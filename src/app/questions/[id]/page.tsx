@@ -328,9 +328,15 @@ export default function QuestionDetailPage() {
   };
 
   const getBackUrl = (): string => {
+    const backToExamResult = searchParams.get('backToExamResult');
     const year = searchParams.get('year');
     const category = searchParams.get('category');
     const subcategory = searchParams.get('subcategory');
+    
+    // 試験結果画面から来た場合は、試験結果に戻る
+    if (backToExamResult) {
+      return `/questions/exam/${backToExamResult}/result`;
+    }
     
     if (year || category || subcategory) {
       // クエリパラメータがある場合は問題一覧に戻る（フィルタ付き）
@@ -347,9 +353,21 @@ export default function QuestionDetailPage() {
   };
 
   const getBackButtonText = (): string => {
+    const backToExamResult = searchParams.get('backToExamResult');
     const year = searchParams.get('year');
     const category = searchParams.get('category');
     const subcategory = searchParams.get('subcategory');
+    
+    // 試験結果画面から来た場合
+    if (backToExamResult) {
+      const yearNum = parseInt(backToExamResult);
+      const japaneseYear = yearNum >= 1989 && yearNum <= 2018 
+        ? `平成${yearNum - 1988}年` 
+        : yearNum >= 2019 
+        ? `令和${yearNum - 2018}年` 
+        : `${yearNum}年`;
+      return `← ${japaneseYear}の結果に戻る`;
+    }
     
     if (year) {
       const yearNum = parseInt(year);

@@ -7,5 +7,10 @@
    - Network:      http://192.168.1.77:3001
 
  ✓ Starting...
- ✓ Ready in 659ms
-[?25h
+ ✓ Ready in 843ms
+ ○ Compiling /questions/[id] ...
+ ✓ Compiled /questions/[id] in 1278ms
+ GET /questions/r5_11 200 in 1768ms
+ ✓ Compiled /favicon.ico in 389ms
+ GET /icon-192.png 404 in 414ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 549ms

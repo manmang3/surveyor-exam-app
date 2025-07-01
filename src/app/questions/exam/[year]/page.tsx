@@ -38,6 +38,7 @@ export default function ExamModePage() {
 
   const [showResult, setShowResult] = useState(false);
   const [hasImage, setHasImage] = useState(false);
+  const [choiceStates, setChoiceStates] = useState<Map<string, number>>(new Map());
 
   const currentQuestion = yearQuestions[examState.currentQuestionIndex];
 
@@ -225,6 +226,80 @@ export default function ExamModePage() {
     }, 2000);
   };
 
+  // マーキング機能
+  const toggleChoiceState = (choice: string) => {
+    setChoiceStates(prev => {
+      const newMap = new Map(prev);
+      const currentState = newMap.get(choice) || 0;
+      const nextState = (currentState + 1) % 5;
+      
+      if (nextState === 0) {
+        newMap.delete(choice);
+      } else {
+        newMap.set(choice, nextState);
+      }
+      
+      return newMap;
+    });
+  };
+
+  const getChoiceStyle = (choice: string) => {
+    const state = choiceStates.get(choice) || 0;
+    switch (state) {
+      case 1: // 青い○
+        return {
+          textClass: 'text-gray-400',
+          overlay: (
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <svg width="48" height="48" viewBox="0 0 48 48" className="drop-shadow-lg">
+                <circle cx="24" cy="24" r="18" fill="none" stroke="#60a5fa" strokeWidth="6"/>
+              </svg>
+            </div>
+          )
+        };
+      case 2: // 赤いX
+        return {
+          textClass: 'text-gray-400 line-through',
+          overlay: (
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <svg width="48" height="48" viewBox="0 0 48 48" className="drop-shadow-lg">
+                <path d="M12 12 36 36M36 12 12 36" stroke="#f87171" strokeWidth="6" strokeLinecap="round"/>
+              </svg>
+            </div>
+          )
+        };
+      case 3: // 青い○？
+        return {
+          textClass: 'text-gray-400',
+          overlay: (
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <svg width="60" height="48" viewBox="0 0 60 48" className="drop-shadow-lg">
+                <circle cx="18" cy="24" r="15" fill="none" stroke="#60a5fa" strokeWidth="5"/>
+                <text x="42" y="32" fill="#60a5fa" fontSize="28" fontWeight="bold">?</text>
+              </svg>
+            </div>
+          )
+        };
+      case 4: // 赤い×？
+        return {
+          textClass: 'text-gray-400 line-through',
+          overlay: (
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <svg width="60" height="48" viewBox="0 0 60 48" className="drop-shadow-lg">
+                <path d="M9 9 27 27M27 9 9 27" stroke="#f87171" strokeWidth="5" strokeLinecap="round"/>
+                <text x="39" y="32" fill="#f87171" fontSize="28" fontWeight="bold">?</text>
+              </svg>
+            </div>
+          )
+        };
+      default:
+        return {
+          textClass: '',
+          overlay: null
+        };
+    }
+  };
+
   // 正答数計算
   const calculateScore = (): number => {
     return examState.answers.reduce((score: number, answer, index) => {
@@ -345,7 +420,7 @@ export default function ExamModePage() {
                 return (
                   <Link
                     key={index}
-                    href={`/questions/${question?.id}`}
+                    href={`/questions/${question?.id}?backToExamResult=${year}&examMode=true`}
                     className={`
                       aspect-square rounded-lg border-2 flex flex-col items-center justify-center text-sm font-semibold transition-all hover:scale-105 cursor-pointer
                       ${isAnswered 
@@ -503,11 +578,57 @@ export default function ExamModePage() {
         <div className="bg-white rounded-lg shadow-md p-8">
           <div className="mb-8">
             <div className="text-lg text-gray-800 leading-relaxed break-words overflow-wrap-anywhere">
-              {currentQuestion.content.split('\n').map((line, index) => (
-                <div key={index} className="mb-3">
-                  {line || <br />}
-                </div>
-              ))}
+              {currentQuestion.content.split('\n').map((line, index) => {
+                // マーキング機能の選択肢判定
+                const choiceMatch = line.match(/^(ア|イ|ウ|エ|オ|カ|キ|ク|ケ|コ|[1-5]|[１-５]|[①②③④⑤⑥⑦⑧⑨⑩])　/) || 
+                                   line.match(/[：；](ア|イ|ウ|エ|オ|カ|キ|ク|ケ|コ)　/);
+                
+                const hasUnderlineChoices = line.match(/（(ア|イ|ウ|エ|オ|カ|キ|ク|ケ|コ)）<u>/);
+                
+                if (choiceMatch) {
+                  const choice = choiceMatch[1] || choiceMatch[2];
+                  const choiceStyle = getChoiceStyle(choice);
+                  const isDialogChoice = line.match(/^(教授|学生|調査士|補助者|先生|生徒)[：；]/);
+                  const indentClass = isDialogChoice ? "ml-12 -indent-12" : "ml-6 -indent-6";
+                  
+                  return (
+                    <div 
+                      key={index} 
+                      className={`${indentClass} mb-3 cursor-pointer transition-all duration-200 hover:bg-gray-100 p-2 rounded relative ${choiceStyle.textClass}`}
+                      onClick={() => !showResult && toggleChoiceState(choice)}
+                    >
+                      <div dangerouslySetInnerHTML={{ __html: line }} />
+                      {choiceStyle.overlay}
+                    </div>
+                  );
+                } else if (hasUnderlineChoices) {
+                  return (
+                    <div 
+                      key={index} 
+                      className="mb-3"
+                      dangerouslySetInnerHTML={{ __html: line }}
+                    />
+                  );
+                } else if (line.match(/^(教授|学生|調査士|補助者|先生|生徒)[：；]/) && !line.match(/[：；](ア|イ|ウ|エ|オ|カ|キ|ク|ケ|コ)　/)) {
+                  return (
+                    <div 
+                      key={index} 
+                      className="ml-12 -indent-12 mb-3 p-2"
+                      dangerouslySetInnerHTML={{ __html: line }}
+                    />
+                  );
+                } else if (line.trim() === '') {
+                  return <br key={index} />;
+                } else {
+                  return (
+                    <div 
+                      key={index}
+                      className="mb-3"
+                      dangerouslySetInnerHTML={{ __html: line }}
+                    />
+                  );
+                }
+              })}
             </div>
           </div>
 
