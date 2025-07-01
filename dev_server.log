@@ -1,0 +1,11 @@
+
+> surveyor-exam-app@0.1.0 dev
+> next dev --turbopack --port 3001
+
+   ▲ Next.js 15.3.4 (Turbopack)
+   - Local:        http://localhost:3001
+   - Network:      http://192.168.1.77:3001
+
+ ✓ Starting...
+ ✓ Ready in 659ms
+[?25h

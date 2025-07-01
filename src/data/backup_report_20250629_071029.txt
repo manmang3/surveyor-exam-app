@@ -1,0 +1,39 @@
+=== Surveyor Exam Questions Backup Report ===
+Created: 2025年 6月29日 日曜日 07時10分29秒 JST
+
+Total Questions: 400
+
+Questions by Year:
+  2005年: 20問
+  2006年: 20問
+  2007年: 20問
+  2008年: 20問
+  2009年: 20問
+  2010年: 20問
+  2011年: 20問
+  2012年: 20問
+  2013年: 20問
+  2014年: 20問
+  2015年: 20問
+  2016年: 20問
+  2017年: 20問
+  2018年: 20問
+  2019年: 20問
+  2020年: 20問
+  2021年: 20問
+  2022年: 20問
+  2023年: 20問
+  2024年: 20問
+
+Questions by Category:
+  代理: 16問
+  債権: 6問
+  物権: 30問
+  相続: 8問
+  懲戒処分: 7問
+  不動産登記法: 320問
+  土地家屋調査士会: 11問
+  土地家屋調査士の義務: 2問
+
+Backup files created:
+-rw-r--r--  1 mandokorokoumei  staff  772933  6 29 07:10 /Users/mandokorokoumei/sample/surveyor-exam-app/src/data/questions_backup_20250629_071008.ts

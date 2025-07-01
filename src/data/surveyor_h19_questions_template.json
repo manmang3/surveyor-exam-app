@@ -1,0 +1,376 @@
+{
+  "questions": [
+    {
+      "id": "h19_01",
+      "year": "平成19年",
+      "questionNumber": 1,
+      "category": "[CATEGORY_TO_BE_FILLED]",
+      "question": "[QUESTION_TEXT_TO_BE_FILLED]\n\nア　[OPTION_A_TEXT]\nイ　[OPTION_I_TEXT]\nウ　[OPTION_U_TEXT]\nエ　[OPTION_E_TEXT]\nオ　[OPTION_O_TEXT]",
+      "choices": [
+        "[CHOICE_1]",
+        "[CHOICE_2]",
+        "[CHOICE_3]",
+        "[CHOICE_4]",
+        "[CHOICE_5]"
+      ],
+      "correctAnswer": 0,
+      "explanation": "[EXPLANATION_TO_BE_FILLED]",
+      "difficulty": "[基本|標準|応用]",
+      "keywords": ["[KEYWORD_1]", "[KEYWORD_2]", "[KEYWORD_3]"]
+    },
+    {
+      "id": "h19_02",
+      "year": "平成19年",
+      "questionNumber": 2,
+      "category": "[CATEGORY_TO_BE_FILLED]",
+      "question": "[QUESTION_TEXT_TO_BE_FILLED]\n\nア　[OPTION_A_TEXT]\nイ　[OPTION_I_TEXT]\nウ　[OPTION_U_TEXT]\nエ　[OPTION_E_TEXT]\nオ　[OPTION_O_TEXT]",
+      "choices": [
+        "[CHOICE_1]",
+        "[CHOICE_2]",
+        "[CHOICE_3]",
+        "[CHOICE_4]",
+        "[CHOICE_5]"
+      ],
+      "correctAnswer": 0,
+      "explanation": "[EXPLANATION_TO_BE_FILLED]",
+      "difficulty": "[基本|標準|応用]",
+      "keywords": ["[KEYWORD_1]", "[KEYWORD_2]", "[KEYWORD_3]"]
+    },
+    {
+      "id": "h19_03",
+      "year": "平成19年",
+      "questionNumber": 3,
+      "category": "[CATEGORY_TO_BE_FILLED]",
+      "question": "[QUESTION_TEXT_TO_BE_FILLED]\n\nア　[OPTION_A_TEXT]\nイ　[OPTION_I_TEXT]\nウ　[OPTION_U_TEXT]\nエ　[OPTION_E_TEXT]\nオ　[OPTION_O_TEXT]",
+      "choices": [
+        "[CHOICE_1]",
+        "[CHOICE_2]",
+        "[CHOICE_3]",
+        "[CHOICE_4]",
+        "[CHOICE_5]"
+      ],
+      "correctAnswer": 0,
+      "explanation": "[EXPLANATION_TO_BE_FILLED]",
+      "difficulty": "[基本|標準|応用]",
+      "keywords": ["[KEYWORD_1]", "[KEYWORD_2]", "[KEYWORD_3]"]
+    },
+    {
+      "id": "h19_04",
+      "year": "平成19年",
+      "questionNumber": 4,
+      "category": "[CATEGORY_TO_BE_FILLED]",
+      "question": "[QUESTION_TEXT_TO_BE_FILLED]\n\nア　[OPTION_A_TEXT]\nイ　[OPTION_I_TEXT]\nウ　[OPTION_U_TEXT]\nエ　[OPTION_E_TEXT]\nオ　[OPTION_O_TEXT]",
+      "choices": [
+        "[CHOICE_1]",
+        "[CHOICE_2]",
+        "[CHOICE_3]",
+        "[CHOICE_4]",
+        "[CHOICE_5]"
+      ],
+      "correctAnswer": 0,
+      "explanation": "[EXPLANATION_TO_BE_FILLED]",
+      "difficulty": "[基本|標準|応用]",
+      "keywords": ["[KEYWORD_1]", "[KEYWORD_2]", "[KEYWORD_3]"]
+    },
+    {
+      "id": "h19_05",
+      "year": "平成19年",
+      "questionNumber": 5,
+      "category": "[CATEGORY_TO_BE_FILLED]",
+      "question": "[QUESTION_TEXT_TO_BE_FILLED]\n\nア　[OPTION_A_TEXT]\nイ　[OPTION_I_TEXT]\nウ　[OPTION_U_TEXT]\nエ　[OPTION_E_TEXT]\nオ　[OPTION_O_TEXT]",
+      "choices": [
+        "[CHOICE_1]",
+        "[CHOICE_2]",
+        "[CHOICE_3]",
+        "[CHOICE_4]",
+        "[CHOICE_5]"
+      ],
+      "correctAnswer": 0,
+      "explanation": "[EXPLANATION_TO_BE_FILLED]",
+      "difficulty": "[基本|標準|応用]",
+      "keywords": ["[KEYWORD_1]", "[KEYWORD_2]", "[KEYWORD_3]"]
+    },
+    {
+      "id": "h19_06",
+      "year": "平成19年",
+      "questionNumber": 6,
+      "category": "[CATEGORY_TO_BE_FILLED]",
+      "question": "[QUESTION_TEXT_TO_BE_FILLED]\n\nア　[OPTION_A_TEXT]\nイ　[OPTION_I_TEXT]\nウ　[OPTION_U_TEXT]\nエ　[OPTION_E_TEXT]\nオ　[OPTION_O_TEXT]",
+      "choices": [
+        "[CHOICE_1]",
+        "[CHOICE_2]",
+        "[CHOICE_3]",
+        "[CHOICE_4]",
+        "[CHOICE_5]"
+      ],
+      "correctAnswer": 0,
+      "explanation": "[EXPLANATION_TO_BE_FILLED]",
+      "difficulty": "[基本|標準|応用]",
+      "keywords": ["[KEYWORD_1]", "[KEYWORD_2]", "[KEYWORD_3]"]
+    },
+    {
+      "id": "h19_07",
+      "year": "平成19年",
+      "questionNumber": 7,
+      "category": "[CATEGORY_TO_BE_FILLED]",
+      "question": "[QUESTION_TEXT_TO_BE_FILLED]\n\nア　[OPTION_A_TEXT]\nイ　[OPTION_I_TEXT]\nウ　[OPTION_U_TEXT]\nエ　[OPTION_E_TEXT]\nオ　[OPTION_O_TEXT]",
+      "choices": [
+        "[CHOICE_1]",
+        "[CHOICE_2]",
+        "[CHOICE_3]",
+        "[CHOICE_4]",
+        "[CHOICE_5]"
+      ],
+      "correctAnswer": 0,
+      "explanation": "[EXPLANATION_TO_BE_FILLED]",
+      "difficulty": "[基本|標準|応用]",
+      "keywords": ["[KEYWORD_1]", "[KEYWORD_2]", "[KEYWORD_3]"]
+    },
+    {
+      "id": "h19_08",
+      "year": "平成19年",
+      "questionNumber": 8,
+      "category": "[CATEGORY_TO_BE_FILLED]",
+      "question": "[QUESTION_TEXT_TO_BE_FILLED]\n\nア　[OPTION_A_TEXT]\nイ　[OPTION_I_TEXT]\nウ　[OPTION_U_TEXT]\nエ　[OPTION_E_TEXT]\nオ　[OPTION_O_TEXT]",
+      "choices": [
+        "[CHOICE_1]",
+        "[CHOICE_2]",
+        "[CHOICE_3]",
+        "[CHOICE_4]",
+        "[CHOICE_5]"
+      ],
+      "correctAnswer": 0,
+      "explanation": "[EXPLANATION_TO_BE_FILLED]",
+      "difficulty": "[基本|標準|応用]",
+      "keywords": ["[KEYWORD_1]", "[KEYWORD_2]", "[KEYWORD_3]"]
+    },
+    {
+      "id": "h19_09",
+      "year": "平成19年",
+      "questionNumber": 9,
+      "category": "[CATEGORY_TO_BE_FILLED]",
+      "question": "[QUESTION_TEXT_TO_BE_FILLED]\n\nア　[OPTION_A_TEXT]\nイ　[OPTION_I_TEXT]\nウ　[OPTION_U_TEXT]\nエ　[OPTION_E_TEXT]\nオ　[OPTION_O_TEXT]",
+      "choices": [
+        "[CHOICE_1]",
+        "[CHOICE_2]",
+        "[CHOICE_3]",
+        "[CHOICE_4]",
+        "[CHOICE_5]"
+      ],
+      "correctAnswer": 0,
+      "explanation": "[EXPLANATION_TO_BE_FILLED]",
+      "difficulty": "[基本|標準|応用]",
+      "keywords": ["[KEYWORD_1]", "[KEYWORD_2]", "[KEYWORD_3]"]
+    },
+    {
+      "id": "h19_10",
+      "year": "平成19年",
+      "questionNumber": 10,
+      "category": "[CATEGORY_TO_BE_FILLED]",
+      "question": "[QUESTION_TEXT_TO_BE_FILLED]\n\nア　[OPTION_A_TEXT]\nイ　[OPTION_I_TEXT]\nウ　[OPTION_U_TEXT]\nエ　[OPTION_E_TEXT]\nオ　[OPTION_O_TEXT]",
+      "choices": [
+        "[CHOICE_1]",
+        "[CHOICE_2]",
+        "[CHOICE_3]",
+        "[CHOICE_4]",
+        "[CHOICE_5]"
+      ],
+      "correctAnswer": 0,
+      "explanation": "[EXPLANATION_TO_BE_FILLED]",
+      "difficulty": "[基本|標準|応用]",
+      "keywords": ["[KEYWORD_1]", "[KEYWORD_2]", "[KEYWORD_3]"]
+    },
+    {
+      "id": "h19_11",
+      "year": "平成19年",
+      "questionNumber": 11,
+      "category": "[CATEGORY_TO_BE_FILLED]",
+      "question": "[QUESTION_TEXT_TO_BE_FILLED]\n\nア　[OPTION_A_TEXT]\nイ　[OPTION_I_TEXT]\nウ　[OPTION_U_TEXT]\nエ　[OPTION_E_TEXT]\nオ　[OPTION_O_TEXT]",
+      "choices": [
+        "[CHOICE_1]",
+        "[CHOICE_2]",
+        "[CHOICE_3]",
+        "[CHOICE_4]",
+        "[CHOICE_5]"
+      ],
+      "correctAnswer": 0,
+      "explanation": "[EXPLANATION_TO_BE_FILLED]",
+      "difficulty": "[基本|標準|応用]",
+      "keywords": ["[KEYWORD_1]", "[KEYWORD_2]", "[KEYWORD_3]"]
+    },
+    {
+      "id": "h19_12",
+      "year": "平成19年",
+      "questionNumber": 12,
+      "category": "[CATEGORY_TO_BE_FILLED]",
+      "question": "[QUESTION_TEXT_TO_BE_FILLED]\n\nア　[OPTION_A_TEXT]\nイ　[OPTION_I_TEXT]\nウ　[OPTION_U_TEXT]\nエ　[OPTION_E_TEXT]\nオ　[OPTION_O_TEXT]",
+      "choices": [
+        "[CHOICE_1]",
+        "[CHOICE_2]",
+        "[CHOICE_3]",
+        "[CHOICE_4]",
+        "[CHOICE_5]"
+      ],
+      "correctAnswer": 0,
+      "explanation": "[EXPLANATION_TO_BE_FILLED]",
+      "difficulty": "[基本|標準|応用]",
+      "keywords": ["[KEYWORD_1]", "[KEYWORD_2]", "[KEYWORD_3]"]
+    },
+    {
+      "id": "h19_13",
+      "year": "平成19年",
+      "questionNumber": 13,
+      "category": "[CATEGORY_TO_BE_FILLED]",
+      "question": "[QUESTION_TEXT_TO_BE_FILLED]\n\nア　[OPTION_A_TEXT]\nイ　[OPTION_I_TEXT]\nウ　[OPTION_U_TEXT]\nエ　[OPTION_E_TEXT]\nオ　[OPTION_O_TEXT]",
+      "choices": [
+        "[CHOICE_1]",
+        "[CHOICE_2]",
+        "[CHOICE_3]",
+        "[CHOICE_4]",
+        "[CHOICE_5]"
+      ],
+      "correctAnswer": 0,
+      "explanation": "[EXPLANATION_TO_BE_FILLED]",
+      "difficulty": "[基本|標準|応用]",
+      "keywords": ["[KEYWORD_1]", "[KEYWORD_2]", "[KEYWORD_3]"]
+    },
+    {
+      "id": "h19_14",
+      "year": "平成19年",
+      "questionNumber": 14,
+      "category": "[CATEGORY_TO_BE_FILLED]",
+      "question": "[QUESTION_TEXT_TO_BE_FILLED]\n\nア　[OPTION_A_TEXT]\nイ　[OPTION_I_TEXT]\nウ　[OPTION_U_TEXT]\nエ　[OPTION_E_TEXT]\nオ　[OPTION_O_TEXT]",
+      "choices": [
+        "[CHOICE_1]",
+        "[CHOICE_2]",
+        "[CHOICE_3]",
+        "[CHOICE_4]",
+        "[CHOICE_5]"
+      ],
+      "correctAnswer": 0,
+      "explanation": "[EXPLANATION_TO_BE_FILLED]",
+      "difficulty": "[基本|標準|応用]",
+      "keywords": ["[KEYWORD_1]", "[KEYWORD_2]", "[KEYWORD_3]"]
+    },
+    {
+      "id": "h19_15",
+      "year": "平成19年",
+      "questionNumber": 15,
+      "category": "[CATEGORY_TO_BE_FILLED]",
+      "question": "[QUESTION_TEXT_TO_BE_FILLED]\n\nア　[OPTION_A_TEXT]\nイ　[OPTION_I_TEXT]\nウ　[OPTION_U_TEXT]\nエ　[OPTION_E_TEXT]\nオ　[OPTION_O_TEXT]",
+      "choices": [
+        "[CHOICE_1]",
+        "[CHOICE_2]",
+        "[CHOICE_3]",
+        "[CHOICE_4]",
+        "[CHOICE_5]"
+      ],
+      "correctAnswer": 0,
+      "explanation": "[EXPLANATION_TO_BE_FILLED]",
+      "difficulty": "[基本|標準|応用]",
+      "keywords": ["[KEYWORD_1]", "[KEYWORD_2]", "[KEYWORD_3]"]
+    },
+    {
+      "id": "h19_16",
+      "year": "平成19年",
+      "questionNumber": 16,
+      "category": "[CATEGORY_TO_BE_FILLED]",
+      "question": "[QUESTION_TEXT_TO_BE_FILLED]\n\nア　[OPTION_A_TEXT]\nイ　[OPTION_I_TEXT]\nウ　[OPTION_U_TEXT]\nエ　[OPTION_E_TEXT]\nオ　[OPTION_O_TEXT]",
+      "choices": [
+        "[CHOICE_1]",
+        "[CHOICE_2]",
+        "[CHOICE_3]",
+        "[CHOICE_4]",
+        "[CHOICE_5]"
+      ],
+      "correctAnswer": 0,
+      "explanation": "[EXPLANATION_TO_BE_FILLED]",
+      "difficulty": "[基本|標準|応用]",
+      "keywords": ["[KEYWORD_1]", "[KEYWORD_2]", "[KEYWORD_3]"]
+    },
+    {
+      "id": "h19_17",
+      "year": "平成19年",
+      "questionNumber": 17,
+      "category": "[CATEGORY_TO_BE_FILLED]",
+      "question": "[QUESTION_TEXT_TO_BE_FILLED]\n\nア　[OPTION_A_TEXT]\nイ　[OPTION_I_TEXT]\nウ　[OPTION_U_TEXT]\nエ　[OPTION_E_TEXT]\nオ　[OPTION_O_TEXT]",
+      "choices": [
+        "[CHOICE_1]",
+        "[CHOICE_2]",
+        "[CHOICE_3]",
+        "[CHOICE_4]",
+        "[CHOICE_5]"
+      ],
+      "correctAnswer": 0,
+      "explanation": "[EXPLANATION_TO_BE_FILLED]",
+      "difficulty": "[基本|標準|応用]",
+      "keywords": ["[KEYWORD_1]", "[KEYWORD_2]", "[KEYWORD_3]"]
+    },
+    {
+      "id": "h19_18",
+      "year": "平成19年",
+      "questionNumber": 18,
+      "category": "[CATEGORY_TO_BE_FILLED]",
+      "question": "[QUESTION_TEXT_TO_BE_FILLED]\n\nア　[OPTION_A_TEXT]\nイ　[OPTION_I_TEXT]\nウ　[OPTION_U_TEXT]\nエ　[OPTION_E_TEXT]\nオ　[OPTION_O_TEXT]",
+      "choices": [
+        "[CHOICE_1]",
+        "[CHOICE_2]",
+        "[CHOICE_3]",
+        "[CHOICE_4]",
+        "[CHOICE_5]"
+      ],
+      "correctAnswer": 0,
+      "explanation": "[EXPLANATION_TO_BE_FILLED]",
+      "difficulty": "[基本|標準|応用]",
+      "keywords": ["[KEYWORD_1]", "[KEYWORD_2]", "[KEYWORD_3]"]
+    },
+    {
+      "id": "h19_19",
+      "year": "平成19年",
+      "questionNumber": 19,
+      "category": "[CATEGORY_TO_BE_FILLED]",
+      "question": "[QUESTION_TEXT_TO_BE_FILLED]\n\nア　[OPTION_A_TEXT]\nイ　[OPTION_I_TEXT]\nウ　[OPTION_U_TEXT]\nエ　[OPTION_E_TEXT]\nオ　[OPTION_O_TEXT]",
+      "choices": [
+        "[CHOICE_1]",
+        "[CHOICE_2]",
+        "[CHOICE_3]",
+        "[CHOICE_4]",
+        "[CHOICE_5]"
+      ],
+      "correctAnswer": 0,
+      "explanation": "[EXPLANATION_TO_BE_FILLED]",
+      "difficulty": "[基本|標準|応用]",
+      "keywords": ["[KEYWORD_1]", "[KEYWORD_2]", "[KEYWORD_3]"]
+    },
+    {
+      "id": "h19_20",
+      "year": "平成19年",
+      "questionNumber": 20,
+      "category": "[CATEGORY_TO_BE_FILLED]",
+      "question": "[QUESTION_TEXT_TO_BE_FILLED]\n\nア　[OPTION_A_TEXT]\nイ　[OPTION_I_TEXT]\nウ　[OPTION_U_TEXT]\nエ　[OPTION_E_TEXT]\nオ　[OPTION_O_TEXT]",
+      "choices": [
+        "[CHOICE_1]",
+        "[CHOICE_2]",
+        "[CHOICE_3]",
+        "[CHOICE_4]",
+        "[CHOICE_5]"
+      ],
+      "correctAnswer": 0,
+      "explanation": "[EXPLANATION_TO_BE_FILLED]",
+      "difficulty": "[基本|標準|応用]",
+      "keywords": ["[KEYWORD_1]", "[KEYWORD_2]", "[KEYWORD_3]"]
+    }
+  ],
+  "metadata": {
+    "totalQuestions": 20,
+    "year": "平成19年",
+    "examType": "午後択一式",
+    "categories": ["民法", "不動産登記法", "筆界特定制度", "土地家屋調査士法"],
+    "difficulties": ["基本", "標準", "応用"],
+    "version": "1.0.0",
+    "created": "2025-06-24",
+    "description": "土地家屋調査士試験 平成19年度午後択一式問題（第1問〜第20問）",
+    "source": "法務省公表問題",
+    "notes": "選択肢は「アイ」「ウオ」等の組み合わせ形式。PDFから手動で入力する必要があります。"
+  }
+}
