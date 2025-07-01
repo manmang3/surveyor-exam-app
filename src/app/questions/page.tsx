@@ -110,6 +110,21 @@ function QuestionsContent() {
           </Link>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">{title}</h1>
           <p className="text-gray-600">全{filteredQuestions.length}問</p>
+          
+          {/* 年度別の通し問題開始ボタン */}
+          {year && filteredQuestions.length === 20 && (
+            <div className="text-center mb-6">
+              <Link
+                href={`/questions/exam/${year}?${searchParams.toString()}`}
+                className="inline-flex items-center px-8 py-3 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors shadow-lg"
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h1m4 0h1m6-10V7a2 2 0 01-2 2H5a2 2 0 01-2-2V4a2 2 0 012-2h14a2 2 0 012 2z" />
+                </svg>
+                {toJapaneseYear(parseInt(year))}の問題を開始する
+              </Link>
+            </div>
+          )}
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
