@@ -6,7 +6,10 @@
     "dev": "next dev --turbopack --port 3001",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "check": "npm run lint && npx tsc --noEmit",
+    "deploy": "./scripts/deploy.sh",
+    "test-build": "npm run check && npm run build"
   },
   "dependencies": {
     "react": "^19.0.0",
