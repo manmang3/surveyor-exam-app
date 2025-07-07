@@ -6,10 +6,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { sampleQuestions } from '@/data/questions';
 import { Question } from '@/types';
+import { LearningStorage } from '@/lib/storage';
 
 interface ExamState {
   currentQuestionIndex: number;
   answers: (number | null)[];
+  answerTimes: (number | null)[]; // 各問題の解答時間（秒）
+  questionStartTimes: (number | null)[]; // 各問題の開始時間
   startTime: number;
   elapsedTime: number;
   isPaused: boolean;
@@ -20,6 +23,7 @@ export default function ExamModePage() {
   const params = useParams();
   const year = params.year as string;
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const isInitializedRef = useRef<Set<string>>(new Set());
 
   // 年度別の問題を取得（1-20問）
   const yearQuestions = sampleQuestions
@@ -30,6 +34,8 @@ export default function ExamModePage() {
   const [examState, setExamState] = useState<ExamState>({
     currentQuestionIndex: 0,
     answers: new Array(20).fill(null),
+    answerTimes: new Array(20).fill(null),
+    questionStartTimes: new Array(20).fill(null),
     startTime: Date.now(),
     elapsedTime: 0,
     isPaused: false,
@@ -38,6 +44,7 @@ export default function ExamModePage() {
 
   const [showResult, setShowResult] = useState(false);
   const [hasImage, setHasImage] = useState(false);
+  const [hasTable, setHasTable] = useState(false);
   const [choiceStates, setChoiceStates] = useState<Map<string, number>>(new Map());
 
   const currentQuestion = yearQuestions[examState.currentQuestionIndex];
@@ -74,7 +81,15 @@ export default function ExamModePage() {
 
   // 初期化時に保存された状態を確認
   useEffect(() => {
+    const isInitialized = isInitializedRef.current.has(year);
+    
+    // 既に初期化済みの場合は何もしない
+    if (isInitialized) {
+      return;
+    }
+
     const savedState = loadExamState();
+    
     if (savedState && !savedState.isCompleted) {
       const shouldResume = window.confirm(
         `${toJapaneseYear(parseInt(year))}の続きから始めますか？\n（「キャンセル」で最初から開始）`
@@ -88,9 +103,30 @@ export default function ExamModePage() {
       } else {
         // 新しく開始
         localStorage.removeItem(getStorageKey());
+        // 最初の問題の開始時間を記録
+        setExamState(prev => {
+          const newQuestionStartTimes = [...prev.questionStartTimes];
+          newQuestionStartTimes[0] = Date.now();
+          return {
+            ...prev,
+            questionStartTimes: newQuestionStartTimes
+          };
+        });
       }
+    } else if (!savedState) {
+      // 初回開始時に最初の問題の開始時間を記録
+      setExamState(prev => {
+        const newQuestionStartTimes = [...prev.questionStartTimes];
+        newQuestionStartTimes[0] = Date.now();
+        return {
+          ...prev,
+          questionStartTimes: newQuestionStartTimes
+        };
+      });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
+    // 初期化完了フラグを設定
+    isInitializedRef.current.add(year);
   }, [year]);
 
   // タイマー処理
@@ -116,13 +152,214 @@ export default function ExamModePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [examState.isPaused, examState.isCompleted, showResult]);
 
-  // 画像の存在確認
+  // 画像の存在確認と表の必要性チェック
   useEffect(() => {
     if (currentQuestion) {
       const imageName = getImageFileName(currentQuestion);
       checkImageExists(imageName).then(setHasImage);
+      
+      // 表が必要な問題かチェック
+      const tableQuestions = ['h19_15', 'h25_07', 'h26_04', 'h29_13', 'r2_19'];
+      setHasTable(tableQuestions.includes(currentQuestion.id));
     }
   }, [currentQuestion]);
+
+  // 問題が変わった時にマーキング状態をリセット
+  useEffect(() => {
+    setChoiceStates(new Map());
+  }, [examState.currentQuestionIndex]);
+
+  const renderTable = (questionId: string) => {
+    switch (questionId) {
+      case 'h19_15':
+        return (
+          <div className="mb-8">
+            <table className="w-full border-collapse border border-gray-300 text-sm">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border border-gray-300 px-3 py-2 text-center w-12">選択肢</th>
+                  <th className="border border-gray-300 px-3 py-2 text-center">登記</th>
+                  <th className="border border-gray-300 px-3 py-2 text-center">対象書面</th>
+                  <th className="border border-gray-300 px-3 py-2 text-center">押印者</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">ア</td>
+                  <td className="border border-gray-300 px-3 py-2">建物の表題登記</td>
+                  <td className="border border-gray-300 px-3 py-2">申請人が記名した委任状</td>
+                  <td className="border border-gray-300 px-3 py-2">申請人</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">イ</td>
+                  <td className="border border-gray-300 px-3 py-2">建物の合併の登記</td>
+                  <td className="border border-gray-300 px-3 py-2">委任による代理人が署名した申請書</td>
+                  <td className="border border-gray-300 px-3 py-2">委任による代理人</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">ウ</td>
+                  <td className="border border-gray-300 px-3 py-2">建物の合体の登記</td>
+                  <td className="border border-gray-300 px-3 py-2">申請書に添付する建物図面で、申請人が記名したもの</td>
+                  <td className="border border-gray-300 px-3 py-2">申請人</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">エ</td>
+                  <td className="border border-gray-300 px-3 py-2">土地の合筆の登記</td>
+                  <td className="border border-gray-300 px-3 py-2">申請人が署名した委任状であって、公証人の認証を受けたもの</td>
+                  <td className="border border-gray-300 px-3 py-2">申請人</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">オ</td>
+                  <td className="border border-gray-300 px-3 py-2">土地の分筆の登記</td>
+                  <td className="border border-gray-300 px-3 py-2">申請書に添付する地積測量図で、その作成者が署名したもの</td>
+                  <td className="border border-gray-300 px-3 py-2">地積測量図の作成者</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        );
+
+      case 'h25_07':
+        return (
+          <div className="mb-8">
+            <Image 
+              src="/tables/h25-7.png" 
+              alt="問題7の表"
+              width={600}
+              height={400}
+              className="mx-auto border border-gray-300 rounded"
+            />
+          </div>
+        );
+
+      case 'h26_04':
+        return (
+          <div className="mb-8">
+            <table className="w-full border-collapse border border-gray-300 text-sm">
+              <tbody>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">A</td>
+                  <td className="border border-gray-300 px-3 py-2">登記簿</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">B</td>
+                  <td className="border border-gray-300 px-3 py-2">不動産登記</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">C</td>
+                  <td className="border border-gray-300 px-3 py-2">土地台帳・家屋台帳</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">D</td>
+                  <td className="border border-gray-300 px-3 py-2">市町村</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">E</td>
+                  <td className="border border-gray-300 px-3 py-2">国</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">F</td>
+                  <td className="border border-gray-300 px-3 py-2">都道府県</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">G</td>
+                  <td className="border border-gray-300 px-3 py-2">用益物権の設定</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">H</td>
+                  <td className="border border-gray-300 px-3 py-2">所有権の保存</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">I</td>
+                  <td className="border border-gray-300 px-3 py-2">所有権の移転</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        );
+
+      case 'h29_13':
+        return (
+          <div className="mb-8">
+            <table className="w-full border-collapse border border-gray-300 text-sm">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border border-gray-300 px-3 py-2 text-center w-12">選択肢</th>
+                  <th className="border border-gray-300 px-3 py-2 text-center">Ａ欄（登記原因たる事実）</th>
+                  <th className="border border-gray-300 px-3 py-2 text-center">Ｂ欄（登記の目的）</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">ア</td>
+                  <td className="border border-gray-300 px-3 py-2">分筆線を誤って申請されたことによる分筆の登記を是正する場合</td>
+                  <td className="border border-gray-300 px-3 py-2">地積に関する更正の登記</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">イ</td>
+                  <td className="border border-gray-300 px-3 py-2">天災等の自然現象によって一筆の土地の一部が常時海面下に没する状態になった場合</td>
+                  <td className="border border-gray-300 px-3 py-2">地積に関する変更の登記</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">ウ</td>
+                  <td className="border border-gray-300 px-3 py-2">天災等の自然現象によって一筆の土地の全部が海面下に没したが、その状態が一時的なものである場合</td>
+                  <td className="border border-gray-300 px-3 py-2">滅失の登記</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">エ</td>
+                  <td className="border border-gray-300 px-3 py-2">一筆の土地の全部が河川法第6条第1項の河川区域内の土地になった場合</td>
+                  <td className="border border-gray-300 px-3 py-2">河川区域内の土地である旨の登記</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">オ</td>
+                  <td className="border border-gray-300 px-3 py-2">河川法第6条第1項の河川区域内の一筆の土地の一部が滅失した場合</td>
+                  <td className="border border-gray-300 px-3 py-2">分筆及び滅失の登記</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        );
+
+      case 'r2_19':
+        return (
+          <div className="mb-8">
+            <table className="w-full border-collapse border border-gray-300 text-sm">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="border border-gray-300 px-3 py-2 text-center w-12">選択肢</th>
+                  <th className="border border-gray-300 px-3 py-2 text-center">第1欄</th>
+                  <th className="border border-gray-300 px-3 py-2 text-center">第2欄</th>
+                  <th className="border border-gray-300 px-3 py-2 text-center">第3欄</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">ア</td>
+                  <td className="border border-gray-300 px-3 py-2">いずれも所有権の登記のある2筆の土地の合筆の登記の申請</td>
+                  <td className="border border-gray-300 px-3 py-2">所有権の登記のある土地の一部の地目が墓地になったためにする一部地目変更及び当該土地を2筆にする分筆の登記の申請</td>
+                  <td className="border border-gray-300 px-3 py-2">1,000円</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">イ</td>
+                  <td className="border border-gray-300 px-3 py-2">2筆の土地の所有権を敷地権とする所有権の登記のある1個の区分建物を2個の区分建物とする再区分の登記の申請</td>
+                  <td className="border border-gray-300 px-3 py-2">国と私人が共有する所有権の登記のある土地を2筆にする分筆の登記の申請</td>
+                  <td className="border border-gray-300 px-3 py-2">2,000円</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">ウ</td>
+                  <td className="border border-gray-300 px-3 py-2">一棟の建物にいずれも所有権の登記のある2個の区分建物が属する場合に当該2個の区分建物を1個の区分建物でない建物とする区分建物の合併の登記の申請</td>
+                  <td className="border border-gray-300 px-3 py-2">いずれも所有権の登記のある2個の建物が合体して1個の建物となったためにする合体による登記等の申請</td>
+                  <td className="border border-gray-300 px-3 py-2">非課税</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">エ</td>
+                  <td className="border border-gray-300 px-3 py-2">いずれも所有権の登記のある2筆の土地の合筆の登記を、錯誤を原因として抹消する登記の申請</td>
+                  <td className="border border-gray-300 px-3 py-2">私人を所有権の登記名義人とする土地の一部を取得した地方公共団体が、私人に代位して行う当該土地を2筆にする分筆の登記の嘱託</td>
+                  <td className="border border-gray-300 px-3 py-2">非課税</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">オ</td>
+                  <td className="border border-gray-300 px-3 py-2">1個の建物の表題部所有者の住所の変更の登記の申請</td>
+                  <td className="border border-gray-300 px-3 py-2">宗教法人が所有権の登記名義人である土地を2筆にする分筆の登記の申請</td>
+                  <td className="border border-gray-300 px-3 py-2">非課税</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
 
   const getImageFileName = (question: Question): string => {
     let yearStr;
@@ -172,10 +409,20 @@ export default function ExamModePage() {
 
     setExamState(prev => {
       const newAnswers = [...prev.answers];
+      const newAnswerTimes = [...prev.answerTimes];
+      
       newAnswers[prev.currentQuestionIndex] = answerIndex;
+      
+      // 回答時間を記録（問題の開始時間が記録されている場合のみ）
+      const questionStartTime = prev.questionStartTimes[prev.currentQuestionIndex];
+      if (questionStartTime) {
+        newAnswerTimes[prev.currentQuestionIndex] = Math.floor((Date.now() - questionStartTime) / 1000);
+      }
+      
       const newState = {
         ...prev,
         answers: newAnswers,
+        answerTimes: newAnswerTimes,
       };
       saveExamState(newState);
       return newState;
@@ -198,14 +445,22 @@ export default function ExamModePage() {
       if (examState.currentQuestionIndex < 19) {
         // 次の問題へ
         setExamState(prev => {
+          const newQuestionStartTimes = [...prev.questionStartTimes];
+          // 次の問題の開始時間を記録
+          newQuestionStartTimes[prev.currentQuestionIndex + 1] = Date.now();
+          
           const newState = {
             ...prev,
             currentQuestionIndex: prev.currentQuestionIndex + 1,
+            questionStartTimes: newQuestionStartTimes,
             startTime: Date.now() - prev.elapsedTime, // タイマーリセット
           };
           saveExamState(newState);
           return newState;
         });
+        
+        // マーキング状態をリセット
+        setChoiceStates(new Map());
         
         // 画面を上部にスクロール
         window.scrollTo({
@@ -213,7 +468,9 @@ export default function ExamModePage() {
           behavior: 'smooth'
         });
       } else {
-        // 全問完了
+        // 全問完了 - 学習履歴を保存
+        saveExamResults();
+        
         setExamState(prev => {
           const newState = {
             ...prev,
@@ -224,6 +481,27 @@ export default function ExamModePage() {
         });
       }
     }, 2000);
+  };
+
+  // 試験結果を学習履歴に保存
+  const saveExamResults = () => {
+    const currentTime = new Date().toISOString();
+    
+    examState.answers.forEach((answer, index) => {
+      if (answer !== null && yearQuestions[index]) {
+        const question = yearQuestions[index];
+        const isCorrect = answer === question.correctAnswer;
+        const answerTime = examState.answerTimes[index] || 60; // デフォルト60秒
+        
+        LearningStorage.saveAnswer(question.id, {
+          answeredAt: currentTime,
+          isCorrect,
+          answerTime,
+          userAnswer: answer,
+          sessionType: 'exam'
+        });
+      }
+    });
   };
 
   // マーキング機能
@@ -404,10 +682,6 @@ export default function ExamModePage() {
                 <div className="w-4 h-4 bg-red-500 rounded mr-2"></div>
                 <span>不正解</span>
               </div>
-              <div className="flex items-center">
-                <div className="w-4 h-4 bg-gray-400 rounded mr-2"></div>
-                <span>未回答</span>
-              </div>
             </div>
 
             {/* 結果グリッド */}
@@ -448,7 +722,7 @@ export default function ExamModePage() {
 
             {/* 詳細統計 */}
             <div className="mt-6 pt-6 border-t border-gray-200">
-              <div className="grid grid-cols-3 gap-4 text-center">
+              <div className="grid grid-cols-2 gap-4 text-center">
                 <div className="bg-green-50 p-3 rounded-lg">
                   <p className="text-2xl font-bold text-green-600">
                     {examState.answers.filter((answer, index) => 
@@ -464,12 +738,6 @@ export default function ExamModePage() {
                     ).length}
                   </p>
                   <p className="text-sm text-red-700">不正解</p>
-                </div>
-                <div className="bg-gray-50 p-3 rounded-lg">
-                  <p className="text-2xl font-bold text-gray-600">
-                    {examState.answers.filter(answer => answer === null).length}
-                  </p>
-                  <p className="text-sm text-gray-700">未回答</p>
                 </div>
               </div>
             </div>
@@ -631,6 +899,9 @@ export default function ExamModePage() {
               })}
             </div>
           </div>
+
+          {/* 表表示 */}
+          {hasTable && renderTable(currentQuestion.id)}
 
           {/* 画像表示 */}
           {hasImage && (

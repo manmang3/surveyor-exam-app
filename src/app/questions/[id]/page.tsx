@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useParams, useSearchParams } from 'next/navigation';
 import { sampleQuestions } from '@/data/questions';
 import { Question } from '@/types';
+import { LearningStorage } from '@/lib/storage';
 
 
 export default function QuestionDetailPage() {
@@ -19,6 +20,7 @@ export default function QuestionDetailPage() {
   const [hasTable, setHasTable] = useState(false);
   const [choiceStates, setChoiceStates] = useState<Map<string, number>>(new Map());
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [startTime, setStartTime] = useState<number>(Date.now());
 
   const findNextQuestion = useCallback((currentQuestion: Question): Question | null => {
     const year = searchParams.get('year');
@@ -77,6 +79,7 @@ export default function QuestionDetailPage() {
     setChoiceStates(new Map());
     setSelectedAnswer(null);
     setShowResult(false);
+    setStartTime(Date.now()); // 新しい問題の開始時間をリセット
     
   }, [params.id, searchParams, findNextQuestion]);
 
@@ -118,7 +121,7 @@ export default function QuestionDetailPage() {
       checkImageExists(imageName).then(setHasImage);
       
       // 表が必要な問題かチェック
-      const tableQuestions = ['h19_15', 'h25_07', 'h29_13', 'r2_19'];
+      const tableQuestions = ['h19_15', 'h25_07', 'h26_04', 'h29_13', 'r2_19'];
       setHasTable(tableQuestions.includes(question.id));
     }
   }, [question]);
@@ -176,39 +179,52 @@ export default function QuestionDetailPage() {
       case 'h25_07':
         return (
           <div className="mb-8">
+            <Image 
+              src="/tables/h25-7.png" 
+              alt="問題7の表"
+              width={600}
+              height={400}
+              className="mx-auto border border-gray-300 rounded"
+            />
+          </div>
+        );
+
+      case 'h26_04':
+        return (
+          <div className="mb-8">
             <table className="w-full border-collapse border border-gray-300 text-sm">
-              <thead>
-                <tr className="bg-gray-100">
-                  <th className="border border-gray-300 px-3 py-2 text-center w-12">選択肢</th>
-                  <th className="border border-gray-300 px-3 py-2 text-center">第１欄</th>
-                  <th className="border border-gray-300 px-3 py-2 text-center">第２欄</th>
-                </tr>
-              </thead>
               <tbody>
                 <tr>
-                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">ア</td>
-                  <td className="border border-gray-300 px-3 py-2">共有者Ａ、Ｂ、Ｃのうち、Ａのみが登記名義人となっている場合</td>
-                  <td className="border border-gray-300 px-3 py-2">ＡからＤへの所有権の移転の登記</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">A</td>
+                  <td className="border border-gray-300 px-3 py-2">登記簿</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">B</td>
+                  <td className="border border-gray-300 px-3 py-2">不動産登記</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">C</td>
+                  <td className="border border-gray-300 px-3 py-2">土地台帳・家屋台帳</td>
                 </tr>
                 <tr>
-                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">イ</td>
-                  <td className="border border-gray-300 px-3 py-2">ＡとＢが共有で登記名義人となっている場合</td>
-                  <td className="border border-gray-300 px-3 py-2">持分の放棄を原因とするＡの持分の抹消及びＢの持分の変更の登記</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">D</td>
+                  <td className="border border-gray-300 px-3 py-2">市町村</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">E</td>
+                  <td className="border border-gray-300 px-3 py-2">国</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">F</td>
+                  <td className="border border-gray-300 px-3 py-2">都道府県</td>
                 </tr>
                 <tr>
-                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">ウ</td>
-                  <td className="border border-gray-300 px-3 py-2">ＡとＢが共有で登記名義人となっている場合</td>
-                  <td className="border border-gray-300 px-3 py-2">相続を原因とするＡの持分についてのＡからＣ（Ａの相続人）への持分の移転の登記</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">G</td>
+                  <td className="border border-gray-300 px-3 py-2">用益物権の設定</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">H</td>
+                  <td className="border border-gray-300 px-3 py-2">所有権の保存</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">I</td>
+                  <td className="border border-gray-300 px-3 py-2">所有権の移転</td>
                 </tr>
                 <tr>
-                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">エ</td>
-                  <td className="border border-gray-300 px-3 py-2">ＡとＢが共有で登記名義人となっている場合</td>
-                  <td className="border border-gray-300 px-3 py-2">売買を原因とするＡの持分についてのＡからＣへの持分の移転の登記</td>
-                </tr>
-                <tr>
-                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">オ</td>
-                  <td className="border border-gray-300 px-3 py-2">Ａが単独で登記名義人となっている場合</td>
-                  <td className="border border-gray-300 px-3 py-2">更正を原因とするＡとＢの共有名義への登記名義人の変更の登記</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">J</td>
+                  <td className="border border-gray-300 px-3 py-2">申請適格者</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">K</td>
+                  <td className="border border-gray-300 px-3 py-2">申請代理人</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">L</td>
+                  <td className="border border-gray-300 px-3 py-2">納税義務者</td>
                 </tr>
               </tbody>
             </table>
@@ -299,6 +315,48 @@ export default function QuestionDetailPage() {
                   <td className="border border-gray-300 px-3 py-2">1個の建物の表題部所有者の住所の変更の登記の申請</td>
                   <td className="border border-gray-300 px-3 py-2">宗教法人が所有権の登記名義人である土地を2筆にする分筆の登記の申請</td>
                   <td className="border border-gray-300 px-3 py-2">非課税</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        );
+
+      case 'h26_04':
+        return (
+          <div className="mb-8">
+            <table className="w-full border-collapse border border-gray-300 text-sm">
+              <tbody>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">A</td>
+                  <td className="border border-gray-300 px-3 py-2">登記簿</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">B</td>
+                  <td className="border border-gray-300 px-3 py-2">不動産登記</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">C</td>
+                  <td className="border border-gray-300 px-3 py-2">土地台帳・家屋台帳</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">D</td>
+                  <td className="border border-gray-300 px-3 py-2">市町村</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">E</td>
+                  <td className="border border-gray-300 px-3 py-2">国</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">F</td>
+                  <td className="border border-gray-300 px-3 py-2">都道府県</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">G</td>
+                  <td className="border border-gray-300 px-3 py-2">用益物権の設定</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">H</td>
+                  <td className="border border-gray-300 px-3 py-2">所有権の保存</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">I</td>
+                  <td className="border border-gray-300 px-3 py-2">所有権の移転</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">J</td>
+                  <td className="border border-gray-300 px-3 py-2">申請適格者</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">K</td>
+                  <td className="border border-gray-300 px-3 py-2">申請代理人</td>
+                  <td className="border border-gray-300 px-3 py-2 text-center font-bold">L</td>
+                  <td className="border border-gray-300 px-3 py-2">納税義務者</td>
                 </tr>
               </tbody>
             </table>
@@ -417,13 +475,32 @@ export default function QuestionDetailPage() {
   }
 
   const handleSubmit = () => {
-    if (selectedAnswer !== null) {
+    if (selectedAnswer !== null && question) {
       setShowResult(true);
+      
+      // 学習履歴を記録
+      const answerTime = Math.floor((Date.now() - startTime) / 1000); // 秒単位
+      const isCorrect = selectedAnswer === question.correctAnswer;
+      const sessionType = searchParams.get('examMode') ? 'exam' : 'individual';
+      
+      LearningStorage.saveAnswer(question.id, {
+        answeredAt: new Date().toISOString(),
+        isCorrect,
+        answerTime,
+        userAnswer: selectedAnswer,
+        sessionType: sessionType as 'individual' | 'exam'
+      });
     }
   };
 
   const isCorrect = selectedAnswer === question.correctAnswer;
 
+  const resetQuestion = () => {
+    setSelectedAnswer(null);
+    setShowResult(false);
+    setChoiceStates(new Map());
+    setStartTime(Date.now()); // 開始時間をリセット
+  };
 
   const toggleChoiceState = (choice: string) => {
     setChoiceStates(prev => {
@@ -521,11 +598,6 @@ export default function QuestionDetailPage() {
     }
   };
 
-  const resetQuestion = () => {
-    setSelectedAnswer(null);
-    setShowResult(false);
-    setChoiceStates(new Map());
-  };
 
   return (
     <div className="min-h-screen bg-gray-50">

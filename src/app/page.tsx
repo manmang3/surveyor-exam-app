@@ -3,9 +3,14 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { sampleQuestions } from '@/data/questions';
+import { ExamDateManager } from '@/lib/examDate';
+import { QuoteManager } from '@/lib/quotes';
+import { Quote } from '@/types/quote';
 
 export default function Home() {
   const [bookmarkedCount, setBookmarkedCount] = useState(0);
+  const [daysUntilExam, setDaysUntilExam] = useState<number>(0);
+  const [dailyQuote, setDailyQuote] = useState<Quote | null>(null);
 
   // メインカテゴリとサブカテゴリの構造
   const mainCategories = {
@@ -27,15 +32,25 @@ export default function Home() {
     }
   };
 
-  // ブックマーク数をlocalStorageから読み込み
+  // ブックマーク数と試験日までの残り日数、今日の名言を読み込み
   useEffect(() => {
     if (typeof window !== 'undefined') {
       try {
         const bookmarks = JSON.parse(localStorage.getItem('bookmarkedQuestions') || '[]');
         setBookmarkedCount(bookmarks.length);
+        
+        // 試験日までの残り日数を計算
+        const days = ExamDateManager.getDaysUntilExam();
+        setDaysUntilExam(days);
+
+        // 今日の名言を取得
+        const quote = QuoteManager.getRandomQuote();
+        setDailyQuote(quote);
       } catch (error) {
-        console.error('Failed to load bookmarks:', error);
+        console.error('Failed to load data:', error);
         setBookmarkedCount(0);
+        setDaysUntilExam(0);
+        setDailyQuote(null);
       }
     }
   }, []);
@@ -47,9 +62,24 @@ export default function Home() {
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
             土地家屋調査士試験 過去問アプリ
           </h1>
-          <p className="text-lg text-gray-600">
-            過去問を解いて合格を目指しましょう
+          <p className="text-lg text-gray-600 mb-6">
+            土地家屋調査士試験まであと{daysUntilExam}日
           </p>
+          
+          {/* 今日の名言 */}
+          {dailyQuote && (
+            <div className="max-w-2xl mx-auto bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6 shadow-sm">
+              <div className="text-gray-700 text-lg italic leading-relaxed mb-3">
+                「{dailyQuote.text}」
+              </div>
+              <div className="text-right text-sm text-gray-600">
+                ― {dailyQuote.author}
+                {dailyQuote.occupation && (
+                  <span className="text-gray-500"> ({dailyQuote.occupation})</span>
+                )}
+              </div>
+            </div>
+          )}
         </header>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -118,12 +148,15 @@ export default function Home() {
                 </div>
               </Link>
               
-              <div className="p-4 border border-gray-200 rounded-lg bg-gray-50 opacity-60">
+              <Link
+                href="/problems"
+                className="block p-4 border border-gray-200 rounded-lg hover:bg-orange-50 hover:border-orange-300 transition-colors"
+              >
                 <div className="flex justify-between items-center">
-                  <span className="font-medium text-gray-500">🎯 苦手分野診断</span>
-                  <span className="text-xs text-gray-400">準備中</span>
+                  <span className="font-medium text-gray-900">🎯 問題別詳細</span>
+                  <span className="text-sm text-gray-500">分析情報</span>
                 </div>
-              </div>
+              </Link>
               
               <div className="p-4 border border-gray-200 rounded-lg bg-gray-50 opacity-60">
                 <div className="flex justify-between items-center">
@@ -132,12 +165,25 @@ export default function Home() {
                 </div>
               </div>
               
-              <div className="p-4 border border-gray-200 rounded-lg bg-gray-50 opacity-60">
+              <Link
+                href="/dashboard"
+                className="block p-4 border border-gray-200 rounded-lg hover:bg-purple-50 hover:border-purple-300 transition-colors"
+              >
                 <div className="flex justify-between items-center">
-                  <span className="font-medium text-gray-500">📊 学習進捗</span>
-                  <span className="text-xs text-gray-400">準備中</span>
+                  <span className="font-medium text-gray-900">📊 学習進捗</span>
+                  <span className="text-sm text-gray-500">ダッシュボード</span>
                 </div>
-              </div>
+              </Link>
+              
+              <Link
+                href="/settings/menu"
+                className="block p-4 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-colors"
+              >
+                <div className="flex justify-between items-center">
+                  <span className="font-medium text-gray-900">⚙️ 設定</span>
+                  <span className="text-sm text-gray-500">試験日・データ管理</span>
+                </div>
+              </Link>
             </div>
           </div>
         </div>
