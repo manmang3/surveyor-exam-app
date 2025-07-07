@@ -184,10 +184,6 @@ export default function ExamResultPage() {
               <div className="w-4 h-4 bg-red-500 rounded mr-2"></div>
               <span>不正解</span>
             </div>
-            <div className="flex items-center">
-              <div className="w-4 h-4 bg-gray-400 rounded mr-2"></div>
-              <span>未回答</span>
-            </div>
           </div>
 
           {/* 結果グリッド */}
@@ -228,7 +224,7 @@ export default function ExamResultPage() {
 
           {/* 詳細統計 */}
           <div className="mt-6 pt-6 border-t border-gray-200">
-            <div className="grid grid-cols-3 gap-4 text-center">
+            <div className="grid grid-cols-2 gap-4 text-center">
               <div className="bg-green-50 p-3 rounded-lg">
                 <p className="text-2xl font-bold text-green-600">
                   {examState.answers.filter((answer, index) => 
@@ -244,12 +240,6 @@ export default function ExamResultPage() {
                   ).length}
                 </p>
                 <p className="text-sm text-red-700">不正解</p>
-              </div>
-              <div className="bg-gray-50 p-3 rounded-lg">
-                <p className="text-2xl font-bold text-gray-600">
-                  {examState.answers.filter(answer => answer === null).length}
-                </p>
-                <p className="text-sm text-gray-700">未回答</p>
               </div>
             </div>
           </div>
