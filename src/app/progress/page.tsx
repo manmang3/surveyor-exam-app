@@ -108,18 +108,14 @@ export default function ProgressPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* ヘッダー */}
         <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">学習カレンダー</h1>
-              <p className="text-gray-600 mt-2">日々の学習進捗を確認できます</p>
-            </div>
-            <Link
-              href="/dashboard"
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              ダッシュボード
-            </Link>
-          </div>
+          <Link
+            href="/"
+            className="text-blue-600 hover:text-blue-800 mb-4 inline-block"
+          >
+            ← ホームに戻る
+          </Link>
+          <h1 className="text-3xl font-bold text-gray-900">学習カレンダー</h1>
+          <p className="text-gray-600 mt-2">日々の学習進捗を確認できます</p>
         </div>
 
         {/* カレンダーヘッダー */}

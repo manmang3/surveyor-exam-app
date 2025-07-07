@@ -53,18 +53,14 @@ export default function DashboardPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* ヘッダー */}
         <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">学習ダッシュボード</h1>
-              <p className="text-gray-600 mt-2">あなたの学習進捗を確認できます</p>
-            </div>
-            <Link
-              href="/"
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              問題に戻る
-            </Link>
-          </div>
+          <Link
+            href="/"
+            className="text-blue-600 hover:text-blue-800 mb-4 inline-block"
+          >
+            ← ホームに戻る
+          </Link>
+          <h1 className="text-3xl font-bold text-gray-900">学習ダッシュボード</h1>
+          <p className="text-gray-600 mt-2">あなたの学習進捗を確認できます</p>
         </div>
 
         {/* 今日の学習状況 */}
@@ -197,22 +193,6 @@ export default function DashboardPage() {
           </Link>
         </div>
 
-        {/* 設定 */}
-        <div className="bg-white rounded-lg shadow-md p-6 mt-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">設定</h3>
-          <div className="flex gap-4">
-            <Link
-              href="/settings/menu"
-              className="flex-1 bg-gray-50 border border-gray-200 rounded-lg p-4 hover:bg-gray-100 transition-colors"
-            >
-              <div className="text-center">
-                <div className="text-2xl mb-2">⚙️</div>
-                <div className="text-sm font-medium text-gray-900">設定</div>
-                <div className="text-xs text-gray-600 mt-1">試験日・データ管理</div>
-              </div>
-            </Link>
-          </div>
-        </div>
 
         {/* 学習のヒント */}
         {stats && stats.totalQuestions === 0 && (

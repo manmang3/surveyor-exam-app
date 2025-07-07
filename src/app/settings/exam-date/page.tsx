@@ -76,18 +76,14 @@ export default function ExamDateSettingPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* ヘッダー */}
         <div className="mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">試験日の設定</h1>
-              <p className="text-gray-600 mt-2">土地家屋調査士試験の日程を設定します</p>
-            </div>
-            <Link
-              href="/settings/menu"
-              className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
-            >
-              設定に戻る
-            </Link>
-          </div>
+          <Link
+            href="/"
+            className="text-blue-600 hover:text-blue-800 mb-4 inline-block"
+          >
+            ← ホームに戻る
+          </Link>
+          <h1 className="text-3xl font-bold text-gray-900">試験日の設定</h1>
+          <p className="text-gray-600 mt-2">土地家屋調査士試験の日程を設定します</p>
         </div>
 
         {/* メッセージ表示 */}
