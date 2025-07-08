@@ -14,3 +14,977 @@
  ✓ Compiled /favicon.ico in 389ms
  GET /icon-192.png 404 in 414ms
  GET /favicon.ico?favicon.45db1c09.ico 200 in 549ms
+ ✓ Compiled in 66ms
+ GET /questions/r5_12 200 in 159ms
+ GET /icon-192.png 404 in 37ms
+ GET /questions/r5_13 200 in 40ms
+ HEAD /images/r5-13.png 404 in 32ms
+ GET /icon-192.png 404 in 48ms
+ GET /questions/r5_14 200 in 43ms
+ HEAD /images/r5-14.png 404 in 31ms
+ GET /icon-192.png 404 in 30ms
+ GET /questions/r5_15 200 in 39ms
+ HEAD /images/r5-15.png 404 in 31ms
+ GET /icon-192.png 404 in 45ms
+ ✓ Compiled /questions in 424ms
+ GET /questions 200 in 441ms
+ GET /icon-192.png 404 in 51ms
+ GET /questions/h22_14 200 in 43ms
+ HEAD /images/h22-14.png 404 in 50ms
+ GET /icon-192.png 404 in 42ms
+ GET /questions 200 in 38ms
+ GET /icon-192.png 404 in 42ms
+ ○ Compiling / ...
+ ✓ Compiled / in 500ms
+ GET / 200 in 518ms
+ GET /icon-192.png 404 in 29ms
+ GET /questions?year=2023 200 in 43ms
+ GET /icon-192.png 404 in 32ms
+ GET /questions/r5_14?year=2023 200 in 36ms
+ HEAD /images/r5-14.png 404 in 28ms
+ GET /icon-192.png 404 in 40ms
+ ✓ Compiled in 103ms
+ HEAD /images/r5-14.png 404 in 29ms
+ HEAD /images/r5-14.png 404 in 26ms
+ GET /questions/r5_15?year=2023 200 in 92ms
+ HEAD /images/r5-15.png 404 in 34ms
+ GET /icon-192.png 404 in 48ms
+ GET /questions?year=2023 200 in 73ms
+ GET /icon-192.png 404 in 31ms
+ GET /questions/r5_14?year=2023 200 in 41ms
+ HEAD /images/r5-14.png 404 in 29ms
+ GET /icon-192.png 404 in 30ms
+ GET /questions/r5_15?year=2023 200 in 46ms
+ HEAD /images/r5-15.png 404 in 32ms
+ GET /icon-192.png 404 in 47ms
+ GET /questions/r5_16?year=2023 200 in 47ms
+ HEAD /images/r5-16.png 404 in 29ms
+ GET /icon-192.png 404 in 47ms
+ GET /questions/r5_17?year=2023 200 in 40ms
+ HEAD /images/r5-17.png 404 in 31ms
+ GET /icon-192.png 404 in 44ms
+ GET /questions/r5_18?year=2023 200 in 40ms
+ HEAD /images/r5-18.png 404 in 29ms
+ GET /icon-192.png 404 in 42ms
+ GET /questions/r5_19?year=2023 200 in 37ms
+ HEAD /images/r5-19.png 404 in 28ms
+ GET /icon-192.png 404 in 39ms
+ GET /questions?year=2023 200 in 45ms
+ GET /icon-192.png 404 in 34ms
+ GET /questions/r5_18?year=2023 200 in 41ms
+ HEAD /images/r5-18.png 404 in 28ms
+ GET /icon-192.png 404 in 41ms
+ GET /questions/r5_19?year=2023 200 in 43ms
+ HEAD /images/r5-19.png 404 in 28ms
+ GET /icon-192.png 404 in 42ms
+ GET /questions/r5_20?year=2023 200 in 42ms
+ HEAD /images/r5-20.png 404 in 30ms
+ GET /icon-192.png 404 in 43ms
+ GET /questions?year=2023 200 in 38ms
+ GET /icon-192.png 404 in 37ms
+ GET / 200 in 104ms
+ GET /icon-192.png 404 in 31ms
+ GET /questions?year=2022 200 in 38ms
+ GET /icon-192.png 404 in 34ms
+ ○ Compiling /questions/exam/[year] ...
+ ✓ Compiled /questions/exam/[year] in 537ms
+ GET /questions/exam/2022?year=2022 200 in 918ms
+ HEAD /images/r4-1.png 404 in 34ms
+ HEAD /images/r4-1.png 404 in 47ms
+ GET /icon-192.png 404 in 56ms
+ HEAD /images/r4-2.png 404 in 54ms
+ HEAD /images/r4-3.png 404 in 41ms
+ HEAD /images/r4-4.png 404 in 38ms
+ HEAD /images/r4-5.png 404 in 44ms
+ HEAD /images/r4-6.png 404 in 47ms
+ HEAD /images/r4-7.png 404 in 51ms
+ HEAD /images/r4-8.png 404 in 46ms
+ HEAD /images/r4-9.png 404 in 45ms
+ HEAD /images/r4-10.png 404 in 43ms
+ HEAD /images/r4-11.png 404 in 57ms
+ GET /images/r4-13.png 404 in 53ms
+ ⨯ The requested resource isn't a valid image for /images/r4-13.png received text/html; charset=utf-8
+ HEAD /images/r4-13.png 404 in 57ms
+ HEAD /images/r4-14.png 404 in 31ms
+ HEAD /images/r4-15.png 404 in 48ms
+ HEAD /images/r4-16.png 404 in 49ms
+ HEAD /images/r4-17.png 404 in 50ms
+ HEAD /images/r4-19.png 404 in 54ms
+ GET /images/r4-19.png 404 in 71ms
+ ⨯ The requested resource isn't a valid image for /images/r4-19.png received text/html; charset=utf-8
+ HEAD /images/r4-20.png 404 in 47ms
+ GET / 200 in 51ms
+ GET /icon-192.png 404 in 34ms
+ GET /questions?year=2009 200 in 40ms
+ GET /icon-192.png 404 in 44ms
+ GET /questions/exam/2009?year=2009 200 in 98ms
+ HEAD /images/h21-1.png 404 in 31ms
+ HEAD /images/h21-1.png 404 in 42ms
+ GET /icon-192.png 404 in 54ms
+ HEAD /images/h21-2.png 404 in 44ms
+ GET /questions/exam/2009?year=2009 200 in 176ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 223ms
+ HEAD /images/h21-1.png 404 in 53ms
+ HEAD /images/h21-2.png 404 in 51ms
+ GET /icon-192.png 404 in 67ms
+ HEAD /images/h21-3.png 404 in 52ms
+ HEAD /images/h21-4.png 404 in 48ms
+ HEAD /images/h21-5.png 404 in 53ms
+ HEAD /images/h21-6.png 404 in 46ms
+ HEAD /images/h21-7.png 404 in 46ms
+ HEAD /images/h21-8.png 404 in 58ms
+ HEAD /images/h21-9.png 404 in 52ms
+ HEAD /images/h21-10.png 404 in 61ms
+ HEAD /images/h21-11.png 404 in 27ms
+ ✓ Compiled in 82ms
+ HEAD /images/h21-11.png 404 in 40ms
+ HEAD /images/h21-12.png 404 in 66ms
+ HEAD /images/h21-13.png 404 in 47ms
+ ✓ Compiled in 66ms
+ HEAD /images/h21-13.png 404 in 26ms
+ ✓ Compiled in 76ms
+ HEAD /images/h21-13.png 404 in 26ms
+ ✓ Compiled in 79ms
+ HEAD /images/h21-13.png 404 in 25ms
+ HEAD /images/h21-14.png 404 in 53ms
+ HEAD /images/h21-15.png 404 in 42ms
+ HEAD /images/h21-16.png 404 in 46ms
+ ✓ Compiled in 84ms
+ HEAD /images/h21-16.png 404 in 25ms
+ HEAD /images/h21-17.png 404 in 47ms
+ HEAD /images/h21-18.png 404 in 47ms
+ HEAD /images/h21-19.png 404 in 48ms
+ HEAD /images/h21-20.png 404 in 48ms
+ GET / 200 in 108ms
+ GET /icon-192.png 404 in 32ms
+ GET /questions?year=2021 200 in 83ms
+ GET /icon-192.png 404 in 33ms
+ GET /questions/exam/2021?year=2021 200 in 82ms
+ HEAD /images/r3-1.png 404 in 34ms
+ HEAD /images/r3-1.png 404 in 48ms
+ GET /icon-192.png 404 in 61ms
+ HEAD /images/r3-2.png 404 in 55ms
+ HEAD /images/r3-3.png 404 in 48ms
+ HEAD /images/r3-4.png 404 in 52ms
+ HEAD /images/r3-5.png 404 in 48ms
+ HEAD /images/r3-6.png 404 in 50ms
+ HEAD /images/r3-7.png 404 in 45ms
+ HEAD /images/r3-8.png 404 in 50ms
+ HEAD /images/r3-9.png 404 in 45ms
+ HEAD /images/r3-10.png 404 in 44ms
+ HEAD /images/r3-11.png 404 in 49ms
+ HEAD /images/r3-12.png 404 in 43ms
+ HEAD /images/r3-13.png 404 in 52ms
+ HEAD /images/r3-14.png 404 in 44ms
+ HEAD /images/r3-15.png 404 in 57ms
+ HEAD /images/r3-16.png 404 in 53ms
+ HEAD /images/r3-17.png 404 in 43ms
+ HEAD /images/r3-18.png 404 in 47ms
+ HEAD /images/r3-19.png 404 in 53ms
+ HEAD /images/r3-20.png 404 in 46ms
+ GET / 200 in 37ms
+ GET /icon-192.png 404 in 35ms
+ GET /questions?year=2024 200 in 46ms
+ GET /icon-192.png 404 in 42ms
+ GET /questions/r6_01?year=2024 200 in 85ms
+ HEAD /images/r6-1.png 404 in 35ms
+ GET /icon-192.png 404 in 45ms
+ GET /questions?year=2024 200 in 44ms
+ GET /icon-192.png 404 in 30ms
+ GET / 200 in 36ms
+ GET /icon-192.png 404 in 32ms
+ GET /questions?year=2022 200 in 36ms
+ GET /icon-192.png 404 in 32ms
+ GET / 200 in 39ms
+ GET /icon-192.png 404 in 33ms
+ ✓ Compiled /categories/[category] in 446ms
+ GET /categories/%E6%B0%91%E6%B3%95 200 in 688ms
+ GET /icon-192.png 404 in 29ms
+ GET / 200 in 45ms
+ GET /icon-192.png 404 in 30ms
+ GET /questions?year=2019 200 in 36ms
+ GET /icon-192.png 404 in 30ms
+ GET /questions/r1_14?year=2019 200 in 37ms
+ HEAD /images/r1-14.png 404 in 32ms
+ GET /icon-192.png 404 in 44ms
+ GET /questions?year=2019 200 in 51ms
+ GET /icon-192.png 404 in 40ms
+ GET / 200 in 50ms
+ GET /icon-192.png 404 in 36ms
+ GET /questions?year=2020 200 in 46ms
+ GET /icon-192.png 404 in 45ms
+ GET /questions/exam/2020?year=2020 200 in 43ms
+ HEAD /images/r2-1.png 404 in 37ms
+ HEAD /images/r2-1.png 404 in 52ms
+ GET /icon-192.png 404 in 69ms
+ GET /questions/exam/2020?year=2020 200 in 194ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 224ms
+ HEAD /images/r2-1.png 404 in 49ms
+ GET /icon-192.png 404 in 60ms
+ HEAD /images/r2-2.png 404 in 44ms
+ HEAD /images/r2-3.png 404 in 58ms
+ HEAD /images/r2-4.png 404 in 48ms
+ HEAD /images/r2-5.png 404 in 51ms
+ HEAD /images/r2-6.png 404 in 54ms
+ HEAD /images/r2-7.png 404 in 63ms
+ HEAD /images/r2-8.png 404 in 54ms
+ HEAD /images/r2-9.png 404 in 28ms
+ HEAD /images/r2-10.png 404 in 49ms
+ HEAD /images/r2-11.png 404 in 43ms
+ HEAD /images/r2-12.png 404 in 49ms
+ HEAD /images/r2-13.png 404 in 66ms
+ HEAD /images/r2-14.png 404 in 54ms
+ HEAD /images/r2-16.png 404 in 54ms
+ GET /images/r2-16.png 404 in 67ms
+ ⨯ The requested resource isn't a valid image for /images/r2-16.png received text/html; charset=utf-8
+ HEAD /images/r2-17.png 404 in 49ms
+ HEAD /images/r2-18.png 404 in 47ms
+ HEAD /images/r2-19.png 404 in 52ms
+ ✓ Compiled in 145ms
+ HEAD /images/r2-19.png 404 in 30ms
+ GET /questions/exam/2020?year=2020 200 in 172ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 221ms
+ HEAD /images/r2-1.png 404 in 49ms
+ GET /icon-192.png 404 in 48ms
+ GET /questions/exam/2020?year=2020 200 in 77ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 219ms
+ HEAD /images/r2-1.png 404 in 49ms
+ GET /questions?year=2020 200 in 92ms
+ GET /icon-192.png 404 in 33ms
+ GET /questions/r2_19?year=2020 200 in 75ms
+ HEAD /images/r2-19.png 404 in 41ms
+ GET /icon-192.png 404 in 58ms
+ GET /questions/r2_19?year=2020 200 in 124ms
+ HEAD /images/r2-19.png 404 in 63ms
+ GET /icon-192.png 404 in 93ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 250ms
+ GET /questions/r2_19?year=2020 200 in 64ms
+ HEAD /images/r2-19.png 404 in 34ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 228ms
+ GET /questions?year=2020 200 in 39ms
+ GET /icon-192.png 404 in 38ms
+ GET / 200 in 99ms
+ GET /icon-192.png 404 in 38ms
+ GET /questions?year=2017 200 in 47ms
+ GET /icon-192.png 404 in 41ms
+ GET /questions/h29_13?year=2017 200 in 45ms
+ HEAD /images/h29-13.png 404 in 32ms
+ GET /icon-192.png 404 in 50ms
+ GET /questions?year=2017 200 in 41ms
+ GET /icon-192.png 404 in 35ms
+ GET / 200 in 37ms
+ GET /icon-192.png 404 in 36ms
+ GET /questions?year=2020 200 in 40ms
+ GET /icon-192.png 404 in 31ms
+ GET /questions/r2_19?year=2020 200 in 45ms
+ HEAD /images/r2-19.png 404 in 32ms
+ GET /icon-192.png 404 in 47ms
+ ✓ Compiled in 100ms
+ HEAD /images/r2-19.png 404 in 25ms
+ GET /questions/r2_20?year=2020 200 in 87ms
+ HEAD /images/r2-20.png 404 in 49ms
+ GET /icon-192.png 404 in 49ms
+ GET /questions?year=2020 200 in 74ms
+ GET /icon-192.png 404 in 35ms
+ GET /questions/r2_19?year=2020 200 in 45ms
+ HEAD /images/r2-19.png 404 in 38ms
+ GET /icon-192.png 404 in 57ms
+ GET /questions/r2_20?year=2020 200 in 41ms
+ HEAD /images/r2-20.png 404 in 40ms
+ GET /icon-192.png 404 in 60ms
+ GET /questions?year=2020 200 in 49ms
+ GET /icon-192.png 404 in 41ms
+ GET / 200 in 80ms
+ GET /icon-192.png 404 in 36ms
+ GET /questions?year=2019 200 in 43ms
+ GET /icon-192.png 404 in 40ms
+ GET /questions/exam/2019?year=2019 200 in 95ms
+ HEAD /images/r1-1.png 404 in 48ms
+ HEAD /images/r1-1.png 404 in 64ms
+ GET /icon-192.png 404 in 79ms
+ HEAD /images/r1-2.png 404 in 45ms
+ HEAD /images/r1-3.png 404 in 48ms
+ HEAD /images/r1-4.png 404 in 53ms
+ HEAD /images/r1-6.png 404 in 44ms
+ GET /images/r1-6.png 404 in 74ms
+ ⨯ The requested resource isn't a valid image for /images/r1-6.png received text/html; charset=utf-8
+ HEAD /images/r1-7.png 404 in 47ms
+ HEAD /images/r1-8.png 404 in 49ms
+ HEAD /images/r1-10.png 404 in 41ms
+ GET /images/r1-10.png 404 in 69ms
+ ⨯ The requested resource isn't a valid image for /images/r1-10.png received text/html; charset=utf-8
+ HEAD /images/r1-11.png 404 in 50ms
+ HEAD /images/r1-12.png 404 in 43ms
+ HEAD /images/r1-13.png 404 in 51ms
+ HEAD /images/r1-14.png 404 in 41ms
+ HEAD /images/r1-15.png 404 in 54ms
+ HEAD /images/r1-16.png 404 in 47ms
+ HEAD /images/r1-17.png 404 in 62ms
+ HEAD /images/r1-18.png 404 in 53ms
+ HEAD /images/r1-20.png 404 in 55ms
+ GET /images/r1-20.png 404 in 74ms
+ ⨯ The requested resource isn't a valid image for /images/r1-20.png received text/html; charset=utf-8
+ GET /questions?year=2019 200 in 43ms
+ GET /icon-192.png 404 in 41ms
+ GET / 200 in 60ms
+ GET /icon-192.png 404 in 39ms
+ GET /questions?year=2018 200 in 49ms
+ GET /icon-192.png 404 in 35ms
+ GET /questions/exam/2018?year=2018 200 in 45ms
+ HEAD /images/h30-1.png 404 in 43ms
+ HEAD /images/h30-1.png 404 in 59ms
+ GET /icon-192.png 404 in 71ms
+ HEAD /images/h30-2.png 404 in 57ms
+ HEAD /images/h30-3.png 404 in 47ms
+ HEAD /images/h30-4.png 404 in 53ms
+ HEAD /images/h30-5.png 404 in 43ms
+ HEAD /images/h30-6.png 404 in 50ms
+ HEAD /images/h30-7.png 404 in 53ms
+ HEAD /images/h30-8.png 404 in 55ms
+ HEAD /images/h30-9.png 404 in 45ms
+ HEAD /images/h30-10.png 404 in 46ms
+ HEAD /images/h30-11.png 404 in 48ms
+ HEAD /images/h30-12.png 404 in 50ms
+ HEAD /images/h30-13.png 404 in 47ms
+ HEAD /images/h30-14.png 404 in 55ms
+ HEAD /images/h30-15.png 404 in 56ms
+ HEAD /images/h30-16.png 404 in 50ms
+ HEAD /images/h30-17.png 404 in 50ms
+ HEAD /images/h30-18.png 404 in 50ms
+ HEAD /images/h30-19.png 404 in 47ms
+ HEAD /images/h30-20.png 404 in 44ms
+ GET / 200 in 58ms
+ GET /icon-192.png 404 in 48ms
+ GET /questions?year=2017 200 in 42ms
+ GET /icon-192.png 404 in 67ms
+ GET /questions/exam/2017?year=2017 200 in 53ms
+ HEAD /images/h29-1.png 404 in 40ms
+ HEAD /images/h29-1.png 404 in 52ms
+ GET /icon-192.png 404 in 67ms
+ HEAD /images/h29-2.png 404 in 40ms
+ HEAD /images/h29-3.png 404 in 48ms
+ HEAD /images/h29-4.png 404 in 43ms
+ HEAD /images/h29-5.png 404 in 55ms
+ HEAD /images/h29-6.png 404 in 65ms
+ HEAD /images/h29-7.png 404 in 52ms
+ HEAD /images/h29-8.png 404 in 57ms
+ HEAD /images/h29-9.png 404 in 49ms
+ HEAD /images/h29-10.png 404 in 47ms
+ HEAD /images/h29-11.png 404 in 53ms
+ HEAD /images/h29-12.png 404 in 42ms
+ HEAD /images/h29-13.png 404 in 47ms
+ GET /questions?year=2017 200 in 133ms
+ GET /icon-192.png 404 in 33ms
+ GET /questions/exam/2017?year=2017 200 in 111ms
+ HEAD /images/h29-1.png 404 in 50ms
+ HEAD /images/h29-13.png 404 in 40ms
+ HEAD /images/h29-1.png 404 in 71ms
+ GET /icon-192.png 404 in 70ms
+ HEAD /images/h29-14.png 404 in 51ms
+ HEAD /images/h29-15.png 404 in 56ms
+ HEAD /images/h29-16.png 404 in 53ms
+ HEAD /images/h29-17.png 404 in 53ms
+ HEAD /images/h29-18.png 404 in 51ms
+ HEAD /images/h29-19.png 404 in 61ms
+ HEAD /images/h29-20.png 404 in 52ms
+ GET /questions?year=2017 200 in 48ms
+ GET /icon-192.png 404 in 44ms
+ GET / 200 in 127ms
+ GET /icon-192.png 404 in 36ms
+ GET /questions?year=2017 200 in 44ms
+ GET /icon-192.png 404 in 38ms
+ GET /questions/h29_13?year=2017 200 in 101ms
+ HEAD /images/h29-13.png 404 in 38ms
+ GET /icon-192.png 404 in 51ms
+ GET /questions?year=2017 200 in 60ms
+ GET /icon-192.png 404 in 39ms
+ GET /questions/exam/2017?year=2017 200 in 50ms
+ HEAD /images/h29-1.png 404 in 40ms
+ HEAD /images/h29-1.png 404 in 51ms
+ GET /icon-192.png 404 in 69ms
+ HEAD /images/h29-2.png 404 in 53ms
+ HEAD /images/h29-3.png 404 in 46ms
+ HEAD /images/h29-4.png 404 in 49ms
+ HEAD /images/h29-5.png 404 in 74ms
+ HEAD /images/h29-6.png 404 in 60ms
+ HEAD /images/h29-7.png 404 in 49ms
+ HEAD /images/h29-8.png 404 in 61ms
+ HEAD /images/h29-9.png 404 in 54ms
+ HEAD /images/h29-10.png 404 in 51ms
+ HEAD /images/h29-11.png 404 in 55ms
+ HEAD /images/h29-12.png 404 in 44ms
+ HEAD /images/h29-13.png 404 in 48ms
+ GET /questions/exam/2017?year=2017 200 in 228ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 227ms
+ HEAD /images/h29-1.png 404 in 57ms
+ GET /icon-192.png 404 in 63ms
+ HEAD /images/h29-2.png 404 in 44ms
+ HEAD /images/h29-3.png 404 in 52ms
+ HEAD /images/h29-4.png 404 in 49ms
+ HEAD /images/h29-5.png 404 in 50ms
+ HEAD /images/h29-6.png 404 in 55ms
+ HEAD /images/h29-7.png 404 in 48ms
+ HEAD /images/h29-8.png 404 in 70ms
+ HEAD /images/h29-9.png 404 in 51ms
+ HEAD /images/h29-10.png 404 in 51ms
+ HEAD /images/h29-11.png 404 in 62ms
+ HEAD /images/h29-12.png 404 in 57ms
+ HEAD /images/h29-13.png 404 in 53ms
+ HEAD /images/h29-13.png 404 in 33ms
+ ✓ Compiled in 131ms
+ ✓ Compiled in 96ms
+ ✓ Compiled in 53ms
+ GET /questions?year=2017 200 in 140ms
+ GET /icon-192.png 404 in 41ms
+ GET /questions/exam/2017?year=2017 200 in 111ms
+ HEAD /images/h29-1.png 404 in 50ms
+ HEAD /images/h29-1.png 404 in 62ms
+ HEAD /images/h29-13.png 404 in 68ms
+ GET /icon-192.png 404 in 76ms
+ GET /questions?year=2017 200 in 45ms
+ GET /icon-192.png 404 in 37ms
+ GET / 200 in 115ms
+ GET /icon-192.png 404 in 42ms
+ GET /questions?year=2016 200 in 44ms
+ GET /icon-192.png 404 in 74ms
+ GET /questions/exam/2016?year=2016 200 in 42ms
+ HEAD /images/h28-1.png 404 in 42ms
+ HEAD /images/h28-1.png 404 in 55ms
+ GET /icon-192.png 404 in 74ms
+ HEAD /images/h28-2.png 404 in 53ms
+ HEAD /images/h28-3.png 404 in 47ms
+ HEAD /images/h28-4.png 404 in 68ms
+ ✓ Compiled in 117ms
+ HEAD /images/h28-4.png 404 in 39ms
+ HEAD /images/h28-4.png 404 in 30ms
+ HEAD /images/h28-5.png 404 in 56ms
+ GET /questions?year=2016 200 in 106ms
+ GET /icon-192.png 404 in 39ms
+ GET /questions/h28_01?year=2016 200 in 109ms
+ HEAD /images/h28-1.png 404 in 44ms
+ GET /icon-192.png 404 in 60ms
+ GET /questions?year=2016 200 in 46ms
+ GET /icon-192.png 404 in 42ms
+ GET /questions/h28_02?year=2016 200 in 53ms
+ HEAD /images/h28-2.png 404 in 38ms
+ GET /icon-192.png 404 in 58ms
+ GET /questions?year=2016 200 in 43ms
+ GET /icon-192.png 404 in 42ms
+ GET /questions/h28_05?year=2016 200 in 43ms
+ HEAD /images/h28-5.png 404 in 34ms
+ GET /icon-192.png 404 in 50ms
+ ✓ Compiled in 115ms
+ HEAD /images/h28-5.png 404 in 35ms
+ HEAD /images/h28-5.png 404 in 29ms
+ GET /questions/h28_06?year=2016 200 in 112ms
+ HEAD /images/h28-6.png 404 in 62ms
+ GET /icon-192.png 404 in 79ms
+ GET /questions/h28_07?year=2016 200 in 49ms
+ HEAD /images/h28-7.png 404 in 42ms
+ GET /icon-192.png 404 in 64ms
+ ✓ Compiled in 101ms
+ HEAD /images/h28-7.png 404 in 50ms
+ HEAD /images/h28-7.png 404 in 31ms
+ GET /questions/h28_08?year=2016 200 in 114ms
+ HEAD /images/h28-8.png 404 in 71ms
+ GET /icon-192.png 404 in 71ms
+ ✓ Compiled in 103ms
+ HEAD /images/h28-8.png 404 in 44ms
+ HEAD /images/h28-8.png 404 in 32ms
+ GET /questions/h28_09?year=2016 200 in 116ms
+ HEAD /images/h28-9.png 404 in 60ms
+ GET /icon-192.png 404 in 86ms
+ ✓ Compiled in 105ms
+ HEAD /images/h28-9.png 404 in 39ms
+ GET /questions/h28_10?year=2016 200 in 118ms
+ HEAD /images/h28-10.png 404 in 68ms
+ GET /icon-192.png 404 in 85ms
+ ✓ Compiled in 140ms
+ HEAD /images/h28-10.png 404 in 40ms
+ HEAD /images/h28-10.png 404 in 30ms
+ GET /questions/h28_11?year=2016 200 in 121ms
+ HEAD /images/h28-11.png 404 in 81ms
+ GET /icon-192.png 404 in 100ms
+ GET /questions/h28_11?year=2016 200 in 233ms
+ HEAD /images/h28-11.png 404 in 42ms
+ GET /icon-192.png 404 in 58ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 243ms
+ GET /questions/h28_12?year=2016 200 in 43ms
+ HEAD /images/h28-12.png 404 in 45ms
+ GET /icon-192.png 404 in 70ms
+ GET /questions/h28_12?year=2016 200 in 250ms
+ HEAD /images/h28-12.png 404 in 61ms
+ GET /icon-192.png 404 in 83ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 252ms
+ GET /questions/h28_13?year=2016 200 in 50ms
+ HEAD /images/h28-13.png 404 in 47ms
+ GET /icon-192.png 404 in 70ms
+ ✓ Compiled in 99ms
+ HEAD /images/h28-13.png 404 in 40ms
+ GET /questions/h28_14?year=2016 200 in 106ms
+ HEAD /images/h28-14.png 404 in 73ms
+ GET /icon-192.png 404 in 95ms
+ ✓ Compiled in 89ms
+ HEAD /images/h28-14.png 404 in 43ms
+ GET /questions/h28_15?year=2016 200 in 108ms
+ HEAD /images/h28-15.png 404 in 72ms
+ GET /icon-192.png 404 in 93ms
+ GET /questions/h28_15?year=2016 200 in 246ms
+ HEAD /images/h28-15.png 404 in 74ms
+ GET /icon-192.png 404 in 81ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 248ms
+ GET /questions/h28_16?year=2016 200 in 47ms
+ HEAD /images/h28-16.png 404 in 44ms
+ GET /icon-192.png 404 in 71ms
+ ✓ Compiled in 95ms
+ HEAD /images/h28-16.png 404 in 41ms
+ GET /questions/h28_16?year=2016 200 in 198ms
+ HEAD /images/h28-16.png 404 in 59ms
+ GET /icon-192.png 404 in 79ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 249ms
+ GET /questions/h28_17?year=2016 200 in 47ms
+ HEAD /images/h28-17.png 404 in 43ms
+ GET /icon-192.png 404 in 65ms
+ ✓ Compiled in 92ms
+ HEAD /images/h28-17.png 404 in 51ms
+ GET /questions/h28_17?year=2016 200 in 216ms
+ HEAD /images/h28-17.png 404 in 53ms
+ GET /icon-192.png 404 in 79ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 247ms
+ GET /questions/h28_18?year=2016 200 in 46ms
+ HEAD /images/h28-18.png 404 in 44ms
+ GET /icon-192.png 404 in 70ms
+ GET /questions/h28_19?year=2016 200 in 55ms
+ HEAD /images/h28-19.png 404 in 50ms
+ GET /icon-192.png 404 in 74ms
+ ✓ Compiled in 84ms
+ HEAD /images/h28-19.png 404 in 42ms
+ GET /questions/h28_19?year=2016 200 in 209ms
+ HEAD /images/h28-19.png 404 in 57ms
+ GET /icon-192.png 404 in 76ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 248ms
+ GET /questions/h28_20?year=2016 200 in 47ms
+ HEAD /images/h28-20.png 404 in 43ms
+ GET /icon-192.png 404 in 66ms
+ ✓ Compiled in 93ms
+ HEAD /images/h28-20.png 404 in 46ms
+ GET /questions?year=2016 200 in 132ms
+ GET /icon-192.png 404 in 48ms
+ GET / 200 in 135ms
+ GET /icon-192.png 404 in 52ms
+ GET /questions?year=2010 200 in 44ms
+ GET /icon-192.png 404 in 45ms
+ GET /questions/exam/2010?year=2010 200 in 120ms
+ HEAD /images/h22-1.png 404 in 71ms
+ HEAD /images/h22-1.png 404 in 73ms
+ GET /icon-192.png 404 in 102ms
+ HEAD /images/h22-2.png 404 in 74ms
+ ✓ Compiled in 113ms
+ HEAD /images/h22-2.png 404 in 40ms
+ HEAD /images/h22-2.png 404 in 33ms
+ ✓ Compiled in 140ms
+ HEAD /images/h22-4.png 404 in 77ms
+ GET /images/h22-4.png 404 in 83ms
+ ⨯ The requested resource isn't a valid image for /images/h22-4.png received text/html; charset=utf-8
+ ✓ Compiled in 101ms
+ HEAD /images/h22-4.png 404 in 42ms
+ HEAD /images/h22-4.png 404 in 59ms
+ HEAD /images/h22-5.png 404 in 64ms
+ HEAD /images/h22-6.png 404 in 62ms
+ GET /questions?year=2010 200 in 137ms
+ GET /icon-192.png 404 in 45ms
+ GET /questions/h22_05?year=2010 200 in 111ms
+ HEAD /images/h22-5.png 404 in 63ms
+ GET /icon-192.png 404 in 85ms
+ ✓ Compiled in 136ms
+ HEAD /images/h22-5.png 404 in 45ms
+ HEAD /images/h22-5.png 404 in 37ms
+ GET /questions/h22_06?year=2010 200 in 111ms
+ HEAD /images/h22-6.png 404 in 49ms
+ GET /icon-192.png 404 in 76ms
+ GET /questions/h22_07?year=2010 200 in 53ms
+ HEAD /images/h22-7.png 404 in 48ms
+ GET /icon-192.png 404 in 71ms
+ GET /questions/h22_08?year=2010 200 in 55ms
+ HEAD /images/h22-8.png 404 in 47ms
+ GET /icon-192.png 404 in 69ms
+ ✓ Compiled in 113ms
+ HEAD /images/h22-8.png 404 in 81ms
+ HEAD /images/h22-8.png 404 in 33ms
+ GET /questions/h22_09?year=2010 200 in 121ms
+ HEAD /images/h22-9.png 404 in 48ms
+ GET /icon-192.png 404 in 75ms
+ GET /questions/h22_10?year=2010 200 in 53ms
+ HEAD /images/h22-10.png 404 in 52ms
+ GET /icon-192.png 404 in 77ms
+ GET /questions/h22_11?year=2010 200 in 53ms
+ HEAD /images/h22-11.png 404 in 50ms
+ GET /icon-192.png 404 in 80ms
+ GET /questions/h22_12?year=2010 200 in 50ms
+ HEAD /images/h22-12.png 404 in 55ms
+ GET /icon-192.png 404 in 76ms
+ GET /questions/h22_13?year=2010 200 in 66ms
+ HEAD /images/h22-13.png 404 in 55ms
+ GET /icon-192.png 404 in 81ms
+ ✓ Compiled in 106ms
+ HEAD /images/h22-13.png 404 in 50ms
+ HEAD /images/h22-13.png 404 in 39ms
+ ✓ Compiled in 97ms
+ HEAD /images/h22-13.png 404 in 40ms
+ HEAD /images/h22-13.png 404 in 34ms
+ GET /questions/h22_14?year=2010 200 in 114ms
+ HEAD /images/h22-14.png 404 in 76ms
+ GET /icon-192.png 404 in 93ms
+ GET /questions/h22_15?year=2010 200 in 63ms
+ HEAD /images/h22-15.png 404 in 53ms
+ GET /icon-192.png 404 in 78ms
+ GET /questions/h22_16?year=2010 200 in 58ms
+ HEAD /images/h22-16.png 404 in 51ms
+ GET /icon-192.png 404 in 71ms
+ GET /questions/h22_17?year=2010 200 in 56ms
+ HEAD /images/h22-17.png 404 in 50ms
+ GET /icon-192.png 404 in 75ms
+ GET /questions/h22_18?year=2010 200 in 53ms
+ HEAD /images/h22-18.png 404 in 49ms
+ GET /icon-192.png 404 in 72ms
+ GET /questions/h22_19?year=2010 200 in 59ms
+ HEAD /images/h22-19.png 404 in 50ms
+ GET /icon-192.png 404 in 74ms
+ GET /questions/h22_20?year=2010 200 in 59ms
+ HEAD /images/h22-20.png 404 in 51ms
+ GET /icon-192.png 404 in 71ms
+ ✓ Compiled in 106ms
+ HEAD /images/h22-20.png 404 in 74ms
+ HEAD /images/h22-20.png 404 in 35ms
+ HEAD /images/h22-20.png 404 in 34ms
+ GET /questions?year=2010 200 in 123ms
+ GET /icon-192.png 404 in 44ms
+ GET /questions/h22_20?year=2010 200 in 114ms
+ HEAD /images/h22-20.png 404 in 87ms
+ GET /icon-192.png 404 in 106ms
+ ✓ Compiled in 103ms
+ HEAD /images/h22-20.png 404 in 49ms
+ HEAD /images/h22-20.png 404 in 37ms
+ GET /questions?year=2010 200 in 127ms
+ GET /icon-192.png 404 in 55ms
+ GET / 200 in 110ms
+ GET /icon-192.png 404 in 68ms
+ GET /questions?year=2015 200 in 47ms
+ GET /icon-192.png 404 in 54ms
+ GET /questions/h27_01?year=2015 200 in 109ms
+ HEAD /images/h27-1.png 404 in 50ms
+ GET /icon-192.png 404 in 74ms
+ GET /questions/h27_02?year=2015 200 in 53ms
+ HEAD /images/h27-2.png 404 in 52ms
+ GET /icon-192.png 404 in 84ms
+ GET /questions/h27_03?year=2015 200 in 54ms
+ HEAD /images/h27-3.png 404 in 51ms
+ GET /icon-192.png 404 in 76ms
+ GET /questions/h27_04?year=2015 200 in 58ms
+ HEAD /images/h27-4.png 404 in 52ms
+ GET /icon-192.png 404 in 77ms
+ GET /questions/h27_05?year=2015 200 in 58ms
+ HEAD /images/h27-5.png 404 in 54ms
+ GET /icon-192.png 404 in 77ms
+ GET /questions/h27_06?year=2015 200 in 62ms
+ HEAD /images/h27-6.png 404 in 51ms
+ GET /icon-192.png 404 in 77ms
+ GET /questions/h27_07?year=2015 200 in 74ms
+ HEAD /images/h27-7.png 404 in 55ms
+ GET /icon-192.png 404 in 80ms
+ GET /questions/h27_08?year=2015 200 in 49ms
+ HEAD /images/h27-8.png 404 in 52ms
+ GET /icon-192.png 404 in 81ms
+ GET /questions/h27_09?year=2015 200 in 55ms
+ HEAD /images/h27-9.png 404 in 57ms
+ GET /icon-192.png 404 in 84ms
+ GET /questions/h27_10?year=2015 200 in 60ms
+ HEAD /images/h27-10.png 404 in 54ms
+ GET /icon-192.png 404 in 85ms
+ GET /questions/h27_11?year=2015 200 in 57ms
+ HEAD /images/h27-11.png 404 in 54ms
+ GET /icon-192.png 404 in 84ms
+ GET /questions/h27_12?year=2015 200 in 52ms
+ HEAD /images/h27-12.png 404 in 52ms
+ GET /icon-192.png 404 in 79ms
+ GET /questions/h27_13?year=2015 200 in 62ms
+ HEAD /images/h27-13.png 404 in 53ms
+ GET /icon-192.png 404 in 74ms
+ GET /questions/h27_14?year=2015 200 in 55ms
+ HEAD /images/h27-14.png 404 in 52ms
+ GET /icon-192.png 404 in 80ms
+ GET /questions/h27_15?year=2015 200 in 64ms
+ HEAD /images/h27-15.png 404 in 56ms
+ GET /icon-192.png 404 in 83ms
+ GET /questions/h27_16?year=2015 200 in 54ms
+ HEAD /images/h27-16.png 404 in 52ms
+ GET /icon-192.png 404 in 77ms
+ GET /questions/h27_17?year=2015 200 in 56ms
+ HEAD /images/h27-17.png 404 in 49ms
+ GET /icon-192.png 404 in 74ms
+ GET /questions/h27_18?year=2015 200 in 53ms
+ HEAD /images/h27-18.png 404 in 51ms
+ GET /icon-192.png 404 in 77ms
+ GET /questions/h27_19?year=2015 200 in 55ms
+ HEAD /images/h27-19.png 404 in 52ms
+ GET /icon-192.png 404 in 76ms
+ ✓ Compiled in 105ms
+ HEAD /images/h27-19.png 404 in 48ms
+ GET /questions/h27_20?year=2015 200 in 122ms
+ HEAD /images/h27-20.png 404 in 67ms
+ GET /icon-192.png 404 in 88ms
+ GET /questions?year=2015 200 in 122ms
+ GET /icon-192.png 404 in 47ms
+ GET / 200 in 168ms
+ GET /icon-192.png 404 in 95ms
+ GET /questions?year=2014 200 in 54ms
+ GET /icon-192.png 404 in 48ms
+ GET /questions/exam/2014?year=2014 200 in 106ms
+ HEAD /images/h26-1.png 404 in 61ms
+ HEAD /images/h26-1.png 404 in 74ms
+ GET /icon-192.png 404 in 98ms
+ HEAD /images/h26-2.png 404 in 63ms
+ HEAD /images/h26-3.png 404 in 66ms
+ HEAD /images/h26-4.png 404 in 56ms
+ GET /questions/exam/2014?year=2014 200 in 271ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 232ms
+ HEAD /images/h26-1.png 404 in 80ms
+ GET /icon-192.png 404 in 87ms
+ HEAD /images/h26-2.png 404 in 60ms
+ HEAD /images/h26-3.png 404 in 59ms
+ HEAD /images/h26-4.png 404 in 59ms
+ GET /questions/exam/2014?year=2014 200 in 141ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 233ms
+ HEAD /images/h26-1.png 404 in 68ms
+ HEAD /images/h26-4.png 404 in 73ms
+ GET /questions/exam/2014?year=2014 200 in 105ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 226ms
+ HEAD /images/h26-1.png 404 in 70ms
+ HEAD /images/h26-4.png 404 in 71ms
+ GET /questions/exam/2014?year=2014 200 in 95ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 231ms
+ HEAD /images/h26-1.png 404 in 47ms
+ HEAD /images/h26-2.png 404 in 54ms
+ HEAD /images/h26-3.png 404 in 55ms
+ HEAD /images/h26-4.png 404 in 47ms
+ ✓ Compiled in 172ms
+ HEAD /images/h26-4.png 404 in 48ms
+ HEAD /images/h26-5.png 404 in 60ms
+ HEAD /images/h26-7.png 404 in 84ms
+ GET /images/h26-7.png 404 in 92ms
+ ⨯ The requested resource isn't a valid image for /images/h26-7.png received text/html; charset=utf-8
+ GET /questions?year=2014 200 in 171ms
+ GET /icon-192.png 404 in 76ms
+ GET /questions/h26_06?year=2014 200 in 108ms
+ GET /icon-192.png 404 in 66ms
+ GET /questions/h26_07?year=2014 200 in 50ms
+ HEAD /images/h26-7.png 404 in 52ms
+ GET /icon-192.png 404 in 74ms
+ ✓ Compiled in 166ms
+ HEAD /images/h26-7.png 404 in 50ms
+ HEAD /images/h26-7.png 404 in 38ms
+ GET /questions/h26_08?year=2014 200 in 151ms
+ HEAD /images/h26-8.png 404 in 55ms
+ GET /icon-192.png 404 in 78ms
+ GET /questions/h26_08?year=2014 200 in 312ms
+ HEAD /images/h26-8.png 404 in 73ms
+ GET /icon-192.png 404 in 103ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 267ms
+ GET /questions/h26_09?year=2014 200 in 47ms
+ HEAD /images/h26-9.png 404 in 48ms
+ GET /icon-192.png 404 in 74ms
+ GET /questions/h26_10?year=2014 200 in 65ms
+ HEAD /images/h26-10.png 404 in 61ms
+ GET /icon-192.png 404 in 92ms
+ GET /questions/h26_11?year=2014 200 in 61ms
+ HEAD /images/h26-11.png 404 in 65ms
+ GET /icon-192.png 404 in 94ms
+ ✓ Compiled in 110ms
+ HEAD /images/h26-11.png 404 in 66ms
+ GET /questions/h26_11?year=2014 200 in 237ms
+ HEAD /images/h26-11.png 404 in 72ms
+ GET /icon-192.png 404 in 100ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 281ms
+ ✓ Compiled in 89ms
+ HEAD /images/h26-11.png 404 in 53ms
+ GET /questions/h26_12?year=2014 200 in 127ms
+ HEAD /images/h26-12.png 404 in 53ms
+ GET /icon-192.png 404 in 82ms
+ GET /questions/h26_13?year=2014 200 in 63ms
+ HEAD /images/h26-13.png 404 in 60ms
+ GET /icon-192.png 404 in 90ms
+ GET /questions/h26_14?year=2014 200 in 63ms
+ HEAD /images/h26-14.png 404 in 59ms
+ GET /icon-192.png 404 in 87ms
+ ✓ Compiled in 93ms
+ HEAD /images/h26-14.png 404 in 62ms
+ GET /questions/h26_14?year=2014 200 in 234ms
+ HEAD /images/h26-14.png 404 in 68ms
+ GET /icon-192.png 404 in 94ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 260ms
+ GET /questions/h26_15?year=2014 200 in 46ms
+ HEAD /images/h26-15.png 404 in 51ms
+ GET /icon-192.png 404 in 81ms
+ GET /questions/h26_16?year=2014 200 in 62ms
+ HEAD /images/h26-16.png 404 in 66ms
+ GET /icon-192.png 404 in 92ms
+ ✓ Compiled in 98ms
+ HEAD /images/h26-16.png 404 in 58ms
+ GET /questions/h26_16?year=2014 200 in 216ms
+ HEAD /images/h26-16.png 404 in 71ms
+ GET /icon-192.png 404 in 97ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 259ms
+ GET /questions/h26_17?year=2014 200 in 46ms
+ HEAD /images/h26-17.png 404 in 55ms
+ GET /icon-192.png 404 in 85ms
+ GET /questions/h26_18?year=2014 200 in 60ms
+ HEAD /images/h26-18.png 404 in 61ms
+ GET /icon-192.png 404 in 88ms
+ GET /questions/h26_19?year=2014 200 in 60ms
+ HEAD /images/h26-19.png 404 in 58ms
+ GET /icon-192.png 404 in 87ms
+ GET /questions/h26_20?year=2014 200 in 56ms
+ HEAD /images/h26-20.png 404 in 57ms
+ GET /icon-192.png 404 in 82ms
+ GET /questions?year=2014 200 in 138ms
+ GET /icon-192.png 404 in 54ms
+ GET / 200 in 143ms
+ GET /icon-192.png 404 in 67ms
+ GET /questions?year=2011 200 in 56ms
+ GET /icon-192.png 404 in 53ms
+ GET /questions/exam/2011?year=2011 200 in 126ms
+ HEAD /images/h23-1.png 404 in 75ms
+ HEAD /images/h23-1.png 404 in 93ms
+ GET /icon-192.png 404 in 115ms
+ ✓ Compiled in 98ms
+ HEAD /images/h23-1.png 404 in 48ms
+ ✓ Compiled in 109ms
+ HEAD /images/h23-1.png 404 in 46ms
+ HEAD /images/h23-1.png 404 in 41ms
+ ✓ Compiled in 108ms
+ HEAD /images/h23-1.png 404 in 51ms
+ HEAD /images/h23-1.png 404 in 42ms
+ HEAD /images/h23-2.png 404 in 62ms
+ ✓ Compiled in 110ms
+ HEAD /images/h23-2.png 404 in 47ms
+ HEAD /images/h23-2.png 404 in 40ms
+ ✓ Compiled in 100ms
+ HEAD /images/h23-2.png 404 in 47ms
+ HEAD /images/h23-2.png 404 in 41ms
+ HEAD /images/h23-3.png 404 in 64ms
+ GET /questions?year=2011 200 in 141ms
+ GET /icon-192.png 404 in 57ms
+ GET /questions/exam/2011?year=2011 200 in 113ms
+ HEAD /images/h23-1.png 404 in 49ms
+ HEAD /images/h23-1.png 404 in 87ms
+ HEAD /images/h23-3.png 404 in 95ms
+ GET /icon-192.png 404 in 121ms
+ GET /questions?year=2011 200 in 53ms
+ GET /icon-192.png 404 in 56ms
+ GET /questions/exam/2011?year=2011 200 in 58ms
+ HEAD /images/h23-1.png 404 in 79ms
+ HEAD /images/h23-1.png 404 in 95ms
+ GET /icon-192.png 404 in 114ms
+ HEAD /images/h23-2.png 404 in 56ms
+ HEAD /images/h23-3.png 404 in 65ms
+ GET /questions?year=2011 200 in 57ms
+ GET /icon-192.png 404 in 62ms
+ GET /questions/exam/2011?year=2011 200 in 51ms
+ HEAD /images/h23-1.png 404 in 87ms
+ HEAD /images/h23-1.png 404 in 100ms
+ GET /icon-192.png 404 in 126ms
+ HEAD /images/h23-2.png 404 in 49ms
+ HEAD /images/h23-3.png 404 in 68ms
+ HEAD /images/h23-4.png 404 in 66ms
+ HEAD /images/h23-5.png 404 in 66ms
+ HEAD /images/h23-6.png 404 in 55ms
+ HEAD /images/h23-7.png 404 in 57ms
+ ✓ Compiled in 104ms
+ HEAD /images/h23-7.png 404 in 54ms
+ HEAD /images/h23-7.png 404 in 49ms
+ HEAD /images/h23-7.png 404 in 46ms
+ HEAD /images/h23-8.png 404 in 67ms
+ ✓ Compiled in 101ms
+ HEAD /images/h23-10.png 404 in 87ms
+ GET /images/h23-10.png 404 in 96ms
+ ⨯ The requested resource isn't a valid image for /images/h23-10.png received text/html; charset=utf-8
+ HEAD /images/h23-11.png 404 in 64ms
+ HEAD /images/h23-12.png 404 in 70ms
+ HEAD /images/h23-13.png 404 in 62ms
+ HEAD /images/h23-14.png 404 in 68ms
+ HEAD /images/h23-15.png 404 in 69ms
+ HEAD /images/h23-16.png 404 in 61ms
+ ✓ Compiled in 106ms
+ HEAD /images/h23-16.png 404 in 50ms
+ HEAD /images/h23-16.png 404 in 39ms
+ HEAD /images/h23-17.png 404 in 68ms
+ HEAD /images/h23-18.png 404 in 66ms
+ HEAD /images/h23-19.png 404 in 69ms
+ HEAD /images/h23-20.png 404 in 58ms
+ ✓ Compiled in 102ms
+ HEAD /images/h23-20.png 404 in 52ms
+ GET /questions/h23_09?backToExamResult=2011&examMode=true 200 in 145ms
+ GET /icon-192.png 404 in 126ms
+ ○ Compiling /questions/exam/[year]/result ...
+ ✓ Compiled /questions/exam/[year]/result in 531ms
+ GET /questions/exam/2011/result 200 in 900ms
+ GET /icon-192.png 404 in 64ms
+ GET /questions/h23_13?backToExamResult=2011&examMode=true 200 in 58ms
+ HEAD /images/h23-13.png 404 in 67ms
+ GET /icon-192.png 404 in 101ms
+ GET /questions/h23_14 200 in 58ms
+ HEAD /images/h23-14.png 404 in 61ms
+ GET /icon-192.png 404 in 94ms
+ GET /questions 200 in 108ms
+ GET /icon-192.png 404 in 81ms
+ GET / 200 in 286ms
+ GET /icon-192.png 404 in 96ms
+ GET /questions?year=2024 200 in 71ms
+ GET /icon-192.png 404 in 70ms
+ GET /questions/r6_01?year=2024 200 in 63ms
+ HEAD /images/r6-1.png 404 in 74ms
+ GET /icon-192.png 404 in 109ms
+ GET /questions?year=2024 200 in 97ms
+ GET /icon-192.png 404 in 86ms
+ GET / 200 in 59ms
+ GET /icon-192.png 404 in 66ms
+ ✓ Compiled in 47ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/mandokorokoumei/sample/surveyor-exam-app/.next/server/app/page/app-build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/mandokorokoumei/sample/surveyor-exam-app/.next/server/app/page/app-build-manifest.json'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 592ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/mandokorokoumei/sample/surveyor-exam-app/.next/static/development/_buildManifest.js.tmp.hvgbbsrfo8f'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/mandokorokoumei/sample/surveyor-exam-app/.next/static/development/_buildManifest.js.tmp.hvgbbsrfo8f'
+}
+[Error: ENOENT: no such file or directory, open '/Users/mandokorokoumei/sample/surveyor-exam-app/.next/server/app/page/app-build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/mandokorokoumei/sample/surveyor-exam-app/.next/server/app/page/app-build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/mandokorokoumei/sample/surveyor-exam-app/.next/static/development/_buildManifest.js.tmp.btyh2afqa1h'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/mandokorokoumei/sample/surveyor-exam-app/.next/static/development/_buildManifest.js.tmp.btyh2afqa1h'
+}
+[Error: ENOENT: no such file or directory, open '/Users/mandokorokoumei/sample/surveyor-exam-app/.next/static/development/_buildManifest.js.tmp.lhgrdhciwi'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/mandokorokoumei/sample/surveyor-exam-app/.next/static/development/_buildManifest.js.tmp.lhgrdhciwi'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/mandokorokoumei/sample/surveyor-exam-app/.next/server/app/favicon.ico/[__metadata_id__]/route/app-paths-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/mandokorokoumei/sample/surveyor-exam-app/.next/server/app/favicon.ico/[__metadata_id__]/route/app-paths-manifest.json'
+}
+[?25h

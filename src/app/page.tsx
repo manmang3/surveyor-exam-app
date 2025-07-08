@@ -158,12 +158,15 @@ export default function Home() {
                 </div>
               </Link>
               
-              <div className="p-4 border border-gray-200 rounded-lg bg-gray-50 opacity-60">
+              <Link
+                href="/games/chimoku-run"
+                className="block p-4 border border-gray-200 rounded-lg hover:bg-red-50 hover:border-red-300 transition-colors"
+              >
                 <div className="flex justify-between items-center">
-                  <span className="font-medium text-gray-500">🎮 分野別ミニゲーム</span>
-                  <span className="text-xs text-gray-400">準備中</span>
+                  <span className="font-medium text-gray-900">🎮 分野別ミニゲーム</span>
+                  <span className="text-sm text-gray-500">地目ラン</span>
                 </div>
-              </div>
+              </Link>
               
               <Link
                 href="/dashboard"
