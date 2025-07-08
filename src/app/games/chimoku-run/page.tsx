@@ -122,7 +122,7 @@ export default function ChimokuRunGame() {
 
   const [showStartScreen, setShowStartScreen] = useState(true);
   const [showResultScreen, setShowResultScreen] = useState(false);
-  const [questionSequence, setQuestionSequence] = useState<ChimokuQuestion[]>([]);
+  // const [questionSequence, setQuestionSequence] = useState<ChimokuQuestion[]>([]); // 未使用のためコメントアウト
   const gameLoopRef = useRef<number | undefined>(undefined);
   const gameAreaRef = useRef<HTMLDivElement>(null);
 
@@ -135,7 +135,7 @@ export default function ChimokuRunGame() {
 
   // 問題から壁を生成
   const createWallFromQuestion = useCallback((question: ChimokuQuestion, index: number): Wall => {
-    const correctSide = Math.random() < 0.5 ? 'left' : 'right';
+    const correctSide: 'left' | 'right' = Math.random() < 0.5 ? 'left' : 'right';
     const isSpecialPhase = index >= 23; // 宅地vs雑種地フェーズ
     
     let leftChoice: string;
@@ -174,7 +174,7 @@ export default function ChimokuRunGame() {
   // 壁を生成
   const generateWalls = useCallback(() => {
     const sequence = generateQuestionSequence();
-    setQuestionSequence(sequence);
+    // setQuestionSequence(sequence); // 未使用のためコメントアウト
     
     const walls: Wall[] = [];
     sequence.forEach((question, index) => {
@@ -675,8 +675,8 @@ export default function ChimokuRunGame() {
             {process.env.NODE_ENV === 'development' && currentQuestion && (
               <div className="absolute top-20 right-4 z-30 bg-purple-600 text-white px-2 py-1 rounded text-xs max-w-xs">
                 <div>問題: {currentQuestion.question}</div>
-                <div className="text-green-300">正解: {currentQuestion.correctAnswer}</div>
-                <div className="text-red-300">不正解: {currentQuestion.wrongAnswer}</div>
+                <div className="text-green-300">左側: {currentQuestion.leftChoice}</div>
+                <div className="text-red-300">右側: {currentQuestion.rightChoice}</div>
                 <div>正解側: {currentQuestion.correctSide}</div>
               </div>
             )}

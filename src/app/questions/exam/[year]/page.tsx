@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -61,23 +61,23 @@ export default function ExamModePage() {
   };
 
   // LocalStorageキー
-  const getStorageKey = () => `examMode_${year}`;
+  const getStorageKey = useCallback(() => `examMode_${year}`, [year]);
 
   // 状態を保存
-  const saveExamState = (state: ExamState) => {
+  const saveExamState = useCallback((state: ExamState) => {
     if (typeof window !== 'undefined') {
       localStorage.setItem(getStorageKey(), JSON.stringify(state));
     }
-  };
+  }, [getStorageKey]);
 
   // 状態を復元
-  const loadExamState = (): ExamState | null => {
+  const loadExamState = useCallback((): ExamState | null => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem(getStorageKey());
       return saved ? JSON.parse(saved) : null;
     }
     return null;
-  };
+  }, [getStorageKey]);
 
   // 初期化時に保存された状態を確認
   useEffect(() => {
@@ -127,7 +127,7 @@ export default function ExamModePage() {
     
     // 初期化完了フラグを設定
     isInitializedRef.current.add(year);
-  }, [year]);
+  }, [year, getStorageKey, loadExamState]);
 
   // タイマー処理
   useEffect(() => {
