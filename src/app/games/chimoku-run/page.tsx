@@ -330,12 +330,12 @@ export default function ChimokuRunGame() {
         const gameAreaHeight = gameAreaRef.current?.clientHeight || 600;
         const playerY = gameAreaHeight - 265; // プレイヤー265px上の位置
         
-        // プレイヤー付近の壁を検索（より幅広い範囲でチェック）
+        // プレイヤー付近の壁を検索（衝突判定用）
         const currentWall = newWalls.find(wall => {
           const wallY = wall.zPosition;
           const wallBottomY = wall.zPosition + 80;
-          // プレイヤーの上下50px範囲でチェック
-          return (wallBottomY >= playerY - 50 && wallY <= playerY + 50) && !wall.passed;
+          // プレイヤーの上下30px範囲でチェック（衝突判定用）
+          return (wallBottomY >= playerY - 30 && wallY <= playerY + 30) && !wall.passed;
         });
         
         console.log(`チェック対象の壁: ${currentWall ? `ID=${currentWall.id}, zPos=${currentWall.zPosition.toFixed(1)}` : 'なし'}`);
@@ -349,25 +349,46 @@ export default function ChimokuRunGame() {
             setTimeout(() => {
               console.log('gameOver()関数実行');
               gameOver();
-            }, 500); // 遅延を短くしてテストしやすくする
+            }, 500);
             return {
               ...prev,
               showFeedback: true,
               feedbackMessage: `不正解！正解は「${currentWall.correctSide === 'left' ? currentWall.leftChoice : currentWall.rightChoice}」でした。`,
               walls: newWalls.map(w => w.id === currentWall.id ? {...w, passed: true} : w),
-              isPlaying: false, // ゲーム停止を明示的に設定
-              isGameOver: true // ゲームオーバーフラグを明示的に設定
+              isPlaying: false,
+              isGameOver: true
+            };
+          } else {
+            // 衝突していないが、プレイヤーの近くを通過中なので即座正解判定
+            console.log('正解ルートを通過中！即座正解判定');
+            const newCorrectAnswers = prev.correctAnswers + 1;
+            const newTotalAnswered = prev.totalAnswered + 1;
+            
+            // 全問クリアチェック
+            if (newTotalAnswered >= 28) {
+              setTimeout(() => gameOver(), 100);
+            }
+            
+            return {
+              ...prev,
+              correctAnswers: newCorrectAnswers,
+              totalAnswered: newTotalAnswered,
+              remainingQuestions: 28 - newTotalAnswered,
+              showFeedback: true,
+              feedbackMessage: '正解！',
+              walls: newWalls.map(w => w.id === currentWall.id ? {...w, passed: true} : w)
             };
           }
         }
 
-        // 壁が完全に通過したかチェック
+        // フォールバック: 通過した壁のチェック（上記で処理されなかった場合のみ）
         const passedWall = newWalls.find(wall => {
           const wallTop = wall.zPosition;
-          return wallTop > playerY + 60 && !wall.passed;
+          return wallTop > playerY + 100 && !wall.passed;
         });
 
         if (passedWall) {
+          console.log(`フォールバック: 壁通過成功 ${passedWall.id}`);
           // 通過成功
           const newCorrectAnswers = prev.correctAnswers + 1;
           const newTotalAnswered = prev.totalAnswered + 1;
@@ -388,8 +409,9 @@ export default function ChimokuRunGame() {
           };
         }
 
-        // フィードバック自動消去
-        const newShowFeedback = prev.showFeedback && prev.animationFrame % 120 < 60;
+        // フィードバック自動消去（正解時は長めに表示）
+        const feedbackDuration = prev.feedbackMessage.includes('正解') ? 180 : 120; // 正解時は3秒、不正解時は2秒
+        const newShowFeedback = prev.showFeedback && prev.animationFrame % feedbackDuration < (feedbackDuration / 2);
 
         return {
           ...prev,
@@ -661,7 +683,7 @@ export default function ChimokuRunGame() {
 
             {/* バージョン表示 */}
             <div className="absolute bottom-2 right-2 z-30 bg-red-600 text-white px-2 py-1 rounded text-sm font-bold">
-              v3.0 - スマホ最適化
+              v3.1 - 即座判定&エフェクト強化
             </div>
             
             {/* ダッシュ状態表示（控えめ） */}
@@ -880,35 +902,64 @@ export default function ChimokuRunGame() {
               </div>
             </div>
 
-            {/* フィードバック表示 */}
+            {/* フィードバック表示（強化エフェクト） */}
             {gameState.showFeedback && (
-              <div className="absolute inset-0 flex items-center justify-center z-30 pointer-events-none">
+              <div className="absolute inset-0 flex items-center justify-center z-50 pointer-events-none">
                 {gameState.feedbackMessage.includes('正解') ? (
-                  <div className="text-center">
-                    <div className="text-8xl font-bold text-yellow-400 pixel-font" 
+                  <div className="text-center relative">
+                    {/* 背景の光る円 */}
+                    <div className="absolute inset-0 bg-green-400 rounded-full opacity-30 animate-ping" 
+                         style={{ width: '400px', height: '400px', left: '-200px', top: '-200px' }}></div>
+                    <div className="absolute inset-0 bg-yellow-400 rounded-full opacity-20 animate-ping" 
+                         style={{ width: '600px', height: '600px', left: '-300px', top: '-300px', animationDelay: '0.3s' }}></div>
+                    
+                    {/* メインスター */}
+                    <div className="text-9xl font-bold text-yellow-400 pixel-font relative z-10" 
                          style={{ 
-                           animation: 'correctPop 0.8s ease-out',
-                           textShadow: '0 0 20px #fbbf24, 0 0 40px #fbbf24'
+                           animation: 'correctPop 1s ease-out, correctShake 0.8s ease-in-out 1s',
+                           textShadow: '0 0 30px #fbbf24, 0 0 60px #fbbf24, 0 0 90px #fbbf24'
                          }}>
                       🌟
                     </div>
-                    <div className="text-4xl font-bold text-green-400 pixel-font mt-4"
-                         style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
+                    
+                    {/* 正解メッセージ */}
+                    <div className="text-5xl font-bold text-green-400 pixel-font mt-4 relative z-10"
+                         style={{ 
+                           textShadow: '3px 3px 0px rgba(0,0,0,0.8), 0 0 20px rgba(34, 197, 94, 0.8)',
+                           animation: 'correctPop 0.6s ease-out 0.4s both'
+                         }}>
                       正解！
                     </div>
+                    
                     {/* キラキラエフェクト */}
-                    {Array.from({ length: 8 }, (_, i) => (
+                    {Array.from({ length: 12 }, (_, i) => (
                       <div
                         key={`sparkle-${i}`}
-                        className="absolute text-2xl"
+                        className="absolute text-3xl"
                         style={{
-                          left: `${50 + 30 * Math.cos(i * Math.PI / 4)}%`,
-                          top: `${50 + 30 * Math.sin(i * Math.PI / 4)}%`,
-                          animation: `sparkle 0.6s ${i * 0.1}s ease-out`,
+                          left: `${50 + 40 * Math.cos(i * Math.PI / 6)}%`,
+                          top: `${50 + 40 * Math.sin(i * Math.PI / 6)}%`,
+                          animation: `sparkle 1s ${i * 0.08}s ease-out`,
                           transform: 'translate(-50%, -50%)'
                         }}
                       >
                         ✨
+                      </div>
+                    ))}
+                    
+                    {/* ハートエフェクト */}
+                    {Array.from({ length: 6 }, (_, i) => (
+                      <div
+                        key={`heart-${i}`}
+                        className="absolute text-2xl"
+                        style={{
+                          left: `${50 + 25 * Math.cos(i * Math.PI / 3)}%`,
+                          top: `${50 + 25 * Math.sin(i * Math.PI / 3)}%`,
+                          animation: `sparkle 0.8s ${i * 0.1 + 0.5}s ease-out`,
+                          transform: 'translate(-50%, -50%)'
+                        }}
+                      >
+                        ❤️
                       </div>
                     ))}
                   </div>
