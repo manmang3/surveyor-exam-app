@@ -8,6 +8,14 @@ import { GameStorage } from '@/lib/games/gameStorage';
 
 // ファミコン風CSS
 const pixelStyles = `
+  * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+  }
   .pixel-font {
     font-family: 'Courier New', 'Monaco', 'Lucida Console', monospace;
     font-weight: bold;
@@ -216,12 +224,16 @@ export default function ChimokuRunGame() {
     setShowResultScreen(false);
   }, [generateWalls]);
 
-  // 主人公の移動
+  // 主人公の移動（道路内に制限）
   const movePlayer = useCallback((direction: 'left' | 'right', amount: number = 0.08) => {
     setGameState(prev => {
+      // 道路の幅に合わせて制限（左右のmx-20を考慮）
+      const roadLeftLimit = 0.15;  // 左端制限
+      const roadRightLimit = 0.85; // 右端制限
+      
       const newPosition = direction === 'left' 
-        ? Math.max(0.1, prev.playerPosition - amount)
-        : Math.min(0.9, prev.playerPosition + amount);
+        ? Math.max(roadLeftLimit, prev.playerPosition - amount)
+        : Math.min(roadRightLimit, prev.playerPosition + amount);
       
       return {
         ...prev,
@@ -442,7 +454,10 @@ export default function ChimokuRunGame() {
     if (!rect) return;
 
     const currentX = (touch.clientX - rect.left) / rect.width;
-    const newPosition = Math.max(0.1, Math.min(0.9, currentX));
+    // 道路内に制限
+    const roadLeftLimit = 0.15;
+    const roadRightLimit = 0.85;
+    const newPosition = Math.max(roadLeftLimit, Math.min(roadRightLimit, currentX));
     
     setGameState(prev => ({
       ...prev,
@@ -482,7 +497,10 @@ export default function ChimokuRunGame() {
     if (!rect) return;
 
     const currentX = (event.clientX - rect.left) / rect.width;
-    const newPosition = Math.max(0.1, Math.min(0.9, currentX));
+    // 道路内に制限
+    const roadLeftLimit = 0.15;
+    const roadRightLimit = 0.85;
+    const newPosition = Math.max(roadLeftLimit, Math.min(roadRightLimit, currentX));
     
     setGameState(prev => ({
       ...prev,
@@ -549,24 +567,7 @@ export default function ChimokuRunGame() {
   return (
     <>
       <style>{pixelStyles}</style>
-      <div className="h-screen bg-gradient-to-b from-cyan-300 via-blue-300 to-green-300 flex flex-col overflow-hidden relative">
-        {/* ファミコン風雲の背景 */}
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {Array.from({ length: 6 }, (_, i) => (
-            <div
-              key={`cloud-${i}`}
-              className="absolute bg-white rounded-full opacity-80 pixel-style"
-              style={{
-                width: `${60 + i * 20}px`,
-                height: `${30 + i * 10}px`,
-                left: `${10 + i * 15}%`,
-                top: `${5 + i * 8}%`,
-                transform: `translateX(${(gameState.backgroundOffset * 0.5 + i * 30) % 120 - 20}px)`,
-                animation: `bounce 3s ${i * 0.5}s infinite ease-in-out`
-              }}
-            />
-          ))}
-        </div>
+      <div className="h-screen bg-gray-600 flex flex-col overflow-hidden relative select-none" style={{ userSelect: 'none', WebkitUserSelect: 'none' }}>
 
         {/* ヘッダー */}
         <div className="p-4 z-50">
@@ -592,6 +593,7 @@ export default function ChimokuRunGame() {
               <div className="text-sm text-blue-600 mb-6 space-y-2 pixel-font font-bold">
                 <p>• 矢印キーまたは画面ドラッグで移動</p>
                 <p>• 正しい選択肢の側を通り抜けよう</p>
+                <p>• 画面タップまたは↑キーでダッシュ</p>
                 <p>• 間違った選択肢に当たるとゲームオーバー</p>
                 <p>• 全28問をクリアしよう！</p>
               </div>
@@ -622,7 +624,12 @@ export default function ChimokuRunGame() {
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
-            style={{ touchAction: 'none', cursor: 'pointer' }}
+            style={{ 
+              touchAction: 'none', 
+              cursor: 'pointer',
+              userSelect: 'none',
+              WebkitUserSelect: 'none'
+            }}
           >
             {/* ゲーム道路（一本道） */}
             <div className="absolute inset-0">
@@ -654,22 +661,17 @@ export default function ChimokuRunGame() {
 
             {/* バージョン表示 */}
             <div className="absolute bottom-2 right-2 z-30 bg-red-600 text-white px-2 py-1 rounded text-sm font-bold">
-              v2.9 - キーボード対応
+              v3.0 - スマホ最適化
             </div>
             
-            {/* ダッシュ状態表示 */}
+            {/* ダッシュ状態表示（控えめ） */}
             {gameState.isDragging && (
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30">
-                <div className="bg-red-500 text-white px-4 py-2 rounded-full text-xl font-bold pixel-font animate-pulse">
-                  💨 ダッシュ! 💨
+              <div className="absolute bottom-4 left-4 z-30">
+                <div className="bg-gray-800 bg-opacity-60 text-white px-2 py-1 rounded text-xs pixel-font">
+                  ダッシュ
                 </div>
               </div>
             )}
-            
-            {/* ダッシュ操作ガイド */}
-            <div className="absolute top-16 left-4 z-30 bg-black bg-opacity-75 text-white px-2 py-1 rounded text-sm">
-              クリック/タップ/↑キーでダッシュ
-            </div>
             
             {/* 問題デバッグ情報 */}
             {process.env.NODE_ENV === 'development' && currentQuestion && (
@@ -691,12 +693,9 @@ export default function ChimokuRunGame() {
             )}
 
             {/* 右上のゲーム情報 */}
-            <div className="absolute top-4 right-4 z-20 space-y-2">
+            <div className="absolute top-16 right-4 z-20">
               <div className="bg-blue-600 bg-opacity-90 rounded px-3 py-1 border-2 border-white pixel-font text-white text-center">
                 残り{gameState.remainingQuestions}問
-              </div>
-              <div className="bg-green-600 bg-opacity-90 rounded px-3 py-1 border-2 border-white pixel-font text-white text-center">
-                正解: {gameState.correctAnswers}
               </div>
             </div>
 
