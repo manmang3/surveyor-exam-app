@@ -140,6 +140,7 @@ export default function ChimokuRunGame() {
     walls: [],
     showFeedback: false,
     feedbackMessage: '',
+    feedbackStartFrame: 0,
     remainingQuestions: 28,
     currentPhase: 'chimoku',
     backgroundOffset: 0,
@@ -232,6 +233,7 @@ export default function ChimokuRunGame() {
       walls,
       showFeedback: false,
       feedbackMessage: '',
+      feedbackStartFrame: 0,
       remainingQuestions: 28,
       currentPhase: 'chimoku',
       backgroundOffset: 0,
@@ -379,6 +381,7 @@ export default function ChimokuRunGame() {
               ...prev,
               showFeedback: true,
               feedbackMessage: `不正解！正解は「${currentWall.correctSide === 'left' ? currentWall.leftChoice : currentWall.rightChoice}」でした。`,
+              feedbackStartFrame: prev.animationFrame,
               walls: newWalls.map(w => w.id === currentWall.id ? {...w, passed: true} : w),
               isPlaying: false,
               isGameOver: true
@@ -401,6 +404,7 @@ export default function ChimokuRunGame() {
               remainingQuestions: 28 - newTotalAnswered,
               showFeedback: true,
               feedbackMessage: '正解！',
+              feedbackStartFrame: prev.animationFrame,
               walls: newWalls.map(w => w.id === currentWall.id ? {...w, passed: true} : w)
             };
           }
@@ -430,13 +434,15 @@ export default function ChimokuRunGame() {
             remainingQuestions: 28 - newTotalAnswered,
             showFeedback: true,
             feedbackMessage: '正解！',
+            feedbackStartFrame: prev.animationFrame,
             walls: newWalls.map(w => w.id === passedWall.id ? {...w, passed: true} : w)
           };
         }
 
-        // フィードバック自動消去（正解時は長めに表示）
-        const feedbackDuration = prev.feedbackMessage.includes('正解') ? 90 : 120; // 正解時は1.5秒、不正解時は2秒
-        const newShowFeedback = prev.showFeedback && prev.animationFrame % feedbackDuration < feedbackDuration;
+        // フィードバック自動消去（正解時は1秒で完全に消去）
+        const feedbackDuration = prev.feedbackMessage.includes('正解') ? 60 : 120; // 正解時は1秒、不正解時は2秒
+        const feedbackElapsed = prev.animationFrame - prev.feedbackStartFrame;
+        const newShowFeedback = prev.showFeedback && feedbackElapsed < feedbackDuration;
 
         return {
           ...prev,
@@ -625,19 +631,19 @@ export default function ChimokuRunGame() {
 
         {/* スタート画面 */}
         {showStartScreen && (
-          <div className="flex-1 flex items-center justify-center p-4">
-            <div className="bg-white border-8 border-blue-600 rounded-lg shadow-xl p-8 max-w-md w-full text-center pixel-style"
+          <div className="flex-1 flex items-start justify-center p-4 pt-8">
+            <div className="bg-white border-8 border-blue-600 rounded-lg shadow-xl p-6 max-w-md w-full text-center pixel-style mt-4"
                  style={{ 
                    background: 'linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%)',
                    boxShadow: '0 0 20px rgba(59, 130, 246, 0.5)'
                  }}>
-              <h1 className="text-4xl font-bold text-blue-600 mb-4 pixel-font retro-glow">🏃‍♂️ 地目ラン</h1>
-              <div className="text-6xl mb-4">🌟</div>
-              <p className="text-gray-800 mb-6 pixel-font text-lg font-bold">
+              <h1 className="text-4xl font-bold text-blue-600 mb-3 pixel-font retro-glow">🏃‍♂️ 地目ラン</h1>
+              <div className="text-5xl mb-3">🌟</div>
+              <p className="text-gray-800 mb-5 pixel-font text-lg font-bold">
                 上から降ってくる選択肢を<br/>
                 正しく避けてゴールを目指そう！
               </p>
-              <div className="text-sm text-blue-600 mb-6 space-y-2 pixel-font font-bold">
+              <div className="text-sm text-blue-600 mb-5 space-y-1 pixel-font font-bold">
                 <p>• 矢印キーまたは画面ドラッグで移動</p>
                 <p>• 正しい選択肢の側を通り抜けよう</p>
                 <p>• 画面タップまたは↑キーでダッシュ</p>
@@ -646,7 +652,7 @@ export default function ChimokuRunGame() {
               </div>
               <button
                 onClick={startGame}
-                className="bg-gradient-to-r from-pink-500 to-yellow-500 text-white px-8 py-4 border-4 border-white font-bold hover:from-pink-600 hover:to-yellow-600 transition-all duration-200 text-xl pixel-font retro-button"
+                className="bg-gradient-to-r from-pink-500 to-yellow-500 text-white px-8 py-3 border-4 border-white font-bold hover:from-pink-600 hover:to-yellow-600 transition-all duration-200 text-xl pixel-font retro-button"
                 style={{ 
                   textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
                   transform: 'scale(1)',
@@ -708,7 +714,7 @@ export default function ChimokuRunGame() {
 
             {/* バージョン表示 */}
             <div className="absolute bottom-2 right-2 z-30 bg-red-600 text-white px-2 py-1 rounded text-sm font-bold">
-              v3.3 - エフェクト&判定修正
+              v3.5 - エフェクト完全消去
             </div>
             
             {/* ダッシュ状態表示（控えめ） */}
