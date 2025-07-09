@@ -93,13 +93,33 @@ const pixelStyles = `
   }
   
   @keyframes sparkle {
-    0%, 100% {
+    0% {
       opacity: 0;
       transform: scale(0) rotate(0deg);
     }
-    50% {
+    20% {
       opacity: 1;
       transform: scale(1) rotate(180deg);
+    }
+    80% {
+      opacity: 1;
+      transform: scale(1) rotate(360deg);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0) rotate(540deg);
+    }
+  }
+  
+  @keyframes fadeOutSlowly {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
     }
   }
 `;
@@ -410,8 +430,8 @@ export default function ChimokuRunGame() {
         }
 
         // フィードバック自動消去（正解時は長めに表示）
-        const feedbackDuration = prev.feedbackMessage.includes('正解') ? 180 : 120; // 正解時は3秒、不正解時は2秒
-        const newShowFeedback = prev.showFeedback && prev.animationFrame % feedbackDuration < (feedbackDuration / 2);
+        const feedbackDuration = prev.feedbackMessage.includes('正解') ? 90 : 120; // 正解時は1.5秒、不正解時は2秒
+        const newShowFeedback = prev.showFeedback && prev.animationFrame % feedbackDuration < feedbackDuration;
 
         return {
           ...prev,
@@ -683,7 +703,7 @@ export default function ChimokuRunGame() {
 
             {/* バージョン表示 */}
             <div className="absolute bottom-2 right-2 z-30 bg-red-600 text-white px-2 py-1 rounded text-sm font-bold">
-              v3.1 - 即座判定&エフェクト強化
+              v3.2 - エフェクト表示時間調整
             </div>
             
             {/* ダッシュ状態表示（控えめ） */}
@@ -773,7 +793,10 @@ export default function ChimokuRunGame() {
                     }`}
                     style={{
                       textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-                      boxShadow: '0 4px 8px rgba(0,0,0,0.3)'
+                      boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
+                      // 正解時の即座非表示
+                      opacity: wall.passed && gameState.feedbackMessage.includes('正解') ? 0 : 1,
+                      transition: 'opacity 0.1s ease-out'
                     }}
                   >
                     {wall.leftChoice}
@@ -786,7 +809,10 @@ export default function ChimokuRunGame() {
                     }`}
                     style={{
                       textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-                      boxShadow: '0 4px 8px rgba(0,0,0,0.3)'
+                      boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
+                      // 正解時の即座非表示
+                      opacity: wall.passed && gameState.feedbackMessage.includes('正解') ? 0 : 1,
+                      transition: 'opacity 0.1s ease-out'
                     }}
                   >
                     {wall.rightChoice}
@@ -916,7 +942,7 @@ export default function ChimokuRunGame() {
                     {/* メインスター */}
                     <div className="text-9xl font-bold text-yellow-400 pixel-font relative z-10" 
                          style={{ 
-                           animation: 'correctPop 1s ease-out, correctShake 0.8s ease-in-out 1s',
+                           animation: 'correctPop 0.3s ease-out, correctShake 0.2s ease-in-out 0.3s, fadeOutSlowly 1.5s ease-out 0.5s both',
                            textShadow: '0 0 30px #fbbf24, 0 0 60px #fbbf24, 0 0 90px #fbbf24'
                          }}>
                       🌟
@@ -926,7 +952,7 @@ export default function ChimokuRunGame() {
                     <div className="text-5xl font-bold text-green-400 pixel-font mt-4 relative z-10"
                          style={{ 
                            textShadow: '3px 3px 0px rgba(0,0,0,0.8), 0 0 20px rgba(34, 197, 94, 0.8)',
-                           animation: 'correctPop 0.6s ease-out 0.4s both'
+                           animation: 'correctPop 0.3s ease-out 0.1s both, fadeOutSlowly 1.5s ease-out 0.5s both'
                          }}>
                       正解！
                     </div>
@@ -939,7 +965,7 @@ export default function ChimokuRunGame() {
                         style={{
                           left: `${50 + 40 * Math.cos(i * Math.PI / 6)}%`,
                           top: `${50 + 40 * Math.sin(i * Math.PI / 6)}%`,
-                          animation: `sparkle 1s ${i * 0.08}s ease-out`,
+                          animation: `sparkle 1.5s ${i * 0.05}s ease-out`,
                           transform: 'translate(-50%, -50%)'
                         }}
                       >
@@ -955,7 +981,7 @@ export default function ChimokuRunGame() {
                         style={{
                           left: `${50 + 25 * Math.cos(i * Math.PI / 3)}%`,
                           top: `${50 + 25 * Math.sin(i * Math.PI / 3)}%`,
-                          animation: `sparkle 0.8s ${i * 0.1 + 0.5}s ease-out`,
+                          animation: `sparkle 1.2s ${i * 0.08 + 0.2}s ease-out`,
                           transform: 'translate(-50%, -50%)'
                         }}
                       >
