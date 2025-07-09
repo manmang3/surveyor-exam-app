@@ -244,16 +244,16 @@ export default function ChimokuRunGame() {
     setShowResultScreen(false);
   }, [generateWalls]);
 
-  // 主人公の移動（道路内に制限）
+  // 主人公の移動（選択肢内に制限）
   const movePlayer = useCallback((direction: 'left' | 'right', amount: number = 0.08) => {
     setGameState(prev => {
-      // 道路の幅に合わせて制限（左右のmx-20を考慮）
-      const roadLeftLimit = 0.15;  // 左端制限
-      const roadRightLimit = 0.85; // 右端制限
+      // 選択肢の範囲内に制限（mx-20 + mr-2/ml-2を考慮）
+      const choiceLeftLimit = 0.2;   // 左側選択肢内
+      const choiceRightLimit = 0.8;  // 右側選択肢内
       
       const newPosition = direction === 'left' 
-        ? Math.max(roadLeftLimit, prev.playerPosition - amount)
-        : Math.min(roadRightLimit, prev.playerPosition + amount);
+        ? Math.max(choiceLeftLimit, prev.playerPosition - amount)
+        : Math.min(choiceRightLimit, prev.playerPosition + amount);
       
       return {
         ...prev,
@@ -262,26 +262,31 @@ export default function ChimokuRunGame() {
     });
   }, []);
 
-  // シンプルな当たり判定：プレイヤーが間違った側にいるかどうか
+  // 不正解優先の当たり判定：中央付近でも不正解側に倒す
   const checkCollision = useCallback((wall: Wall, playerPos: number): boolean => {
     console.log(`当たり判定チェック: Wall ID=${wall.id}, 正解側=${wall.correctSide}, プレイヤー位置=${playerPos.toFixed(3)}`);
     
-    // プレイヤーが中央より左にいるか右にいるかを判定
-    const tolerance = 0.1; // 中央付近のマージン
-    const isPlayerOnLeft = playerPos < 0.5 - tolerance;
-    const isPlayerOnRight = playerPos > 0.5 + tolerance;
+    // 中央付近の小さなマージンで、不正解側に倒す
+    const centerTolerance = 0.05; // 非常に小さなマージン
+    const isPlayerOnLeft = playerPos < 0.5 - centerTolerance;
+    const isPlayerOnRight = playerPos > 0.5 + centerTolerance;
     
-    console.log(`プレイヤー位置判定: 左側=${isPlayerOnLeft}, 右側=${isPlayerOnRight}`);
+    console.log(`プレイヤー位置判定: 左側=${isPlayerOnLeft}, 右側=${isPlayerOnRight}, 中央=${!isPlayerOnLeft && !isPlayerOnRight}`);
     
-    // 正解側と反対側にいる場合は衝突
+    // 中央付近の場合は不正解側に判定
     let collision = false;
-    if (wall.correctSide === 'left' && isPlayerOnRight) {
-      collision = true;
-      console.log('衝突！左が正解だがプレイヤーが右側にいる');
-    }
-    if (wall.correctSide === 'right' && isPlayerOnLeft) {
-      collision = true;
-      console.log('衝突！右が正解だがプレイヤーが左側にいる');
+    if (wall.correctSide === 'left') {
+      // 左が正解の場合、右側または中央にいると衝突
+      collision = isPlayerOnRight || (!isPlayerOnLeft && !isPlayerOnRight);
+      if (collision) {
+        console.log('衝突！左が正解だがプレイヤーが右側または中央にいる');
+      }
+    } else {
+      // 右が正解の場合、左側または中央にいると衝突
+      collision = isPlayerOnLeft || (!isPlayerOnLeft && !isPlayerOnRight);
+      if (collision) {
+        console.log('衝突！右が正解だがプレイヤーが左側または中央にいる');
+      }
     }
     
     if (!collision) {
@@ -496,10 +501,10 @@ export default function ChimokuRunGame() {
     if (!rect) return;
 
     const currentX = (touch.clientX - rect.left) / rect.width;
-    // 道路内に制限
-    const roadLeftLimit = 0.15;
-    const roadRightLimit = 0.85;
-    const newPosition = Math.max(roadLeftLimit, Math.min(roadRightLimit, currentX));
+    // 選択肢内に制限
+    const choiceLeftLimit = 0.2;
+    const choiceRightLimit = 0.8;
+    const newPosition = Math.max(choiceLeftLimit, Math.min(choiceRightLimit, currentX));
     
     setGameState(prev => ({
       ...prev,
@@ -539,10 +544,10 @@ export default function ChimokuRunGame() {
     if (!rect) return;
 
     const currentX = (event.clientX - rect.left) / rect.width;
-    // 道路内に制限
-    const roadLeftLimit = 0.15;
-    const roadRightLimit = 0.85;
-    const newPosition = Math.max(roadLeftLimit, Math.min(roadRightLimit, currentX));
+    // 選択肢内に制限
+    const choiceLeftLimit = 0.2;
+    const choiceRightLimit = 0.8;
+    const newPosition = Math.max(choiceLeftLimit, Math.min(choiceRightLimit, currentX));
     
     setGameState(prev => ({
       ...prev,
@@ -703,7 +708,7 @@ export default function ChimokuRunGame() {
 
             {/* バージョン表示 */}
             <div className="absolute bottom-2 right-2 z-30 bg-red-600 text-white px-2 py-1 rounded text-sm font-bold">
-              v3.2 - エフェクト表示時間調整
+              v3.3 - エフェクト&判定修正
             </div>
             
             {/* ダッシュ状態表示（控えめ） */}
@@ -735,8 +740,8 @@ export default function ChimokuRunGame() {
             )}
 
             {/* 右上のゲーム情報 */}
-            <div className="absolute top-16 right-4 z-20">
-              <div className="bg-blue-600 bg-opacity-90 rounded px-3 py-1 border-2 border-white pixel-font text-white text-center">
+            <div className="absolute top-2 right-2 z-20">
+              <div className="pixel-font text-white text-sm font-bold" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
                 残り{gameState.remainingQuestions}問
               </div>
             </div>
@@ -965,7 +970,7 @@ export default function ChimokuRunGame() {
                         style={{
                           left: `${50 + 40 * Math.cos(i * Math.PI / 6)}%`,
                           top: `${50 + 40 * Math.sin(i * Math.PI / 6)}%`,
-                          animation: `sparkle 1.5s ${i * 0.05}s ease-out`,
+                          animation: `sparkle 1s ${i * 0.03}s ease-out`,
                           transform: 'translate(-50%, -50%)'
                         }}
                       >
@@ -981,7 +986,7 @@ export default function ChimokuRunGame() {
                         style={{
                           left: `${50 + 25 * Math.cos(i * Math.PI / 3)}%`,
                           top: `${50 + 25 * Math.sin(i * Math.PI / 3)}%`,
-                          animation: `sparkle 1.2s ${i * 0.08 + 0.2}s ease-out`,
+                          animation: `sparkle 0.8s ${i * 0.05 + 0.1}s ease-out`,
                           transform: 'translate(-50%, -50%)'
                         }}
                       >
