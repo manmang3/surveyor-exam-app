@@ -35,6 +35,10 @@ export interface ChimokuRunState extends GameState {
   dragStartX: number; // ドラッグ開始位置
   isDragging: boolean; // ドラッグ中かどうか
   lastFailedQuestion: Wall | null; // ゲームオーバー時の最後の問題
+  gameStartTime: number; // ゲーム開始時刻
+  elapsedTime: number; // 経過時間（秒）
+  turboStartTime: number; // ターボ開始時刻
+  currentSpeedMultiplier: number; // 現在の速度倍率
 }
 
 export interface Wall {

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { chimokuQuestions, advancedQuestions, ChimokuQuestion, getWrongAnswer } from '@/data/games/chimoku-data';
 import { ChimokuRunState, Wall } from '@/types/game';
 import { GameStorage } from '@/lib/games/gameStorage';
+import { AchievementManager } from '@/lib/achievements';
 
 // ファミコン風CSS
 const pixelStyles = `
@@ -147,7 +148,11 @@ export default function ChimokuRunGame() {
     animationFrame: 0,
     dragStartX: 0,
     isDragging: false,
-    lastFailedQuestion: null
+    lastFailedQuestion: null,
+    gameStartTime: 0,
+    elapsedTime: 0,
+    turboStartTime: 0,
+    currentSpeedMultiplier: 1
   });
 
   const [showStartScreen, setShowStartScreen] = useState(true);
@@ -235,7 +240,11 @@ export default function ChimokuRunGame() {
       animationFrame: 0,
       dragStartX: 0,
       isDragging: false,
-      lastFailedQuestion: null
+      lastFailedQuestion: null,
+      gameStartTime: Date.now(),
+      elapsedTime: 0,
+      turboStartTime: 0,
+      currentSpeedMultiplier: 1
     });
     
     setShowStartScreen(false);
@@ -313,6 +322,18 @@ export default function ChimokuRunGame() {
       difficulty: 'medium'
     });
 
+    // 全問クリアの場合は実績を保存
+    if (gameState.totalAnswered === 20 && gameState.correctAnswers === 20) {
+      const isNewRecord = AchievementManager.unlockChimokuRunClear(
+        gameState.elapsedTime,
+        gameState.correctAnswers,
+        gameState.totalAnswered
+      );
+      if (isNewRecord) {
+        console.log('地目ラン実績解除！');
+      }
+    }
+
     console.log('setGameStateでゲーヤオーバー状態に変更中...');
     setGameState(prev => ({
       ...prev,
@@ -336,9 +357,20 @@ export default function ChimokuRunGame() {
 
     const gameLoop = () => {
       setGameState(prev => {
-        // ダッシュモード時の速度計算
-        const dashMultiplier = prev.isDragging ? 2.5 : 1.0; // ダッシュ時は2.5倍速
-        const effectiveSpeed = 1.5 * prev.gameSpeed * dashMultiplier;
+        // 経過時間を計算
+        const currentTime = Date.now();
+        const elapsedTime = (currentTime - prev.gameStartTime) / 1000;
+
+        // ターボ時の段階的加速計算
+        let speedMultiplier = 1.0;
+        if (prev.isDragging) {
+          const turboElapsed = (currentTime - prev.turboStartTime) / 1000;
+          // 5秒かけて最高速度（3倍）に到達
+          const maxSpeed = 3.0;
+          speedMultiplier = Math.min(1.0 + (maxSpeed - 1.0) * (turboElapsed / 5.0), maxSpeed);
+        }
+        
+        const effectiveSpeed = 1.5 * prev.gameSpeed * speedMultiplier;
         
         if (prev.isDragging) {
           console.log(`ダッシュ中: 速度 ${effectiveSpeed.toFixed(1)}px/frame`);
@@ -446,7 +478,9 @@ export default function ChimokuRunGame() {
           walls: newWalls,
           backgroundOffset: (prev.backgroundOffset + effectiveSpeed) % 100,
           animationFrame: (prev.animationFrame + 1) % 600,
-          showFeedback: newShowFeedback
+          showFeedback: newShowFeedback,
+          elapsedTime,
+          currentSpeedMultiplier: speedMultiplier
         };
       });
 
@@ -492,7 +526,8 @@ export default function ChimokuRunGame() {
     setGameState(prev => ({
       ...prev,
       dragStartX: startX,
-      isDragging: true // ダッシュモード開始
+      isDragging: true, // ダッシュモード開始
+      turboStartTime: Date.now()
     }));
   }, [gameState.isPlaying]);
 
@@ -536,7 +571,8 @@ export default function ChimokuRunGame() {
     setGameState(prev => ({
       ...prev,
       dragStartX: startX,
-      isDragging: true // ダッシュモード開始
+      isDragging: true, // ダッシュモード開始
+      turboStartTime: Date.now()
     }));
   }, [gameState.isPlaying]);
 
@@ -575,7 +611,8 @@ export default function ChimokuRunGame() {
         console.log('上矢印キー: ダッシュモードON');
         setGameState(prev => ({
           ...prev,
-          isDragging: true
+          isDragging: true,
+          turboStartTime: Date.now()
         }));
       }
       
@@ -737,6 +774,9 @@ export default function ChimokuRunGame() {
             <div className="absolute top-4 right-4 z-20">
               <div className="pixel-font text-white text-sm font-bold" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
                 残り{gameState.remainingQuestions}問
+              </div>
+              <div className="pixel-font text-white text-sm font-bold mt-1" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
+                {gameState.elapsedTime.toFixed(1)}秒
               </div>
             </div>
 
@@ -1051,6 +1091,10 @@ export default function ChimokuRunGame() {
                 <div className="text-2xl pixel-font font-bold">
                   <span>正解数: </span>
                   <span className="text-green-600">{gameState.correctAnswers} / 20</span>
+                </div>
+                <div className="text-xl pixel-font font-bold">
+                  <span>Time: </span>
+                  <span className="text-blue-600">{gameState.elapsedTime.toFixed(2)}秒</span>
                 </div>
               </div>
               

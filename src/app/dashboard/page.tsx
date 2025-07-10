@@ -4,11 +4,13 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { LearningStorage } from '@/lib/storage';
 import { LearningStatistics, DayLearningStats, CategoryStats } from '@/types/learning';
+import { AchievementManager, Achievement } from '@/lib/achievements';
 
 export default function DashboardPage() {
   const [stats, setStats] = useState<LearningStatistics | null>(null);
   const [todayStats, setTodayStats] = useState<DayLearningStats | null>(null);
   const [categoryStats, setCategoryStats] = useState<CategoryStats[]>([]);
+  const [achievements, setAchievements] = useState<Achievement[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -26,6 +28,10 @@ export default function DashboardPage() {
         // カテゴリ別統計を取得
         const categories = LearningStorage.getCategoryStats();
         setCategoryStats(categories);
+
+        // 実績を取得
+        const achievementList = AchievementManager.getAllAchievements();
+        setAchievements(achievementList);
 
         setIsLoading(false);
       } catch (error) {
@@ -165,6 +171,44 @@ export default function DashboardPage() {
             </div>
           </div>
         )}
+
+        {/* 実績 */}
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">🏆 実績</h2>
+          {achievements.length > 0 ? (
+            <div className="space-y-4">
+              {achievements.map((achievement) => (
+                <div key={achievement.id} className="flex items-center p-4 bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-lg">
+                  <div className="text-3xl mr-4">🏅</div>
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-gray-900">{achievement.title}</h3>
+                    <p className="text-sm text-gray-600">{achievement.description}</p>
+                    <p className="text-xs text-gray-500 mt-1">
+                      達成日時: {achievement.unlockedAt.toLocaleDateString('ja-JP', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8">
+              <div className="text-4xl mb-4">🎯</div>
+              <p className="text-gray-500 mb-4">まだ実績がありません</p>
+              <Link
+                href="/games/chimoku-run"
+                className="inline-block bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
+              >
+                地目ランで実績を解除する
+              </Link>
+            </div>
+          )}
+        </div>
 
         {/* クイックアクション */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
