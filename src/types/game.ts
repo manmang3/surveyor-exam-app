@@ -34,6 +34,7 @@ export interface ChimokuRunState extends GameState {
   animationFrame: number; // アニメーションフレーム番号
   dragStartX: number; // ドラッグ開始位置
   isDragging: boolean; // ドラッグ中かどうか
+  lastFailedQuestion: Wall | null; // ゲームオーバー時の最後の問題
 }
 
 export interface Wall {

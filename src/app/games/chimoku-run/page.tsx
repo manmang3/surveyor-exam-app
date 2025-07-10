@@ -146,7 +146,8 @@ export default function ChimokuRunGame() {
     backgroundOffset: 0,
     animationFrame: 0,
     dragStartX: 0,
-    isDragging: false
+    isDragging: false,
+    lastFailedQuestion: null
   });
 
   const [showStartScreen, setShowStartScreen] = useState(true);
@@ -230,7 +231,8 @@ export default function ChimokuRunGame() {
       backgroundOffset: 0,
       animationFrame: 0,
       dragStartX: 0,
-      isDragging: false
+      isDragging: false,
+      lastFailedQuestion: null
     });
     
     setShowStartScreen(false);
@@ -375,7 +377,8 @@ export default function ChimokuRunGame() {
               feedbackStartFrame: prev.animationFrame,
               walls: newWalls.map(w => w.id === currentWall.id ? {...w, passed: true} : w),
               isPlaying: false,
-              isGameOver: true
+              isGameOver: true,
+              lastFailedQuestion: currentWall
             };
           } else {
             // 衝突していないが、プレイヤーの近くを通過中なので即座正解判定
@@ -438,7 +441,7 @@ export default function ChimokuRunGame() {
         return {
           ...prev,
           walls: newWalls,
-          backgroundOffset: (prev.backgroundOffset + 2 * prev.gameSpeed) % 100,
+          backgroundOffset: (prev.backgroundOffset + effectiveSpeed) % 100,
           animationFrame: (prev.animationFrame + 1) % 600,
           showFeedback: newShowFeedback
         };
@@ -680,10 +683,10 @@ export default function ChimokuRunGame() {
               {/* 道路の背景 */}
               <div className="absolute inset-0 bg-gradient-to-b from-gray-600 via-gray-500 to-gray-400">
                 {/* 道路の中央線 */}
-                <div className="absolute left-1/2 transform -translate-x-1/2 w-2 h-full bg-yellow-300 opacity-80"
+                <div className="absolute left-1/2 transform -translate-x-1/2 w-2 h-full bg-white opacity-80"
                      style={{
-                       backgroundImage: 'repeating-linear-gradient(0deg, #fef08a 0px, #fef08a 20px, transparent 20px, transparent 40px)',
-                       animation: `translateY(${gameState.backgroundOffset}px)`
+                       backgroundImage: 'repeating-linear-gradient(0deg, white 0px, white 20px, transparent 20px, transparent 40px)',
+                       transform: `translateY(${gameState.backgroundOffset}px)`
                      }}
                 />
                 
@@ -727,21 +730,21 @@ export default function ChimokuRunGame() {
               </div>
             )}
 
+            {/* 上部のゲーム情報 */}
+            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-20">
+              <div className="pixel-font text-white text-sm font-bold" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
+                残り{gameState.remainingQuestions}問
+              </div>
+            </div>
+
             {/* 問題文表示 */}
             {currentQuestion && (
-              <div className="absolute top-4 left-4 right-20 z-20 bg-gradient-to-r from-yellow-300 to-orange-300 rounded-lg shadow-lg p-4 border-4 border-orange-500">
+              <div className="absolute top-16 left-1/2 transform -translate-x-1/2 z-20 bg-gradient-to-r from-yellow-300 to-orange-300 rounded-lg shadow-lg p-4 border-4 border-orange-500 max-w-2xl">
                 <p className="font-bold text-orange-800 text-lg text-center pixel-font">
                   {currentQuestion.question}
                 </p>
               </div>
             )}
-
-            {/* 右上のゲーム情報 */}
-            <div className="absolute top-6 right-4 z-20">
-              <div className="pixel-font text-white text-sm font-bold bg-black bg-opacity-50 px-2 py-1 rounded" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
-                残り{gameState.remainingQuestions}問
-              </div>
-            </div>
 
             {/* 選択肢の壁 */}
             {gameState.walls
@@ -1014,9 +1017,32 @@ export default function ChimokuRunGame() {
                 {gameState.totalAnswered === 20 ? (
                   <span className="text-yellow-500">🏆 CLEAR! 🏆</span>
                 ) : (
-                  <span className="text-red-600">💥 GAME OVER 💥</span>
+                  <span className="text-red-600">GAME OVER</span>
                 )}
               </h2>
+              
+              {/* ゲームオーバー時の説明 */}
+              {gameState.totalAnswered !== 20 && gameState.lastFailedQuestion && (
+                <div className="mb-6 text-gray-800 text-lg pixel-font">
+                  <div className="bg-orange-100 border-2 border-orange-300 rounded-lg p-4">
+                    <div className="font-bold text-orange-800 mb-2">振り返り</div>
+                    <div className="text-sm">
+                      「{gameState.lastFailedQuestion.question}」は、
+                      <span className="font-bold text-green-600">
+                        {gameState.lastFailedQuestion.correctSide === 'left' 
+                          ? gameState.lastFailedQuestion.leftChoice 
+                          : gameState.lastFailedQuestion.rightChoice}
+                      </span>
+                      です。
+                    </div>
+                    {gameState.lastFailedQuestion.explanation && (
+                      <div className="text-xs text-gray-600 mt-2">
+                        {gameState.lastFailedQuestion.explanation}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
               
               {gameState.totalAnswered === 20 && (
                 <div className="text-2xl font-bold text-orange-500 mb-6 pixel-font">
