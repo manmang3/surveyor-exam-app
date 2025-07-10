@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
-import { chimokuQuestions, takuchiVsZasshuchiQuestions, ChimokuQuestion } from '@/data/games/chimoku-data';
+import { allQuestions, ChimokuQuestion, getWrongAnswer } from '@/data/games/chimoku-data';
 import { ChimokuRunState, Wall } from '@/types/game';
 import { GameStorage } from '@/lib/games/gameStorage';
 
@@ -141,7 +141,7 @@ export default function ChimokuRunGame() {
     showFeedback: false,
     feedbackMessage: '',
     feedbackStartFrame: 0,
-    remainingQuestions: 28,
+    remainingQuestions: 20,
     currentPhase: 'chimoku',
     backgroundOffset: 0,
     animationFrame: 0,
@@ -155,28 +155,19 @@ export default function ChimokuRunGame() {
   const gameLoopRef = useRef<number | undefined>(undefined);
   const gameAreaRef = useRef<HTMLDivElement>(null);
 
-  // 28問のシーケンスを生成
+  // 20問のシーケンスを生成
   const generateQuestionSequence = useCallback(() => {
-    const shuffledChimokuQuestions = [...chimokuQuestions].sort(() => Math.random() - 0.5);
-    const shuffledTakuchiQuestions = [...takuchiVsZasshuchiQuestions].sort(() => Math.random() - 0.5);
-    return [...shuffledChimokuQuestions, ...shuffledTakuchiQuestions];
+    const shuffledQuestions = [...allQuestions].sort(() => Math.random() - 0.5);
+    return shuffledQuestions;
   }, []);
 
   // 問題から壁を生成
   const createWallFromQuestion = useCallback((question: ChimokuQuestion, index: number): Wall => {
     const correctSide: 'left' | 'right' = Math.random() < 0.5 ? 'left' : 'right';
-    const isSpecialPhase = index >= 23; // 宅地vs雑種地フェーズ
+    const wrongAnswer = getWrongAnswer(question.correctAnswer, question.wrongAnswers);
     
-    let leftChoice: string;
-    let rightChoice: string;
-    
-    if (isSpecialPhase) {
-      leftChoice = correctSide === 'left' ? '宅地' : '雑種地';
-      rightChoice = correctSide === 'right' ? '宅地' : '雑種地';
-    } else {
-      leftChoice = correctSide === 'left' ? question.correctAnswer : question.wrongAnswer;
-      rightChoice = correctSide === 'right' ? question.correctAnswer : question.wrongAnswer;
-    }
+    const leftChoice = correctSide === 'left' ? question.correctAnswer : wrongAnswer;
+    const rightChoice = correctSide === 'right' ? question.correctAnswer : wrongAnswer;
 
     const wall = {
       id: `wall-${index}`,
@@ -193,7 +184,7 @@ export default function ChimokuRunGame() {
     // デバッグ用ログ
     console.log(`壁作成 ID=${wall.id}:`);
     console.log(`  問題: ${question.question}`);
-    console.log(`  正解: ${question.correctAnswer}, 不正解: ${question.wrongAnswer}`);
+    console.log(`  正解: ${question.correctAnswer}, 不正解: ${wrongAnswer}`);
     console.log(`  左側: ${leftChoice}, 右側: ${rightChoice}`);
     console.log(`  正解側: ${correctSide}`);
     
@@ -234,7 +225,7 @@ export default function ChimokuRunGame() {
       showFeedback: false,
       feedbackMessage: '',
       feedbackStartFrame: 0,
-      remainingQuestions: 28,
+      remainingQuestions: 20,
       currentPhase: 'chimoku',
       backgroundOffset: 0,
       animationFrame: 0,
@@ -393,7 +384,7 @@ export default function ChimokuRunGame() {
             const newTotalAnswered = prev.totalAnswered + 1;
             
             // 全問クリアチェック
-            if (newTotalAnswered >= 28) {
+            if (newTotalAnswered >= 20) {
               setTimeout(() => gameOver(), 100);
             }
             
@@ -401,7 +392,7 @@ export default function ChimokuRunGame() {
               ...prev,
               correctAnswers: newCorrectAnswers,
               totalAnswered: newTotalAnswered,
-              remainingQuestions: 28 - newTotalAnswered,
+              remainingQuestions: 20 - newTotalAnswered,
               showFeedback: true,
               feedbackMessage: '正解！',
               feedbackStartFrame: prev.animationFrame,
@@ -648,7 +639,7 @@ export default function ChimokuRunGame() {
                 <p>• 正しい選択肢の側を通り抜けよう</p>
                 <p>• 画面タップまたは↑キーでダッシュ</p>
                 <p>• 間違った選択肢に当たるとゲームオーバー</p>
-                <p>• 全28問をクリアしよう！</p>
+                <p>• 全20問をクリアしよう！</p>
               </div>
               <button
                 onClick={startGame}
@@ -738,7 +729,7 @@ export default function ChimokuRunGame() {
 
             {/* 問題文表示 */}
             {currentQuestion && (
-              <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-20 bg-gradient-to-r from-yellow-300 to-orange-300 rounded-lg shadow-lg p-4 border-4 border-orange-500 max-w-lg">
+              <div className="absolute top-4 left-4 right-20 z-20 bg-gradient-to-r from-yellow-300 to-orange-300 rounded-lg shadow-lg p-4 border-4 border-orange-500">
                 <p className="font-bold text-orange-800 text-lg text-center pixel-font">
                   {currentQuestion.question}
                 </p>
@@ -746,8 +737,8 @@ export default function ChimokuRunGame() {
             )}
 
             {/* 右上のゲーム情報 */}
-            <div className="absolute top-2 right-2 z-20">
-              <div className="pixel-font text-white text-sm font-bold" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
+            <div className="absolute top-6 right-4 z-20">
+              <div className="pixel-font text-white text-sm font-bold bg-black bg-opacity-50 px-2 py-1 rounded" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
                 残り{gameState.remainingQuestions}問
               </div>
             </div>
@@ -1020,14 +1011,14 @@ export default function ChimokuRunGame() {
           <div className="flex-1 flex items-center justify-center p-4">
             <div className="bg-gradient-to-b from-white to-blue-50 border-8 border-blue-600 rounded-lg shadow-xl p-12 max-w-lg w-full text-center pixel-style">
               <h2 className="text-5xl font-bold mb-8 pixel-font retro-glow">
-                {gameState.totalAnswered === 28 ? (
+                {gameState.totalAnswered === 20 ? (
                   <span className="text-yellow-500">🏆 CLEAR! 🏆</span>
                 ) : (
                   <span className="text-red-600">💥 GAME OVER 💥</span>
                 )}
               </h2>
               
-              {gameState.totalAnswered === 28 && (
+              {gameState.totalAnswered === 20 && (
                 <div className="text-2xl font-bold text-orange-500 mb-6 pixel-font">
                   🎉 CONGRATULATIONS! 🎉
                 </div>
@@ -1036,7 +1027,7 @@ export default function ChimokuRunGame() {
               <div className="space-y-3 mb-8 text-gray-800">
                 <div className="text-2xl pixel-font font-bold">
                   <span>正解数: </span>
-                  <span className="text-green-600">{gameState.correctAnswers} / 28</span>
+                  <span className="text-green-600">{gameState.correctAnswers} / 20</span>
                 </div>
               </div>
               
