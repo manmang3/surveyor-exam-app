@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
-import { allQuestions, ChimokuQuestion, getWrongAnswer } from '@/data/games/chimoku-data';
+import { chimokuQuestions, advancedQuestions, ChimokuQuestion, getWrongAnswer } from '@/data/games/chimoku-data';
 import { ChimokuRunState, Wall } from '@/types/game';
 import { GameStorage } from '@/lib/games/gameStorage';
 
@@ -156,10 +156,13 @@ export default function ChimokuRunGame() {
   const gameLoopRef = useRef<number | undefined>(undefined);
   const gameAreaRef = useRef<HTMLDivElement>(null);
 
-  // 20問のシーケンスを生成
+  // 20問のシーケンスを生成（1-15問：基本、16-20問：応用）
   const generateQuestionSequence = useCallback(() => {
-    const shuffledQuestions = [...allQuestions].sort(() => Math.random() - 0.5);
-    return shuffledQuestions;
+    const shuffledBasicQuestions = [...chimokuQuestions].sort(() => Math.random() - 0.5);
+    const shuffledAdvancedQuestions = [...advancedQuestions].sort(() => Math.random() - 0.5);
+    
+    // 1-15問は基本問題、16-20問は応用問題
+    return [...shuffledBasicQuestions, ...shuffledAdvancedQuestions];
   }, []);
 
   // 問題から壁を生成
@@ -730,8 +733,8 @@ export default function ChimokuRunGame() {
               </div>
             )}
 
-            {/* 上部のゲーム情報 */}
-            <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-20">
+            {/* 右上のゲーム情報 */}
+            <div className="absolute top-4 right-4 z-20">
               <div className="pixel-font text-white text-sm font-bold" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.8)' }}>
                 残り{gameState.remainingQuestions}問
               </div>
@@ -739,7 +742,7 @@ export default function ChimokuRunGame() {
 
             {/* 問題文表示 */}
             {currentQuestion && (
-              <div className="absolute top-16 left-1/2 transform -translate-x-1/2 z-20 bg-gradient-to-r from-yellow-300 to-orange-300 rounded-lg shadow-lg p-4 border-4 border-orange-500 max-w-2xl">
+              <div className="absolute top-4 left-4 right-20 z-20 bg-gradient-to-r from-yellow-300 to-orange-300 rounded-lg shadow-lg p-4 border-4 border-orange-500">
                 <p className="font-bold text-orange-800 text-lg text-center pixel-font">
                   {currentQuestion.question}
                 </p>
@@ -1025,7 +1028,6 @@ export default function ChimokuRunGame() {
               {gameState.totalAnswered !== 20 && gameState.lastFailedQuestion && (
                 <div className="mb-6 text-gray-800 text-lg pixel-font">
                   <div className="bg-orange-100 border-2 border-orange-300 rounded-lg p-4">
-                    <div className="font-bold text-orange-800 mb-2">振り返り</div>
                     <div className="text-sm">
                       「{gameState.lastFailedQuestion.question}」は、
                       <span className="font-bold text-green-600">
@@ -1035,11 +1037,6 @@ export default function ChimokuRunGame() {
                       </span>
                       です。
                     </div>
-                    {gameState.lastFailedQuestion.explanation && (
-                      <div className="text-xs text-gray-600 mt-2">
-                        {gameState.lastFailedQuestion.explanation}
-                      </div>
-                    )}
                   </div>
                 </div>
               )}
