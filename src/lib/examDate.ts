@@ -27,16 +27,18 @@ export class ExamDateManager {
    * 直近の10月第3日曜日を取得（デフォルト試験日）
    */
   static getDefaultExamDate(): Date {
+    // 2025年の試験日は10月19日に固定
+    const exam2025 = new Date(2025, 9, 19); // 2025年10月19日
     const today = new Date();
-    const currentYear = today.getFullYear();
-    const thisYearExam = this.getThirdSundayOfOctober(currentYear);
     
-    // 今年の試験日が過ぎていれば来年の試験日を返す
-    if (today > thisYearExam) {
-      return this.getThirdSundayOfOctober(currentYear + 1);
+    // 2025年の試験日が過ぎていなければ2025年の試験日を返す
+    if (today <= exam2025) {
+      return exam2025;
     }
     
-    return thisYearExam;
+    // 2025年の試験日が過ぎていれば来年の試験日を計算
+    const currentYear = today.getFullYear();
+    return this.getThirdSundayOfOctober(currentYear + 1);
   }
 
   /**
@@ -78,12 +80,12 @@ export class ExamDateManager {
     const examDate = this.getExamDate();
     const today = new Date();
     
-    // 今日を除き、試験日の前日までを数える
+    // 今日を含めて試験日までの日数を計算
     const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     const examDateOnly = new Date(examDate.getFullYear(), examDate.getMonth(), examDate.getDate());
     
     const diffTime = examDateOnly.getTime() - todayOnly.getTime();
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) - 1; // 試験日を含まない
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); // 試験日を含む
     
     return Math.max(0, diffDays); // 負の値は返さない
   }

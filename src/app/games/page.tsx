@@ -88,23 +88,20 @@ export default function GamesMenuPage() {
 
           {/* 今後追加予定のゲーム */}
           <div className="bg-white rounded-xl shadow-lg opacity-60 overflow-hidden">
-            <div className="bg-gradient-to-r from-purple-400 to-pink-500 p-6 text-white">
-              <div className="text-4xl mb-3">🧩</div>
-              <h2 className="text-2xl font-bold mb-2">法令パズル</h2>
+            <div className="bg-gradient-to-r from-gray-400 to-gray-500 p-6 text-white">
+              <div className="text-4xl mb-3">🚧</div>
+              <h2 className="text-2xl font-bold mb-2">準備中</h2>
               <p className="text-sm opacity-90">
-                条文を正しい順序に並べよう！
+                新しいミニゲームを開発中です
               </p>
             </div>
             
             <div className="p-6">
               <div className="mb-4">
-                <h3 className="font-semibold text-gray-700 mb-2">ゲーム内容：</h3>
-                <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• 法令の条文を正しい順序に並び替え</li>
-                  <li>• ドラッグ&ドロップで直感的操作</li>
-                  <li>• 段階的に難易度アップ</li>
-                  <li>• 制限時間内にクリアを目指そう</li>
-                </ul>
+                <p className="text-gray-600 text-center">
+                  楽しく学べる新しいゲームを準備しています。<br/>
+                  お楽しみに！
+                </p>
               </div>
 
               <div className="w-full bg-gray-300 text-gray-500 py-3 px-4 rounded-lg font-semibold text-center">
@@ -114,23 +111,20 @@ export default function GamesMenuPage() {
           </div>
 
           <div className="bg-white rounded-xl shadow-lg opacity-60 overflow-hidden">
-            <div className="bg-gradient-to-r from-orange-400 to-red-500 p-6 text-white">
-              <div className="text-4xl mb-3">🎯</div>
-              <h2 className="text-2xl font-bold mb-2">計算シューティング</h2>
+            <div className="bg-gradient-to-r from-gray-400 to-gray-500 p-6 text-white">
+              <div className="text-4xl mb-3">🚧</div>
+              <h2 className="text-2xl font-bold mb-2">準備中</h2>
               <p className="text-sm opacity-90">
-                測量計算で的を撃ち抜け！
+                新しいミニゲームを開発中です
               </p>
             </div>
             
             <div className="p-6">
               <div className="mb-4">
-                <h3 className="font-semibold text-gray-700 mb-2">ゲーム内容：</h3>
-                <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• 測量計算問題を素早く解答</li>
-                  <li>• 正解で的を撃破</li>
-                  <li>• コンボでボーナスポイント</li>
-                  <li>• 制限時間とのバトル</li>
-                </ul>
+                <p className="text-gray-600 text-center">
+                  楽しく学べる新しいゲームを準備しています。<br/>
+                  お楽しみに！
+                </p>
               </div>
 
               <div className="w-full bg-gray-300 text-gray-500 py-3 px-4 rounded-lg font-semibold text-center">

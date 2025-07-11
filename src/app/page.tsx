@@ -164,7 +164,7 @@ export default function Home() {
               >
                 <div className="flex justify-between items-center">
                   <span className="font-medium text-gray-900">🎮 分野別ミニゲーム</span>
-                  <span className="text-sm text-gray-500">地目ラン・法令パズル他</span>
+                  <span className="text-sm text-gray-500">遊んで学ぶ</span>
                 </div>
               </Link>
               
