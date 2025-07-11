@@ -76,7 +76,7 @@ class AudioPool {
     try {
       audio.pause();
       audio.currentTime = 0;
-    } catch (error) {
+    } catch {
       // 無視
     }
     this.returnToPool(audio);
@@ -93,7 +93,7 @@ class AudioPool {
       try {
         audio.pause();
         audio.src = '';
-      } catch (error) {
+      } catch {
         // 無視
       }
     });
@@ -147,7 +147,7 @@ class RunningAudio {
       this.isPlaying = false;
       this.currentPlaybackRate = 1.0;
       this.targetPlaybackRate = 1.0;
-    } catch (error) {
+    } catch {
       // 無視
     }
   }
@@ -212,7 +212,7 @@ export const useGameSounds = (): GameSounds => {
     try {
       // AudioContextを作成（既に存在する場合は再利用）
       if (!audioContextRef.current) {
-        const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
+        const AudioContextClass = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
         if (AudioContextClass) {
           audioContextRef.current = new AudioContextClass();
         }
@@ -261,7 +261,8 @@ export const useGameSounds = (): GameSounds => {
 
     // クリーンアップ
     return () => {
-      Object.values(audioPoolsRef.current).forEach(pool => {
+      const currentAudioPools = audioPoolsRef.current;
+      Object.values(currentAudioPools).forEach(pool => {
         if (pool) pool.cleanup();
       });
       
@@ -272,7 +273,7 @@ export const useGameSounds = (): GameSounds => {
       if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
         try {
           audioContextRef.current.close();
-        } catch (error) {
+        } catch {
           // 無視
         }
       }

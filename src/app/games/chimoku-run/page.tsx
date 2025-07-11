@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { chimokuQuestions, advancedQuestions, ChimokuQuestion, getWrongAnswer } from '@/data/games/chimoku-data';
-import { ChimokuRunState, Wall } from '@/types/game';
+import { Wall } from '@/types/game';
 import { GameStorage } from '@/lib/games/gameStorage';
 import { AchievementManager } from '@/lib/achievements';
 import { useGameSounds } from '@/lib/useGameSounds';
@@ -134,7 +134,6 @@ export default function ChimokuRunGame() {
   const { 
     gameState, 
     updateGameState, 
-    updateWalls, 
     updatePlayerPosition, 
     updateDragging, 
     resetGame 
