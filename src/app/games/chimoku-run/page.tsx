@@ -6,6 +6,10 @@ import { chimokuQuestions, advancedQuestions, ChimokuQuestion, getWrongAnswer } 
 import { ChimokuRunState, Wall } from '@/types/game';
 import { GameStorage } from '@/lib/games/gameStorage';
 import { AchievementManager } from '@/lib/achievements';
+import { useGameSounds } from '@/lib/useGameSounds';
+import { useGameState } from '@/hooks/useGameState';
+import GameWall from '@/components/GameWall';
+import PlayerCharacter from '@/components/PlayerCharacter';
 
 // ファミコン風CSS
 const pixelStyles = `
@@ -126,37 +130,19 @@ const pixelStyles = `
 `;
 
 export default function ChimokuRunGame() {
-  const [gameState, setGameState] = useState<ChimokuRunState>({
-    isPlaying: false,
-    isPaused: false,
-    isGameOver: false,
-    score: 0,
-    lives: 1,
-    currentQuestionIndex: 0,
-    correctAnswers: 0,
-    totalAnswered: 0,
-    startTime: 0,
-    gameSpeed: 1,
-    playerPosition: 0.5, // 0=左端、0.5=中央、1=右端
-    walls: [],
-    showFeedback: false,
-    feedbackMessage: '',
-    feedbackStartFrame: 0,
-    remainingQuestions: 20,
-    currentPhase: 'chimoku',
-    backgroundOffset: 0,
-    animationFrame: 0,
-    dragStartX: 0,
-    isDragging: false,
-    lastFailedQuestion: null,
-    gameStartTime: 0,
-    elapsedTime: 0,
-    turboStartTime: 0,
-    currentSpeedMultiplier: 1
-  });
+  const gameSounds = useGameSounds();
+  const { 
+    gameState, 
+    updateGameState, 
+    updateWalls, 
+    updatePlayerPosition, 
+    updateDragging, 
+    resetGame 
+  } = useGameState();
 
   const [showStartScreen, setShowStartScreen] = useState(true);
   const [showResultScreen, setShowResultScreen] = useState(false);
+  const [isNewRecord, setIsNewRecord] = useState(false);
   // const [questionSequence, setQuestionSequence] = useState<ChimokuQuestion[]>([]); // 未使用のためコメントアウト
   const gameLoopRef = useRef<number | undefined>(undefined);
   const gameAreaRef = useRef<HTMLDivElement>(null);
@@ -190,12 +176,14 @@ export default function ChimokuRunGame() {
       difficulty: question.difficulty
     };
     
-    // デバッグ用ログ
-    console.log(`壁作成 ID=${wall.id}:`);
-    console.log(`  問題: ${question.question}`);
-    console.log(`  正解: ${question.correctAnswer}, 不正解: ${wrongAnswer}`);
-    console.log(`  左側: ${leftChoice}, 右側: ${rightChoice}`);
-    console.log(`  正解側: ${correctSide}`);
+    // デバッグ用ログ（開発環境のみ）
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`壁作成 ID=${wall.id}:`);
+      console.log(`  問題: ${question.question}`);
+      console.log(`  正解: ${question.correctAnswer}, 不正解: ${wrongAnswer}`);
+      console.log(`  左側: ${leftChoice}, 右側: ${rightChoice}`);
+      console.log(`  正解側: ${correctSide}`);
+    }
     
     return wall;
   }, []);
@@ -216,44 +204,37 @@ export default function ChimokuRunGame() {
 
   // ゲーム開始
   const startGame = useCallback(() => {
-    const walls = generateWalls();
+    gameSounds.playButtonSound(); // ボタン音再生
     
-    setGameState({
+    const walls = generateWalls();
+    const gameStartTime = performance.now(); // 高精度タイマー使用
+    
+    // ゲーム状態をリセットしてから更新
+    resetGame();
+    updateGameState(prev => ({
+      ...prev,
       isPlaying: true,
-      isPaused: false,
-      isGameOver: false,
-      score: 0,
-      lives: 1,
-      currentQuestionIndex: 0,
-      correctAnswers: 0,
-      totalAnswered: 0,
-      startTime: Date.now(),
-      gameSpeed: 1,
-      playerPosition: 0.5,
       walls,
-      showFeedback: false,
-      feedbackMessage: '',
-      feedbackStartFrame: 0,
-      remainingQuestions: 20,
-      currentPhase: 'chimoku',
-      backgroundOffset: 0,
-      animationFrame: 0,
-      dragStartX: 0,
-      isDragging: false,
-      lastFailedQuestion: null,
-      gameStartTime: Date.now(),
-      elapsedTime: 0,
-      turboStartTime: 0,
-      currentSpeedMultiplier: 1
-    });
+      gameStartTime,
+      startTime: gameStartTime
+    }));
+    
+    // タイマーリセット
+    gameTimeRef.current.lastUpdate = gameStartTime;
+    gameTimeRef.current.lastSoundUpdate = gameStartTime;
     
     setShowStartScreen(false);
     setShowResultScreen(false);
-  }, [generateWalls]);
+    
+    // 走る音を開始
+    setTimeout(() => {
+      gameSounds.startRunningSound();
+    }, 100); // 少し遅延させてスムーズに開始
+  }, [generateWalls, gameSounds, resetGame, updateGameState]);
 
   // 主人公の移動（選択肢内に制限）
   const movePlayer = useCallback((direction: 'left' | 'right', amount: number = 0.08) => {
-    setGameState(prev => {
+    updateGameState(prev => {
       // 選択肢の範囲内に制限（mx-20 + mr-2/ml-2を考慮）
       const choiceLeftLimit = 0.2;   // 左側選択肢内
       const choiceRightLimit = 0.8;  // 右側選択肢内
@@ -267,36 +248,40 @@ export default function ChimokuRunGame() {
         playerPosition: newPosition
       };
     });
-  }, []);
+  }, [updateGameState]);
 
   // 不正解優先の当たり判定：中央付近でも不正解側に倒す
   const checkCollision = useCallback((wall: Wall, playerPos: number): boolean => {
-    console.log(`当たり判定チェック: Wall ID=${wall.id}, 正解側=${wall.correctSide}, プレイヤー位置=${playerPos.toFixed(3)}`);
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`当たり判定チェック: Wall ID=${wall.id}, 正解側=${wall.correctSide}, プレイヤー位置=${playerPos.toFixed(3)}`);
+    }
     
     // 中央付近の小さなマージンで、不正解側に倒す
     const centerTolerance = 0.05; // 非常に小さなマージン
     const isPlayerOnLeft = playerPos < 0.5 - centerTolerance;
     const isPlayerOnRight = playerPos > 0.5 + centerTolerance;
     
-    console.log(`プレイヤー位置判定: 左側=${isPlayerOnLeft}, 右側=${isPlayerOnRight}, 中央=${!isPlayerOnLeft && !isPlayerOnRight}`);
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`プレイヤー位置判定: 左側=${isPlayerOnLeft}, 右側=${isPlayerOnRight}, 中央=${!isPlayerOnLeft && !isPlayerOnRight}`);
+    }
     
     // 中央付近の場合は不正解側に判定
     let collision = false;
     if (wall.correctSide === 'left') {
       // 左が正解の場合、右側または中央にいると衝突
       collision = isPlayerOnRight || (!isPlayerOnLeft && !isPlayerOnRight);
-      if (collision) {
+      if (collision && process.env.NODE_ENV === 'development') {
         console.log('衝突！左が正解だがプレイヤーが右側または中央にいる');
       }
     } else {
       // 右が正解の場合、左側または中央にいると衝突
       collision = isPlayerOnLeft || (!isPlayerOnLeft && !isPlayerOnRight);
-      if (collision) {
+      if (collision && process.env.NODE_ENV === 'development') {
         console.log('衝突！右が正解だがプレイヤーが左側または中央にいる');
       }
     }
     
-    if (!collision) {
+    if (!collision && process.env.NODE_ENV === 'development') {
       console.log('衝突なし: プレイヤーが正しい側にいる');
     }
     
@@ -305,81 +290,127 @@ export default function ChimokuRunGame() {
 
   // ゲームオーバー
   const gameOver = useCallback(() => {
-    console.log('gameOver関数が呼び出されました');
-    console.log('現在のgameState:', gameState);
-    
-    const playTime = Math.floor((Date.now() - gameState.startTime) / 1000);
-    const accuracy = gameState.totalAnswered > 0 
-      ? Math.round((gameState.correctAnswers / gameState.totalAnswered) * 100) 
-      : 0;
-
-    GameStorage.saveGameScore({
-      score: gameState.score,
-      correctAnswers: gameState.correctAnswers,
-      totalQuestions: gameState.totalAnswered,
-      accuracy,
-      playTime,
-      difficulty: 'medium'
-    });
-
-    // 全問クリアの場合は実績を保存
-    if (gameState.totalAnswered === 20 && gameState.correctAnswers === 20) {
-      const isNewRecord = AchievementManager.unlockChimokuRunClear(
-        gameState.elapsedTime,
-        gameState.correctAnswers,
-        gameState.totalAnswered
-      );
-      if (isNewRecord) {
-        console.log('地目ラン実績解除！');
-      }
+    if (process.env.NODE_ENV === 'development') {
+      console.log('gameOver関数が呼び出されました');
     }
-
-    console.log('setGameStateでゲーヤオーバー状態に変更中...');
-    setGameState(prev => ({
-      ...prev,
-      isPlaying: false,
-      isGameOver: true
-    }));
     
-    console.log('setShowResultScreen(true)を実行中...');
+    // 最新の状態を取得するため、updateGameStateのコールバックを使用
+    updateGameState(prev => {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('現在のgameState:', prev);
+      }
+      
+      const playTime = Math.floor((performance.now() - prev.startTime) / 1000);
+      const accuracy = prev.totalAnswered > 0 
+        ? Math.round((prev.correctAnswers / prev.totalAnswered) * 100) 
+        : 0;
+
+      GameStorage.saveGameScore({
+        score: prev.score,
+        correctAnswers: prev.correctAnswers,
+        totalQuestions: prev.totalAnswered,
+        accuracy,
+        playTime,
+        difficulty: 'medium'
+      });
+
+      // 全問クリアの場合は実績を保存
+      if (prev.totalAnswered === 20 && prev.correctAnswers === 20) {
+        const newRecord = AchievementManager.unlockChimokuRunClear(
+          prev.elapsedTime,
+          prev.correctAnswers,
+          prev.totalAnswered
+        );
+        if (newRecord) {
+          if (process.env.NODE_ENV === 'development') {
+            console.log('地目ラン実績解除！');
+          }
+          setIsNewRecord(true);
+        }
+        // ゲームクリア音を再生
+        gameSounds.stopRunningSound();
+        gameSounds.playVictorySound();
+      } else {
+        // ゲームオーバー音を再生
+        gameSounds.stopRunningSound();
+        gameSounds.playGameOverSound();
+      }
+
+      if (process.env.NODE_ENV === 'development') {
+        console.log('setGameStateでゲーヤオーバー状態に変更中...');
+      }
+      return {
+        ...prev,
+        isPlaying: false,
+        isGameOver: true
+      };
+    });
+    
+    if (process.env.NODE_ENV === 'development') {
+      console.log('setShowResultScreen(true)を実行中...');
+    }
     setShowResultScreen(true);
-  }, [gameState]);
+  }, [gameSounds, updateGameState]);
 
   // ゲームリスタート
   const restartGame = useCallback(() => {
+    gameSounds.playButtonSound(); // ボタン音再生
     setShowResultScreen(false);
     setShowStartScreen(true);
-  }, []);
+    setIsNewRecord(false);
+  }, [gameSounds]);
+
+  // タイマー統一管理
+  const gameTimeRef = useRef({
+    lastUpdate: 0,
+    lastSoundUpdate: 0,
+    soundUpdateInterval: 250 // 250ms間隔で音声更新
+  });
 
   // ゲームループ
   useEffect(() => {
     if (!gameState.isPlaying) return;
 
     const gameLoop = () => {
-      setGameState(prev => {
-        // 経過時間を計算
-        const currentTime = Date.now();
+      updateGameState(prev => {
+        // 高精度タイマーで統一
+        const currentTime = performance.now();
         const elapsedTime = (currentTime - prev.gameStartTime) / 1000;
 
         // ターボ時の段階的加速計算
         let speedMultiplier = 1.0;
         if (prev.isDragging) {
           const turboElapsed = (currentTime - prev.turboStartTime) / 1000;
-          // 5秒かけて最高速度（3倍）に到達
-          const maxSpeed = 3.0;
-          speedMultiplier = Math.min(1.0 + (maxSpeed - 1.0) * (turboElapsed / 5.0), maxSpeed);
+          // 2.5秒かけて最高速度（4.5倍）に到達（従来の2倍の速さで加速）
+          const maxSpeed = 4.5;
+          speedMultiplier = Math.min(1.0 + (maxSpeed - 1.0) * (turboElapsed / 2.5), maxSpeed);
+        }
+        
+        // 音声更新の間引き処理
+        if (currentTime - gameTimeRef.current.lastSoundUpdate > gameTimeRef.current.soundUpdateInterval) {
+          gameSounds.setRunningSpeed(speedMultiplier);
+          gameTimeRef.current.lastSoundUpdate = currentTime;
         }
         
         const effectiveSpeed = 1.5 * prev.gameSpeed * speedMultiplier;
         
-        if (prev.isDragging) {
+        // ダッシュ速度のログは本番では無効化
+        if (prev.isDragging && process.env.NODE_ENV === 'development') {
           console.log(`ダッシュ中: 速度 ${effectiveSpeed.toFixed(1)}px/frame`);
         }
         
-        const newWalls = prev.walls.map(wall => ({
-          ...wall,
-          zPosition: wall.zPosition + effectiveSpeed
-        }));
+        // メモリ最適化: 可視範囲の壁のみ更新
+        const newWalls = prev.walls.map(wall => {
+          // 画面外の壁は位置更新しない
+          if (wall.zPosition > 1200 || wall.zPosition < -500) {
+            return wall;
+          }
+          // 可視範囲内のみ更新
+          return {
+            ...wall,
+            zPosition: wall.zPosition + effectiveSpeed
+          };
+        });
 
         // プレイヤーと重なっている壁を検索
         const gameAreaHeight = gameAreaRef.current?.clientHeight || 600;
@@ -393,13 +424,20 @@ export default function ChimokuRunGame() {
           return (wallBottomY >= playerY - 30 && wallY <= playerY + 30) && !wall.passed;
         });
         
-        console.log(`チェック対象の壁: ${currentWall ? `ID=${currentWall.id}, zPos=${currentWall.zPosition.toFixed(1)}` : 'なし'}`);
+        // デバッグ情報は開発環境のみ
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`チェック対象の壁: ${currentWall ? `ID=${currentWall.id}, zPos=${currentWall.zPosition.toFixed(1)}` : 'なし'}`);
+        }
 
         if (currentWall) {
-          console.log(`壁がプレイヤー付近にあります: Wall ID=${currentWall.id}`);
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`壁がプレイヤー付近にあります: Wall ID=${currentWall.id}`);
+          }
           // 当たり判定
           if (checkCollision(currentWall, prev.playerPosition)) {
-            console.log('衝突検出！ゲームオーバー処理開始');
+            if (process.env.NODE_ENV === 'development') {
+              console.log('衝突検出！ゲームオーバー処理開始');
+            }
             // 衝突：ゲームオーバー
             setTimeout(() => {
               console.log('gameOver()関数実行');
@@ -417,7 +455,10 @@ export default function ChimokuRunGame() {
             };
           } else {
             // 衝突していないが、プレイヤーの近くを通過中なので即座正解判定
-            console.log('正解ルートを通過中！即座正解判定');
+            if (process.env.NODE_ENV === 'development') {
+              console.log('正解ルートを通過中！即座正解判定');
+            }
+            gameSounds.playCorrectSound(); // 正解音再生
             const newCorrectAnswers = prev.correctAnswers + 1;
             const newTotalAnswered = prev.totalAnswered + 1;
             
@@ -446,13 +487,16 @@ export default function ChimokuRunGame() {
         });
 
         if (passedWall) {
-          console.log(`フォールバック: 壁通過成功 ${passedWall.id}`);
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`フォールバック: 壁通過成功 ${passedWall.id}`);
+          }
+          gameSounds.playCorrectSound(); // 正解音再生
           // 通過成功
           const newCorrectAnswers = prev.correctAnswers + 1;
           const newTotalAnswered = prev.totalAnswered + 1;
           
           // 全問クリアチェック
-          if (newTotalAnswered >= 28) {
+          if (newTotalAnswered >= 20) {
             setTimeout(() => gameOver(), 100);
           }
           
@@ -460,7 +504,7 @@ export default function ChimokuRunGame() {
             ...prev,
             correctAnswers: newCorrectAnswers,
             totalAnswered: newTotalAnswered,
-            remainingQuestions: 28 - newTotalAnswered,
+            remainingQuestions: 20 - newTotalAnswered,
             showFeedback: true,
             feedbackMessage: '正解！',
             feedbackStartFrame: prev.animationFrame,
@@ -473,14 +517,31 @@ export default function ChimokuRunGame() {
         const feedbackElapsed = prev.animationFrame - prev.feedbackStartFrame;
         const newShowFeedback = prev.showFeedback && feedbackElapsed < feedbackDuration;
 
+        // メモリ最適化: 必要なプロパティのみ更新
+        const animationFrame = (prev.animationFrame + 1) % 600;
+        const newBackgroundOffset = (prev.backgroundOffset + effectiveSpeed) % 100;
+        
+        // 変更があったプロパティのみ更新してオブジェクト生成を最小化
+        if (prev.walls === newWalls && 
+            prev.showFeedback === newShowFeedback &&
+            Math.abs(prev.backgroundOffset - newBackgroundOffset) < 0.1 &&
+            prev.elapsedTime === elapsedTime) {
+          // 変更がない場合は現在の状態を返す
+          return {
+            ...prev,
+            animationFrame,
+            currentSpeedMultiplier: speedMultiplier
+          };
+        }
+
         return {
           ...prev,
           walls: newWalls,
-          backgroundOffset: (prev.backgroundOffset + effectiveSpeed) % 100,
-          animationFrame: (prev.animationFrame + 1) % 600,
-          showFeedback: newShowFeedback,
+          backgroundOffset: newBackgroundOffset,
+          animationFrame,
           elapsedTime,
-          currentSpeedMultiplier: speedMultiplier
+          currentSpeedMultiplier: speedMultiplier,
+          showFeedback: newShowFeedback
         };
       });
 
@@ -494,7 +555,7 @@ export default function ChimokuRunGame() {
         cancelAnimationFrame(gameLoopRef.current);
       }
     };
-  }, [gameState.isPlaying, checkCollision, gameOver]);
+  }, [gameState.isPlaying, checkCollision, gameOver, gameSounds, updateGameState]);
 
   // キーボード操作
   useEffect(() => {
@@ -523,13 +584,12 @@ export default function ChimokuRunGame() {
     const startX = (touch.clientX - rect.left) / rect.width;
     
     console.log('タッチ開始: ダッシュモードON');
-    setGameState(prev => ({
+    updateDragging(true, performance.now());
+    updateGameState(prev => ({
       ...prev,
-      dragStartX: startX,
-      isDragging: true, // ダッシュモード開始
-      turboStartTime: Date.now()
+      dragStartX: startX
     }));
-  }, [gameState.isPlaying]);
+  }, [gameState.isPlaying, updateDragging, updateGameState]);
 
   const handleTouchMove = useCallback((event: React.TouchEvent) => {
     if (!gameState.isPlaying || !gameState.isDragging) return;
@@ -544,19 +604,13 @@ export default function ChimokuRunGame() {
     const choiceRightLimit = 0.8;
     const newPosition = Math.max(choiceLeftLimit, Math.min(choiceRightLimit, currentX));
     
-    setGameState(prev => ({
-      ...prev,
-      playerPosition: newPosition
-    }));
-  }, [gameState.isPlaying, gameState.isDragging]);
+    updatePlayerPosition(newPosition);
+  }, [gameState.isPlaying, gameState.isDragging, updatePlayerPosition]);
 
   const handleTouchEnd = useCallback(() => {
     console.log('タッチ終了: ダッシュモードOFF');
-    setGameState(prev => ({
-      ...prev,
-      isDragging: false // ダッシュモード終了
-    }));
-  }, []);
+    updateDragging(false);
+  }, [updateDragging]);
 
   // マウス操作ハンドラー（PC用）
   const handleMouseDown = useCallback((event: React.MouseEvent) => {
@@ -568,13 +622,12 @@ export default function ChimokuRunGame() {
     const startX = (event.clientX - rect.left) / rect.width;
     
     console.log('マウスクリック: ダッシュモードON');
-    setGameState(prev => ({
+    updateDragging(true, performance.now());
+    updateGameState(prev => ({
       ...prev,
-      dragStartX: startX,
-      isDragging: true, // ダッシュモード開始
-      turboStartTime: Date.now()
+      dragStartX: startX
     }));
-  }, [gameState.isPlaying]);
+  }, [gameState.isPlaying, updateDragging, updateGameState]);
 
   const handleMouseMove = useCallback((event: React.MouseEvent) => {
     if (!gameState.isPlaying || !gameState.isDragging) return;
@@ -588,19 +641,13 @@ export default function ChimokuRunGame() {
     const choiceRightLimit = 0.8;
     const newPosition = Math.max(choiceLeftLimit, Math.min(choiceRightLimit, currentX));
     
-    setGameState(prev => ({
-      ...prev,
-      playerPosition: newPosition
-    }));
-  }, [gameState.isPlaying, gameState.isDragging]);
+    updatePlayerPosition(newPosition);
+  }, [gameState.isPlaying, gameState.isDragging, updatePlayerPosition]);
 
   const handleMouseUp = useCallback(() => {
     console.log('マウスリリース: ダッシュモードOFF');
-    setGameState(prev => ({
-      ...prev,
-      isDragging: false // ダッシュモード終了
-    }));
-  }, []);
+    updateDragging(false);
+  }, [updateDragging]);
 
   // キーボードイベントハンドラー
   useEffect(() => {
@@ -608,12 +655,10 @@ export default function ChimokuRunGame() {
       if (!gameState.isPlaying) return;
       
       if (event.key === 'ArrowUp' && !gameState.isDragging) {
-        console.log('上矢印キー: ダッシュモードON');
-        setGameState(prev => ({
-          ...prev,
-          isDragging: true,
-          turboStartTime: Date.now()
-        }));
+        if (process.env.NODE_ENV === 'development') {
+          console.log('上矢印キー: ダッシュモードON');
+        }
+        updateDragging(true, performance.now());
       }
       
       // 左右矢印キーでプレイヤー移動
@@ -629,11 +674,10 @@ export default function ChimokuRunGame() {
       if (!gameState.isPlaying) return;
       
       if (event.key === 'ArrowUp' && gameState.isDragging) {
-        console.log('上矢印キーリリース: ダッシュモードOFF');
-        setGameState(prev => ({
-          ...prev,
-          isDragging: false
-        }));
+        if (process.env.NODE_ENV === 'development') {
+          console.log('上矢印キーリリース: ダッシュモードOFF');
+        }
+        updateDragging(false);
       }
     };
 
@@ -644,7 +688,7 @@ export default function ChimokuRunGame() {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
     };
-  }, [gameState.isPlaying, gameState.isDragging, movePlayer]);
+  }, [gameState.isPlaying, gameState.isDragging, movePlayer, updateDragging]);
 
   // 現在表示すべき問題を取得（回答が終わるまで表示し続ける）
   const currentQuestion = gameState.walls.find(wall => 
@@ -674,15 +718,14 @@ export default function ChimokuRunGame() {
               <h1 className="text-4xl font-bold text-blue-600 mb-3 pixel-font retro-glow">🏃‍♂️ 地目ラン</h1>
               <div className="text-5xl mb-3">🌟</div>
               <p className="text-gray-800 mb-5 pixel-font text-lg font-bold">
-                上から降ってくる選択肢を<br/>
-                正しく避けてゴールを目指そう！
+                正しい地目を選んで走ろう！
               </p>
               <div className="text-sm text-blue-600 mb-5 space-y-1 pixel-font font-bold">
-                <p>• 矢印キーまたは画面ドラッグで移動</p>
-                <p>• 正しい選択肢の側を通り抜けよう</p>
-                <p>• 画面タップまたは↑キーでダッシュ</p>
-                <p>• 間違った選択肢に当たるとゲームオーバー</p>
-                <p>• 全20問をクリアしよう！</p>
+                <p>• 画面ドラッグで移動</p>
+                <p>• 正しい選択肢の道を選んで走ろう</p>
+                <p>• 間違った選択肢を選ぶと終了</p>
+                <p>• 画面を押し続けると加速</p>
+                <p>• 全20問をなるべく速くクリアしよう！</p>
               </div>
               <button
                 onClick={startGame}
@@ -715,7 +758,9 @@ export default function ChimokuRunGame() {
               touchAction: 'none', 
               cursor: 'pointer',
               userSelect: 'none',
-              WebkitUserSelect: 'none'
+              WebkitUserSelect: 'none',
+              willChange: 'transform', // GPU加速を有効化
+              transform: 'translateZ(0)' // 3D変換でGPU層に移動
             }}
           >
             {/* ゲーム道路（一本道） */}
@@ -726,7 +771,8 @@ export default function ChimokuRunGame() {
                 <div className="absolute left-1/2 transform -translate-x-1/2 w-2 h-full bg-white opacity-80"
                      style={{
                        backgroundImage: 'repeating-linear-gradient(0deg, white 0px, white 20px, transparent 20px, transparent 40px)',
-                       transform: `translateY(${gameState.backgroundOffset}px)`
+                       transform: `translate3d(-50%, ${gameState.backgroundOffset}px, 0)`, // GPU加速
+                       willChange: 'transform'
                      }}
                 />
                 
@@ -782,7 +828,7 @@ export default function ChimokuRunGame() {
 
             {/* 問題文表示 */}
             {currentQuestion && (
-              <div className="absolute top-4 left-4 right-20 z-20 bg-gradient-to-r from-yellow-300 to-orange-300 rounded-lg shadow-lg p-4 border-4 border-orange-500">
+              <div className="absolute top-20 left-1/2 transform -translate-x-1/2 z-20 bg-gradient-to-r from-yellow-300 to-orange-300 rounded-lg shadow-lg p-4 border-4 border-orange-500 w-5/6 max-w-lg">
                 <p className="font-bold text-orange-800 text-lg text-center pixel-font">
                   {currentQuestion.question}
                 </p>
@@ -793,79 +839,11 @@ export default function ChimokuRunGame() {
             {gameState.walls
               .filter(wall => wall.zPosition > -200 && wall.zPosition < 800)
               .map((wall) => (
-                <div
+                <GameWall 
                   key={wall.id}
-                  id={`wall-${wall.id}`}
-                  className="absolute w-full flex"
-                  style={{
-                    top: `${wall.zPosition}px`,
-                    zIndex: 10
-                  }}
-                >
-                  {/* デバッグ: 壁の当たり判定枠 */}
-                  {process.env.NODE_ENV === 'development' && (
-                    <>
-                      {/* 壁全体の当たり判定枠 */}
-                      <div
-                        className="absolute inset-0 border-2 border-purple-500 opacity-70 pointer-events-none"
-                        style={{
-                          height: '80px', // 壁の高さ
-                          zIndex: 25
-                        }}
-                      />
-                      
-                      {/* 壁のIDとzPosition表示 */}
-                      <div
-                        className="absolute top-0 left-2 text-purple-300 text-xs pixel-font bg-black bg-opacity-75 px-1 pointer-events-none"
-                        style={{ zIndex: 26 }}
-                      >
-                        {wall.id}: {wall.zPosition.toFixed(1)}px
-                      </div>
-                      
-                      {/* 正解側の強調表示 */}
-                      <div
-                        className={`absolute top-0 ${wall.correctSide === 'left' ? 'left-20' : 'right-20'} border-4 border-yellow-300 opacity-60 pointer-events-none`}
-                        style={{
-                          width: 'calc(50% - 90px)', // mx-20とmr-2/ml-2を考慮
-                          height: '80px',
-                          zIndex: 24
-                        }}
-                      />
-                    </>
-                  )}
-
-                  {/* 左側の選択肢 */}
-                  <div 
-                    className={`flex-1 mx-20 mr-2 h-20 border-4 border-gray-800 flex items-center justify-center pixel-font font-bold text-white text-lg ${
-                      wall.correctSide === 'left' ? 'bg-gradient-to-b from-green-400 to-green-600' : 'bg-gradient-to-b from-red-400 to-red-600'
-                    }`}
-                    style={{
-                      textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-                      boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
-                      // 正解時の即座非表示
-                      opacity: wall.passed && gameState.feedbackMessage.includes('正解') ? 0 : 1,
-                      transition: 'opacity 0.1s ease-out'
-                    }}
-                  >
-                    {wall.leftChoice}
-                  </div>
-                  
-                  {/* 右側の選択肢 */}
-                  <div 
-                    className={`flex-1 ml-2 mx-20 h-20 border-4 border-gray-800 flex items-center justify-center pixel-font font-bold text-white text-lg ${
-                      wall.correctSide === 'right' ? 'bg-gradient-to-b from-green-400 to-green-600' : 'bg-gradient-to-b from-red-400 to-red-600'
-                    }`}
-                    style={{
-                      textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-                      boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
-                      // 正解時の即座非表示
-                      opacity: wall.passed && gameState.feedbackMessage.includes('正解') ? 0 : 1,
-                      transition: 'opacity 0.1s ease-out'
-                    }}
-                  >
-                    {wall.rightChoice}
-                  </div>
-                </div>
+                  wall={wall}
+                  showDebug={process.env.NODE_ENV === 'development'}
+                />
               ))}
 
             {/* 当たり判定の可視化（デバッグ用） */}
@@ -924,57 +902,11 @@ export default function ChimokuRunGame() {
             )}
 
             {/* 主人公 */}
-            <div
-              id="player-character"
-              className="absolute pixel-character transition-all duration-100 z-20"
-              style={{
-                left: `${gameState.playerPosition * 100}%`,
-                bottom: '265px',
-                transform: 'translateX(-50%)',
-                filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))'
-              }}
-            >
-              <div className={`transform ${
-                // ダッシュ時はアニメーションを高速化
-                gameState.isDragging 
-                  ? (gameState.animationFrame % 20 < 10 ? 'scale-115 rotate-1' : 'scale-105 rotate--1')
-                  : (gameState.animationFrame % 60 < 30 ? 'scale-110' : 'scale-100')
-              } transition-transform duration-100 ${
-                gameState.isDragging ? 'animate-bounce' : ''
-              }`}>
-                <svg width="48" height="64" viewBox="0 0 16 24" className="pixel-style">
-                  {/* 頭 */}
-                  <rect x="6" y="0" width="4" height="4" fill="#FFDBAC" stroke="#000" strokeWidth="0.3"/>
-                  <rect x="5" y="1" width="6" height="3" fill="#FFDBAC" stroke="#000" strokeWidth="0.3"/>
-                  
-                  {/* 髪 */}
-                  <rect x="5" y="0" width="6" height="2" fill="#8B4513"/>
-                  
-                  {/* 目 */}
-                  <circle cx="6.5" cy="2.5" r="0.5" fill="#000"/>
-                  <circle cx="9.5" cy="2.5" r="0.5" fill="#000"/>
-                  
-                  {/* 胴体 */}
-                  <rect x="6" y="4" width="4" height="8" fill="#00BFFF" stroke="#000" strokeWidth="0.3"/>
-                  <rect x="5" y="5" width="6" height="6" fill="#00BFFF"/>
-                  
-                  {/* 腕 */}
-                  <rect x="3" y="6" width="2" height="4" fill="#FFDBAC"/>
-                  <rect x="11" y="6" width="2" height="4" fill="#FFDBAC"/>
-                  
-                  {/* 脚 */}
-                  <rect x="6" y="12" width="2" height="6" fill="#FFDBAC"/>
-                  <rect x="8" y="12" width="2" height="6" fill="#FFDBAC"/>
-                  
-                  {/* 靴 */}
-                  <rect x="5" y="17" width="4" height="2" fill="#8B4513"/>
-                  <rect x="7" y="17" width="4" height="2" fill="#8B4513"/>
-                  
-                  {/* パンツ */}
-                  <rect x="5" y="10" width="6" height="4" fill="#FF6B35"/>
-                </svg>
-              </div>
-            </div>
+            <PlayerCharacter 
+              playerPosition={gameState.playerPosition}
+              isDragging={gameState.isDragging}
+              animationFrame={gameState.animationFrame}
+            />
 
             {/* フィードバック表示（強化エフェクト） */}
             {gameState.showFeedback && (
@@ -1084,6 +1016,12 @@ export default function ChimokuRunGame() {
               {gameState.totalAnswered === 20 && (
                 <div className="text-2xl font-bold text-orange-500 mb-6 pixel-font">
                   🎉 CONGRATULATIONS! 🎉
+                </div>
+              )}
+              
+              {isNewRecord && (
+                <div className="text-3xl font-bold text-yellow-500 mb-6 pixel-font animate-pulse">
+                  ✨ 最高記録！ ✨
                 </div>
               )}
               

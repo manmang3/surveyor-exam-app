@@ -172,9 +172,9 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* 実績 */}
+        {/* ミニゲーム実績 */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">🏆 実績</h2>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">🏆 ミニゲーム実績</h2>
           {achievements.length > 0 ? (
             <div className="space-y-4">
               {achievements.map((achievement) => (
@@ -199,13 +199,7 @@ export default function DashboardPage() {
           ) : (
             <div className="text-center py-8">
               <div className="text-4xl mb-4">🎯</div>
-              <p className="text-gray-500 mb-4">まだ実績がありません</p>
-              <Link
-                href="/games/chimoku-run"
-                className="inline-block bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
-              >
-                地目ランで実績を解除する
-              </Link>
+              <p className="text-gray-500">まだミニゲーム実績がありません</p>
             </div>
           )}
         </div>
