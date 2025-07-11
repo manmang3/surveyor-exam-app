@@ -440,7 +440,6 @@ export default function ChimokuRunGame() {
             }
             // 衝突：ゲームオーバー
             setTimeout(() => {
-              console.log('gameOver()関数実行');
               gameOver();
             }, 500);
             return {
@@ -583,7 +582,6 @@ export default function ChimokuRunGame() {
 
     const startX = (touch.clientX - rect.left) / rect.width;
     
-    console.log('タッチ開始: ダッシュモードON');
     updateDragging(true, performance.now());
     updateGameState(prev => ({
       ...prev,
@@ -608,7 +606,6 @@ export default function ChimokuRunGame() {
   }, [gameState.isPlaying, gameState.isDragging, updatePlayerPosition]);
 
   const handleTouchEnd = useCallback(() => {
-    console.log('タッチ終了: ダッシュモードOFF');
     updateDragging(false);
   }, [updateDragging]);
 
@@ -621,7 +618,6 @@ export default function ChimokuRunGame() {
 
     const startX = (event.clientX - rect.left) / rect.width;
     
-    console.log('マウスクリック: ダッシュモードON');
     updateDragging(true, performance.now());
     updateGameState(prev => ({
       ...prev,
@@ -645,7 +641,6 @@ export default function ChimokuRunGame() {
   }, [gameState.isPlaying, gameState.isDragging, updatePlayerPosition]);
 
   const handleMouseUp = useCallback(() => {
-    console.log('マウスリリース: ダッシュモードOFF');
     updateDragging(false);
   }, [updateDragging]);
 
@@ -702,8 +697,8 @@ export default function ChimokuRunGame() {
 
         {/* ヘッダー */}
         <div className="p-4 z-50">
-          <Link href="/" className="text-white hover:text-blue-200 mb-4 inline-block text-shadow-lg">
-            ← ホームに戻る
+          <Link href="/games" className="text-white hover:text-blue-200 mb-4 inline-block text-shadow-lg">
+            ← ミニゲームメニューに戻る
           </Link>
         </div>
 
@@ -792,19 +787,6 @@ export default function ChimokuRunGame() {
               </div>
             </div>
 
-            {/* バージョン表示 */}
-            <div className="absolute bottom-2 right-2 z-30 bg-red-600 text-white px-2 py-1 rounded text-sm font-bold">
-              v3.5 - エフェクト完全消去
-            </div>
-            
-            {/* ダッシュ状態表示（控えめ） */}
-            {gameState.isDragging && (
-              <div className="absolute bottom-4 left-4 z-30">
-                <div className="bg-gray-800 bg-opacity-60 text-white px-2 py-1 rounded text-xs pixel-font">
-                  ダッシュ
-                </div>
-              </div>
-            )}
             
             {/* 問題デバッグ情報 */}
             {process.env.NODE_ENV === 'development' && currentQuestion && (
