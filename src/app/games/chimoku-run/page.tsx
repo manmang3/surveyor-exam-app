@@ -788,15 +788,6 @@ export default function ChimokuRunGame() {
             </div>
 
             
-            {/* 問題デバッグ情報 */}
-            {process.env.NODE_ENV === 'development' && currentQuestion && (
-              <div className="absolute top-20 right-4 z-30 bg-purple-600 text-white px-2 py-1 rounded text-xs max-w-xs">
-                <div>問題: {currentQuestion.question}</div>
-                <div className="text-green-300">左側: {currentQuestion.leftChoice}</div>
-                <div className="text-red-300">右側: {currentQuestion.rightChoice}</div>
-                <div>正解側: {currentQuestion.correctSide}</div>
-              </div>
-            )}
 
             {/* 右上のゲーム情報 */}
             <div className="absolute top-4 right-4 z-20">
@@ -824,64 +815,10 @@ export default function ChimokuRunGame() {
                 <GameWall 
                   key={wall.id}
                   wall={wall}
-                  showDebug={process.env.NODE_ENV === 'development'}
+                  showDebug={false}
                 />
               ))}
 
-            {/* 当たり判定の可視化（デバッグ用） */}
-            {process.env.NODE_ENV === 'development' && (
-              <>
-                {/* プレイヤーの当たり判定範囲 */}
-                <div
-                  className="absolute bottom-20 border-2 border-red-500 opacity-50 z-15"
-                  style={{
-                    left: `${gameState.playerPosition * 100}%`,
-                    transform: 'translateX(-50%)',
-                    width: '64px',
-                    height: '64px'
-                  }}
-                />
-                
-                {/* プレイヤーの中心線 */}
-                <div
-                  className="absolute bottom-20 bg-blue-500 opacity-70 z-16"
-                  style={{
-                    left: `${gameState.playerPosition * 100}%`,
-                    transform: 'translateX(-50%)',
-                    width: '2px',
-                    height: '64px'
-                  }}
-                />
-                
-                {/* 画面中央の分割線 */}
-                <div
-                  className="absolute left-1/2 top-0 bg-yellow-400 opacity-30 z-5"
-                  style={{
-                    transform: 'translateX(-50%)',
-                    width: '2px',
-                    height: '100%'
-                  }}
-                />
-                
-                {/* プレイヤー位置の数値表示 */}
-                <div
-                  className="absolute bottom-2 text-white pixel-font text-sm bg-black bg-opacity-75 px-2 py-1 rounded z-30"
-                  style={{
-                    left: `${gameState.playerPosition * 100}%`,
-                    transform: 'translateX(-50%)'
-                  }}
-                >
-                  X: {gameState.playerPosition.toFixed(2)}
-                </div>
-                
-                {/* 画面上にプレイヤーの計算位置を表示 */}
-                <div className="absolute top-4 left-4 text-white pixel-font text-sm bg-black bg-opacity-75 px-2 py-1 rounded z-30">
-                  <div>プレイヤー中心Y: {((gameAreaRef.current?.clientHeight || 600) - 120 + 32).toFixed(0)}px</div>
-                  <div>プレイヤー範囲: {((gameAreaRef.current?.clientHeight || 600) - 120 + 32 - 32).toFixed(0)}px - {((gameAreaRef.current?.clientHeight || 600) - 120 + 32 + 32).toFixed(0)}px</div>
-                  <div>画面高さ: {(gameAreaRef.current?.clientHeight || 600)}px</div>
-                </div>
-              </>
-            )}
 
             {/* 主人公 */}
             <PlayerCharacter 
