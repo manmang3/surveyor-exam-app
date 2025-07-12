@@ -398,13 +398,13 @@ export default function ChimokuRunGame() {
           console.log(`ダッシュ中: 速度 ${effectiveSpeed.toFixed(1)}px/frame`);
         }
         
-        // メモリ最適化: 可視範囲の壁のみ更新
+        // メモリ最適化: 画面より十分下の壁のみ更新停止
         const newWalls = prev.walls.map(wall => {
-          // 画面外の壁は位置更新しない
-          if (wall.zPosition > 1200 || wall.zPosition < -500) {
+          // 画面より十分下に行った壁のみ位置更新停止
+          if (wall.zPosition > 1200) {
             return wall;
           }
-          // 可視範囲内のみ更新
+          // その他の壁は全て更新（上方向の制限を撤廃）
           return {
             ...wall,
             zPosition: wall.zPosition + effectiveSpeed
