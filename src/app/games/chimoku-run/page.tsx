@@ -209,6 +209,9 @@ export default function ChimokuRunGame() {
   const startGame = useCallback(() => {
     gameSounds.playButtonSound(); // ボタン音再生
     
+    // モバイル音声初期化（ユーザーインタラクション後）
+    gameSounds.initializeMobileAudio();
+    
     const walls = generateWalls();
     const gameStartTime = performance.now(); // 高精度タイマー使用
     
@@ -358,6 +361,10 @@ export default function ChimokuRunGame() {
   // ゲームリスタート
   const restartGame = useCallback(() => {
     gameSounds.playButtonSound(); // ボタン音再生
+    
+    // モバイル音声初期化（ユーザーインタラクション後）
+    gameSounds.initializeMobileAudio();
+    
     setShowResultScreen(false);
     setShowStartScreen(true);
     setIsNewRecord(false);

@@ -9,6 +9,7 @@ interface GameSounds {
   stopRunningSound: () => void;
   setRunningSpeed: (speedMultiplier: number) => void;
   resumeAudioContext: () => void;
+  initializeMobileAudio: () => Promise<void>;
 }
 
 // 音声プールクラス
@@ -204,6 +205,11 @@ export const useGameSounds = (): GameSounds => {
   const runningAudioRef = useRef<RunningAudio | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const isInitializedRef = useRef(false);
+  const lastSoundTimesRef = useRef({
+    correct: 0,
+    gameover: 0,
+    victory: 0
+  });
 
   // AudioContext の管理
   const initializeAudioContext = useCallback(() => {
@@ -241,6 +247,33 @@ export const useGameSounds = (): GameSounds => {
       }
     }
   }, []);
+
+  // モバイル音声初期化の強化
+  const initializeMobileAudio = useCallback(async () => {
+    // モバイル向け音声初期化：ユーザーインタラクション後に短い無音を再生
+    try {
+      await resumeAudioContext();
+      
+      // 各音声プールで短い無音再生を試行（iOS/Android対応）
+      Object.values(audioPoolsRef.current).forEach(pool => {
+        if (pool) {
+          try {
+            const testAudio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBDuU2u7LbycEJ3vJ8NuMOgcbartykFBa');
+            testAudio.volume = 0.01;
+            testAudio.play().catch(() => {}); // エラーは無視
+          } catch {}
+        }
+      });
+      
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Mobile audio initialized with user interaction');
+      }
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('Mobile audio initialization failed:', error);
+      }
+    }
+  }, [resumeAudioContext]);
 
   // 音声システムの初期化
   useEffect(() => {
@@ -288,8 +321,21 @@ export const useGameSounds = (): GameSounds => {
   }, [resumeAudioContext]);
 
   const playCorrectSound = useCallback(async () => {
+    // モバイルでの音声再生信頼性向上のため、再生前に短い遅延を追加
     await resumeAudioContext();
-    audioPoolsRef.current.correct?.play(0.8);
+    
+    // 音声再生の重複を防ぐため、短時間での連続再生をスキップ
+    const now = performance.now();
+    if (now - lastSoundTimesRef.current.correct < 200) { // 200ms以内の連続再生を防止
+      return;
+    }
+    lastSoundTimesRef.current.correct = now;
+    
+    // プール枯渇時のフォールバック処理
+    const success = audioPoolsRef.current.correct?.play(0.8);
+    if (!success && process.env.NODE_ENV === 'development') {
+      console.warn('正解音再生失敗: プール枯渇またはユーザーインタラクション不足');
+    }
   }, [resumeAudioContext]);
 
   const playGameOverSound = useCallback(async () => {
@@ -330,5 +376,6 @@ export const useGameSounds = (): GameSounds => {
     stopRunningSound,
     setRunningSpeed,
     resumeAudioContext,
+    initializeMobileAudio,
   };
 };
