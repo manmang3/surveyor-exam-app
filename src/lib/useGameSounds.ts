@@ -156,25 +156,30 @@ class RunningAudio {
   setSpeed(speedMultiplier: number) {
     if (!this.audio || !this.isPlaying) return;
 
-    const now = performance.now();
-    this.targetPlaybackRate = Math.min(Math.max(1.0, speedMultiplier * 0.7), 2.0);
+    // モバイル安定性のため、段階的な固定値に簡素化
+    let targetRate = 1.0;
+    if (speedMultiplier >= 3.0) {
+      targetRate = 1.8; // 最高速度
+    } else if (speedMultiplier >= 2.0) {
+      targetRate = 1.4; // 中速度
+    } else if (speedMultiplier >= 1.5) {
+      targetRate = 1.2; // 低速度
+    }
 
-    // 250ms間隔で段階的に調整
-    if (now - this.lastRateUpdate > this.rateUpdateInterval) {
-      const rateDiff = this.targetPlaybackRate - this.currentPlaybackRate;
-      if (Math.abs(rateDiff) > 0.05) {
-        // 段階的に調整（急激な変化を避ける）
-        const step = rateDiff * 0.3;
-        this.currentPlaybackRate += step;
+    // 更新間隔を500msに延長してCPU負荷軽減
+    const now = performance.now();
+    if (now - this.lastRateUpdate > 500 && Math.abs(this.currentPlaybackRate - targetRate) > 0.1) {
+      try {
+        this.audio.playbackRate = targetRate;
+        this.currentPlaybackRate = targetRate;
+        this.lastRateUpdate = now;
         
-        try {
-          this.audio.playbackRate = this.currentPlaybackRate;
-          this.lastRateUpdate = now;
-        } catch (error) {
-          // playbackRate設定に失敗した場合は無視
-          if (process.env.NODE_ENV === 'development') {
-            console.warn('PlaybackRate adjustment failed:', error);
-          }
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`足音速度変更: ${speedMultiplier.toFixed(1)}x → ${targetRate.toFixed(1)}x`);
+        }
+      } catch (error) {
+        if (process.env.NODE_ENV === 'development') {
+          console.warn('PlaybackRate adjustment failed:', error);
         }
       }
     }
@@ -250,23 +255,24 @@ export const useGameSounds = (): GameSounds => {
 
   // モバイル音声初期化の強化
   const initializeMobileAudio = useCallback(async () => {
-    // モバイル向け音声初期化：ユーザーインタラクション後に短い無音を再生
+    // モバイル向け音声初期化：実際の音声ファイルを極小音量で再生
     try {
       await resumeAudioContext();
       
-      // 各音声プールで短い無音再生を試行（iOS/Android対応）
-      Object.values(audioPoolsRef.current).forEach(pool => {
-        if (pool) {
-          try {
-            const testAudio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmEaBDuU2u7LbycEJ3vJ8NuMOgcbartykFBa');
-            testAudio.volume = 0.01;
-            testAudio.play().catch(() => {}); // エラーは無視
-          } catch {}
+      // 実際のボタン音を極小音量で再生してiOS/Android音声コンテキストを初期化
+      if (audioPoolsRef.current.button) {
+        audioPoolsRef.current.button.play(0.001); // 極小音量で初期化
+      }
+      
+      // 短い遅延後に正解音も初期化
+      setTimeout(() => {
+        if (audioPoolsRef.current.correct) {
+          audioPoolsRef.current.correct.play(0.001);
         }
-      });
+      }, 50);
       
       if (process.env.NODE_ENV === 'development') {
-        console.log('Mobile audio initialized with user interaction');
+        console.log('Mobile audio initialized with real audio files');
       }
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
