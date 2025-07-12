@@ -255,24 +255,24 @@ export const useGameSounds = (): GameSounds => {
 
   // モバイル音声初期化の強化
   const initializeMobileAudio = useCallback(async () => {
-    // モバイル向け音声初期化：実際の音声ファイルを極小音量で再生
+    // モバイル向け音声初期化：完全無音で実際の音声ファイルを再生
     try {
       await resumeAudioContext();
       
-      // 実際のボタン音を極小音量で再生してiOS/Android音声コンテキストを初期化
+      // 実際のボタン音を完全無音で再生してiOS/Android音声コンテキストを初期化
       if (audioPoolsRef.current.button) {
-        audioPoolsRef.current.button.play(0.001); // 極小音量で初期化
+        audioPoolsRef.current.button.play(0); // 完全無音で初期化
       }
       
       // 短い遅延後に正解音も初期化
       setTimeout(() => {
         if (audioPoolsRef.current.correct) {
-          audioPoolsRef.current.correct.play(0.001);
+          audioPoolsRef.current.correct.play(0); // 完全無音で初期化
         }
       }, 50);
       
       if (process.env.NODE_ENV === 'development') {
-        console.log('Mobile audio initialized with real audio files');
+        console.log('Mobile audio initialized silently with real audio files');
       }
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
