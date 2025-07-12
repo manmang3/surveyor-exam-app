@@ -449,7 +449,7 @@ export default function ChimokuRunGame() {
               ...prev,
               showFeedback: true,
               feedbackMessage: `不正解！正解は「${currentWall.correctSide === 'left' ? currentWall.leftChoice : currentWall.rightChoice}」でした。`,
-              feedbackStartFrame: prev.animationFrame,
+              feedbackStartTime: currentTime,
               walls: newWalls.map(w => w.id === currentWall.id ? {...w, passed: true} : w),
               isPlaying: false,
               isGameOver: true,
@@ -476,7 +476,7 @@ export default function ChimokuRunGame() {
               remainingQuestions: 20 - newTotalAnswered,
               showFeedback: true,
               feedbackMessage: '正解！',
-              feedbackStartFrame: prev.animationFrame,
+              feedbackStartTime: currentTime,
               walls: newWalls.map(w => w.id === currentWall.id ? {...w, passed: true} : w)
             };
           }
@@ -509,14 +509,14 @@ export default function ChimokuRunGame() {
             remainingQuestions: 20 - newTotalAnswered,
             showFeedback: true,
             feedbackMessage: '正解！',
-            feedbackStartFrame: prev.animationFrame,
+            feedbackStartTime: currentTime,
             walls: newWalls.map(w => w.id === passedWall.id ? {...w, passed: true} : w)
           };
         }
 
-        // フィードバック自動消去（正解時は1秒で完全に消去）
-        const feedbackDuration = prev.feedbackMessage.includes('正解') ? 60 : 120; // 正解時は1秒、不正解時は2秒
-        const feedbackElapsed = prev.animationFrame - prev.feedbackStartFrame;
+        // フィードバック自動消去（時間ベース制御で安定性向上）
+        const feedbackDuration = prev.feedbackMessage.includes('正解') ? 1000 : 2000; // 正解時は1秒、不正解時は2秒（ミリ秒）
+        const feedbackElapsed = prev.feedbackStartTime ? currentTime - prev.feedbackStartTime : 0;
         const newShowFeedback = prev.showFeedback && feedbackElapsed < feedbackDuration;
 
         // メモリ最適化: 必要なプロパティのみ更新

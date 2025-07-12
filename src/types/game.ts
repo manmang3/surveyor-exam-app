@@ -27,7 +27,7 @@ export interface ChimokuRunState extends GameState {
   walls: Wall[]; // 迫ってくる壁の配列
   showFeedback: boolean;
   feedbackMessage: string;
-  feedbackStartFrame: number; // フィードバック開始フレーム
+  feedbackStartTime: number; // フィードバック開始時刻（performance.now()）
   remainingQuestions: number; // 残り問題数
   currentPhase: 'chimoku' | 'takuchi-vs-zasshuchi'; // 現在のフェーズ
   backgroundOffset: number; // 背景スクロールオフセット

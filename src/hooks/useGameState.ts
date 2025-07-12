@@ -27,7 +27,7 @@ const createInitialState = (gameStartTime: number = performance.now()): ChimokuR
   walls: [],
   showFeedback: false,
   feedbackMessage: '',
-  feedbackStartFrame: 0,
+  feedbackStartTime: 0,
   remainingQuestions: 20,
   currentPhase: 'chimoku',
   backgroundOffset: 0,
