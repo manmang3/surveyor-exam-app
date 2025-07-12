@@ -809,7 +809,7 @@ export default function ChimokuRunGame() {
 
             {/* 選択肢の壁 */}
             {gameState.walls
-              .filter(wall => wall.zPosition > -200 && wall.zPosition < 800)
+              .filter(wall => wall.zPosition > -200 && wall.zPosition < 800 && !wall.passed)
               .map((wall) => (
                 <GameWall 
                   key={wall.id}

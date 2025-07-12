@@ -58,10 +58,7 @@ const GameWall = memo<GameWallProps>(({ wall, showDebug = false }) => {
         }`}
         style={{
           textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-          boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
-          // 正解時の即座非表示
-          opacity: wall.passed ? 0 : 1,
-          transition: 'opacity 0.1s ease-out'
+          boxShadow: '0 4px 8px rgba(0,0,0,0.3)'
         }}
       >
         {wall.leftChoice}
@@ -74,10 +71,7 @@ const GameWall = memo<GameWallProps>(({ wall, showDebug = false }) => {
         }`}
         style={{
           textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-          boxShadow: '0 4px 8px rgba(0,0,0,0.3)',
-          // 正解時の即座非表示
-          opacity: wall.passed ? 0 : 1,
-          transition: 'opacity 0.1s ease-out'
+          boxShadow: '0 4px 8px rgba(0,0,0,0.3)'
         }}
       >
         {wall.rightChoice}
