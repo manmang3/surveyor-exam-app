@@ -181,6 +181,54 @@ export const advancedQuestions: ChimokuQuestion[] = [
     wrongAnswers: ['宅地'],
     explanation: '建物としての要件を備えていない鉄塔の敷地は雑種地です。',
     difficulty: 'hard'
+  },
+  {
+    id: 'advanced_006',
+    question: '競馬場内の事務所、観覧車および厩舎',
+    correctAnswer: '宅地',
+    wrongAnswers: ['雑種地'],
+    explanation: '競馬場内の事務所、観覧車および厩舎は宅地です。',
+    difficulty: 'hard'
+  },
+  {
+    id: 'advanced_007',
+    question: '宅地に接続するテニスコート、プール',
+    correctAnswer: '宅地',
+    wrongAnswers: ['雑種地'],
+    explanation: '宅地に接続するテニスコート、プールは宅地です。',
+    difficulty: 'hard'
+  },
+  {
+    id: 'advanced_008',
+    question: '高圧線の下の土地で建物の敷地として利用されている土地',
+    correctAnswer: '宅地',
+    wrongAnswers: ['雑種地'],
+    explanation: '高圧線の下の土地で建物の敷地として利用されている土地は宅地です。',
+    difficulty: 'hard'
+  },
+  {
+    id: 'advanced_009',
+    question: '永久的設備と認められた雨覆いがある陶器かまどの設けられた土地',
+    correctAnswer: '宅地',
+    wrongAnswers: ['雑種地'],
+    explanation: '永久的設備と認められた雨覆いがある陶器かまどの設けられた土地は宅地です。',
+    difficulty: 'hard'
+  },
+  {
+    id: 'advanced_010',
+    question: '建物がある木場（木ぼり）の区域内の土地',
+    correctAnswer: '宅地',
+    wrongAnswers: ['雑種地'],
+    explanation: '建物がある木場（木ぼり）の区域内の土地は宅地です。',
+    difficulty: 'hard'
+  },
+  {
+    id: 'advanced_011',
+    question: '構内に建物の設備がある火葬場',
+    correctAnswer: '宅地',
+    wrongAnswers: ['雑種地'],
+    explanation: '構内に建物の設備がある火葬場は宅地です。',
+    difficulty: 'hard'
   }
 ];
 

@@ -151,8 +151,18 @@ export default function ChimokuRunGame() {
     const shuffledBasicQuestions = [...chimokuQuestions].sort(() => Math.random() - 0.5);
     const shuffledAdvancedQuestions = [...advancedQuestions].sort(() => Math.random() - 0.5);
     
-    // 1-15問は基本問題、16-20問は応用問題
-    return [...shuffledBasicQuestions, ...shuffledAdvancedQuestions];
+    // 1-15問は基本問題、16-20問は応用問題から5問選択
+    // 宅地問題と雑種地問題のバランスを保つため、両方から選択
+    const takuchiQuestions = shuffledAdvancedQuestions.filter(q => q.correctAnswer === '宅地');
+    const zasshuchiQuestions = shuffledAdvancedQuestions.filter(q => q.correctAnswer === '雑種地');
+    
+    // 宅地2-3問、雑種地2-3問を含むよう選択
+    const selectedTakuchi = takuchiQuestions.slice(0, Math.min(3, takuchiQuestions.length));
+    const selectedZassuchi = zasshuchiQuestions.slice(0, 5 - selectedTakuchi.length);
+    
+    const selectedAdvanced = [...selectedTakuchi, ...selectedZassuchi].sort(() => Math.random() - 0.5);
+    
+    return [...shuffledBasicQuestions, ...selectedAdvanced];
   }, []);
 
   // 問題から壁を生成
