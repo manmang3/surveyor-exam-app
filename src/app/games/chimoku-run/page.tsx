@@ -146,23 +146,17 @@ export default function ChimokuRunGame() {
   const gameLoopRef = useRef<number | undefined>(undefined);
   const gameAreaRef = useRef<HTMLDivElement>(null);
 
-  // 20問のシーケンスを生成（1-15問：基本、16-20問：応用）
+  // 20問のシーケンスを生成（1-15問：基本33問から15問、16-20問：応用19問から5問）
   const generateQuestionSequence = useCallback(() => {
+    // 1-15問目：33問からランダムで15問選択（重複なし）
     const shuffledBasicQuestions = [...chimokuQuestions].sort(() => Math.random() - 0.5);
+    const selectedBasic = shuffledBasicQuestions.slice(0, 15);
+    
+    // 16-20問目：19問からランダムで5問選択（重複なし）
     const shuffledAdvancedQuestions = [...advancedQuestions].sort(() => Math.random() - 0.5);
+    const selectedAdvanced = shuffledAdvancedQuestions.slice(0, 5);
     
-    // 1-15問は基本問題、16-20問は応用問題から5問選択
-    // 宅地問題と雑種地問題のバランスを保つため、両方から選択
-    const takuchiQuestions = shuffledAdvancedQuestions.filter(q => q.correctAnswer === '宅地');
-    const zasshuchiQuestions = shuffledAdvancedQuestions.filter(q => q.correctAnswer === '雑種地');
-    
-    // 宅地2-3問、雑種地2-3問を含むよう選択
-    const selectedTakuchi = takuchiQuestions.slice(0, Math.min(3, takuchiQuestions.length));
-    const selectedZassuchi = zasshuchiQuestions.slice(0, 5 - selectedTakuchi.length);
-    
-    const selectedAdvanced = [...selectedTakuchi, ...selectedZassuchi].sort(() => Math.random() - 0.5);
-    
-    return [...shuffledBasicQuestions, ...selectedAdvanced];
+    return [...selectedBasic, ...selectedAdvanced];
   }, []);
 
   // 問題から壁を生成

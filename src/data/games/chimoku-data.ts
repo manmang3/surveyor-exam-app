@@ -137,6 +137,158 @@ export const chimokuQuestions: ChimokuQuestion[] = [
     wrongAnswers: ['宅地'],
     explanation: '牧場のために使用する建物の敷地は牧場です。',
     difficulty: 'medium'
+  },
+  {
+    id: 'chimoku_016',
+    question: '耕作の方法によらないで雑草、かん木類の生息する土地',
+    correctAnswer: '原野',
+    wrongAnswers: ['山林'],
+    explanation: '耕作の方法によらないで雑草、かん木類の生息する土地は原野です。',
+    difficulty: 'medium'
+  },
+  {
+    id: 'chimoku_017',
+    question: '人の遺体、または遺骨を埋葬する土地',
+    correctAnswer: '墓地',
+    wrongAnswers: ['雑種地'],
+    explanation: '人の遺体、または遺骨を埋葬する土地は墓地です。',
+    difficulty: 'medium'
+  },
+  {
+    id: 'chimoku_018',
+    question: '本殿、拝殿、本堂、神社、庫裏、社務所、教会、修道院がある土地',
+    correctAnswer: '境内地',
+    wrongAnswers: ['宅地'],
+    explanation: '本殿、拝殿、本堂、神社、庫裏、社務所、教会、修道院がある土地は境内地です。',
+    difficulty: 'medium'
+  },
+  {
+    id: 'chimoku_019',
+    question: '運河に関する水路や道路、堤防などの土地',
+    correctAnswer: '運河用地',
+    wrongAnswers: ['水道用地', '堤'],
+    explanation: '運河に関する水路や道路、堤防などの土地は運河用地です。',
+    difficulty: 'medium'
+  },
+  {
+    id: 'chimoku_020',
+    question: '専ら給水の目的で敷設する水道の水源地',
+    correctAnswer: '水道用地',
+    wrongAnswers: ['ため池', '池沼', '運河用地'],
+    explanation: '専ら給水の目的で敷設する水道の水源地は水道用地です。',
+    difficulty: 'medium'
+  },
+  {
+    id: 'chimoku_021',
+    question: '浄水場内の事務所の敷地',
+    correctAnswer: '水道用地',
+    wrongAnswers: ['ため池', '池沼', '運河用地'],
+    explanation: '浄水場内の事務所の敷地は水道用地です。',
+    difficulty: 'medium'
+  },
+  {
+    id: 'chimoku_022',
+    question: '水道用のダム貯水池',
+    correctAnswer: '水道用地',
+    wrongAnswers: ['ため池', '池沼', '運河用地'],
+    explanation: '水道用のダム貯水池は水道用地です。',
+    difficulty: 'medium'
+  },
+  {
+    id: 'chimoku_023',
+    question: 'かんがい用または悪水排せつ用の水路の土地',
+    correctAnswer: '用悪水路',
+    wrongAnswers: [],
+    explanation: 'かんがい用または悪水排せつ用の水路の土地は用悪水路です。',
+    difficulty: 'medium'
+  },
+  {
+    id: 'chimoku_024',
+    question: '耕地かんがい用の用水貯留地',
+    correctAnswer: 'ため池',
+    wrongAnswers: ['池沼'],
+    explanation: '耕地かんがい用の用水貯留地はため池です。',
+    difficulty: 'medium'
+  },
+  {
+    id: 'chimoku_025',
+    question: '防水のために築造した堤防の土地',
+    correctAnswer: '堤',
+    wrongAnswers: ['運河用地', '水道用地'],
+    explanation: '防水のために築造した堤防の土地は堤です。',
+    difficulty: 'medium'
+  },
+  {
+    id: 'chimoku_026',
+    question: '一般交通の用に供する道路として利用されている堤防の天端の部分',
+    correctAnswer: '堤',
+    wrongAnswers: [],
+    explanation: '一般交通の用に供する道路として利用されている堤防の天端の部分は堤です。',
+    difficulty: 'medium'
+  },
+  {
+    id: 'chimoku_027',
+    question: '田畝または村落の間にある通水路',
+    correctAnswer: '井溝',
+    wrongAnswers: [],
+    explanation: '田畝または村落の間にある通水路は井溝です。',
+    difficulty: 'medium'
+  },
+  {
+    id: 'chimoku_028',
+    question: '森林法に基づき農林水産大臣が保安林として指定した土地',
+    correctAnswer: '保安林',
+    wrongAnswers: ['山林', '雑種地'],
+    explanation: '森林法に基づき農林水産大臣が保安林として指定した土地は保安林です。',
+    difficulty: 'medium'
+  },
+  {
+    id: 'chimoku_029',
+    question: '一般公衆の交通の用に供する道路の土地',
+    correctAnswer: '公衆用道路',
+    wrongAnswers: ['公園'],
+    explanation: '一般公衆の交通の用に供する道路の土地は公衆用道路です。',
+    difficulty: 'medium'
+  },
+  {
+    id: 'chimoku_030',
+    question: '公衆の遊楽のために供する土地',
+    correctAnswer: '公園',
+    wrongAnswers: ['雑種地'],
+    explanation: '公衆の遊楽のために供する土地は公園です。',
+    difficulty: 'medium'
+  },
+  {
+    id: 'chimoku_031',
+    question: '公園内にある運動施設',
+    correctAnswer: '公園',
+    wrongAnswers: ['宅地'],
+    explanation: '公園内にある運動施設は公園です。',
+    difficulty: 'medium'
+  },
+  {
+    id: 'chimoku_032',
+    question: '動物の遺体、遺骨を埋葬する土地',
+    correctAnswer: '雑種地',
+    wrongAnswers: ['墓地'],
+    explanation: '動物の遺体、遺骨を埋葬する土地は雑種地です。',
+    difficulty: 'hard'
+  },
+  {
+    id: 'chimoku_033',
+    question: '山林の急傾斜地に土砂崩れや地滑り防止のための擁壁が占める土地',
+    correctAnswer: '雑種地',
+    wrongAnswers: ['堤'],
+    explanation: '山林の急傾斜地に土砂崩れや地滑り防止のための擁壁が占める土地は雑種地です。',
+    difficulty: 'hard'
+  },
+  {
+    id: 'chimoku_034',
+    question: '坑口、やぐら敷地、精錬所の煙道敷地',
+    correctAnswer: '雑種地',
+    wrongAnswers: [],
+    explanation: '坑口、やぐら敷地、精錬所の煙道敷地は雑種地です。',
+    difficulty: 'hard'
   }
 ];
 
@@ -228,6 +380,70 @@ export const advancedQuestions: ChimokuQuestion[] = [
     correctAnswer: '宅地',
     wrongAnswers: ['雑種地'],
     explanation: '構内に建物の設備がある火葬場は宅地です。',
+    difficulty: 'hard'
+  },
+  {
+    id: 'advanced_012',
+    question: '変電所敷地',
+    correctAnswer: '雑種地',
+    wrongAnswers: ['宅地'],
+    explanation: '変電所敷地は雑種地です。',
+    difficulty: 'hard'
+  },
+  {
+    id: 'advanced_013',
+    question: '建物敷地以外の土地の利用を主とした遊園地、運動場、ゴルフ場、飛行場',
+    correctAnswer: '雑種地',
+    wrongAnswers: ['宅地'],
+    explanation: '建物敷地以外の土地の利用を主とした遊園地、運動場、ゴルフ場、飛行場は雑種地です。',
+    difficulty: 'hard'
+  },
+  {
+    id: 'advanced_014',
+    question: 'ガソリンスタンド',
+    correctAnswer: '雑種地',
+    wrongAnswers: ['宅地'],
+    explanation: 'ガソリンスタンドは雑種地です。',
+    difficulty: 'hard'
+  },
+  {
+    id: 'advanced_015',
+    question: '競馬場内の馬場',
+    correctAnswer: '雑種地',
+    wrongAnswers: ['宅地'],
+    explanation: '競馬場内の馬場は雑種地です。',
+    difficulty: 'hard'
+  },
+  {
+    id: 'advanced_016',
+    question: '永久的設備と認められた雨覆いがない陶器かまどの設けられた土地',
+    correctAnswer: '雑種地',
+    wrongAnswers: ['宅地'],
+    explanation: '永久的設備と認められた雨覆いがない陶器かまどの設けられた土地は雑種地です。',
+    difficulty: 'hard'
+  },
+  {
+    id: 'advanced_017',
+    question: '建物がない木場（木ぼり）の区域内の土地',
+    correctAnswer: '雑種地',
+    wrongAnswers: ['宅地'],
+    explanation: '建物がない木場（木ぼり）の区域内の土地は雑種地です。',
+    difficulty: 'hard'
+  },
+  {
+    id: 'advanced_018',
+    question: '構内に建物の設備がない火葬場',
+    correctAnswer: '雑種地',
+    wrongAnswers: ['宅地'],
+    explanation: '構内に建物の設備がない火葬場は雑種地です。',
+    difficulty: 'hard'
+  },
+  {
+    id: 'advanced_019',
+    question: '宅地に接続しないテニスコート、プール',
+    correctAnswer: '雑種地',
+    wrongAnswers: ['宅地'],
+    explanation: '宅地に接続しないテニスコート、プールは雑種地です。',
     difficulty: 'hard'
   }
 ];
