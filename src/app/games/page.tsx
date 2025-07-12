@@ -109,29 +109,6 @@ export default function GamesMenuPage() {
               </div>
             </div>
           </div>
-
-          <div className="bg-white rounded-xl shadow-lg opacity-60 overflow-hidden">
-            <div className="bg-gradient-to-r from-gray-400 to-gray-500 p-6 text-white">
-              <div className="text-4xl mb-3">🚧</div>
-              <h2 className="text-2xl font-bold mb-2">準備中</h2>
-              <p className="text-sm opacity-90">
-                新しいミニゲームを開発中です
-              </p>
-            </div>
-            
-            <div className="p-6">
-              <div className="mb-4">
-                <p className="text-gray-600 text-center">
-                  楽しく学べる新しいゲームを準備しています。<br/>
-                  お楽しみに！
-                </p>
-              </div>
-
-              <div className="w-full bg-gray-300 text-gray-500 py-3 px-4 rounded-lg font-semibold text-center">
-                🔜 準備中
-              </div>
-            </div>
-          </div>
         </div>
 
         {/* 全実績表示 */}
