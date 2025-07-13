@@ -213,7 +213,15 @@ export const useGameSounds = (): GameSounds => {
   const lastSoundTimesRef = useRef({
     correct: 0,
     gameover: 0,
-    victory: 0
+    victory: 0,
+    button: 0
+  });
+  
+  // モバイル音声ミューテックス：同時再生を完全防止
+  const audioMutexRef = useRef({
+    isPlaying: false,
+    currentType: '',
+    lockTime: 0
   });
 
   // AudioContext の管理
@@ -321,28 +329,81 @@ export const useGameSounds = (): GameSounds => {
     };
   }, [initializeAudioContext]);
 
-  const playButtonSound = useCallback(async () => {
-    await resumeAudioContext();
-    audioPoolsRef.current.button?.play(0.7);
-  }, [resumeAudioContext]);
-
-  const playCorrectSound = useCallback(async () => {
-    // モバイルでの音声再生信頼性向上のため、再生前に短い遅延を追加
-    await resumeAudioContext();
-    
-    // 音声再生の重複を防ぐため、短時間での連続再生をスキップ
+  // モバイル用音声ミューテックス制御
+  const acquireAudioLock = useCallback((audioType: string, duration: number = 1000): boolean => {
     const now = performance.now();
-    if (now - lastSoundTimesRef.current.correct < 200) { // 200ms以内の連続再生を防止
+    const mutex = audioMutexRef.current;
+    
+    // 既にロック中で、かつ別の音声タイプの場合は拒否
+    if (mutex.isPlaying && mutex.currentType !== audioType && (now - mutex.lockTime < 1000)) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log(`Audio lock denied: ${audioType} (current: ${mutex.currentType})`);
+      }
+      return false;
+    }
+    
+    // ロック取得
+    mutex.isPlaying = true;
+    mutex.currentType = audioType;
+    mutex.lockTime = now;
+    
+    // 指定時間後に自動解除
+    setTimeout(() => {
+      if (mutex.currentType === audioType && mutex.lockTime === now) {
+        mutex.isPlaying = false;
+        mutex.currentType = '';
+      }
+    }, duration);
+    
+    return true;
+  }, []);
+
+  const playButtonSound = useCallback(async () => {
+    const now = performance.now();
+    
+    // ボタン音の重複防止（1秒間隔）
+    if (now - lastSoundTimesRef.current.button < 1000) {
       return;
     }
+    
+    // 音声ロック取得
+    if (!acquireAudioLock('button', 1000)) {
+      return;
+    }
+    
+    lastSoundTimesRef.current.button = now;
+    await resumeAudioContext();
+    audioPoolsRef.current.button?.play(0.7);
+  }, [resumeAudioContext, acquireAudioLock]);
+
+  const playCorrectSound = useCallback(async () => {
+    const now = performance.now();
+    
+    // スマホ用強化：正解音の重複防止を1秒に延長
+    if (now - lastSoundTimesRef.current.correct < 1000) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('正解音スキップ: 重複防止（1秒以内）');
+      }
+      return;
+    }
+    
+    // 音声ロック取得（正解音は優先度低く設定）
+    if (!acquireAudioLock('correct', 800)) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('正解音スキップ: 音声ロック取得失敗');
+      }
+      return;
+    }
+    
     lastSoundTimesRef.current.correct = now;
+    await resumeAudioContext();
     
     // プール枯渇時のフォールバック処理
     const success = audioPoolsRef.current.correct?.play(0.8);
     if (!success && process.env.NODE_ENV === 'development') {
       console.warn('正解音再生失敗: プール枯渇またはユーザーインタラクション不足');
     }
-  }, [resumeAudioContext]);
+  }, [resumeAudioContext, acquireAudioLock]);
 
   const playGameOverSound = useCallback(async () => {
     await resumeAudioContext();
