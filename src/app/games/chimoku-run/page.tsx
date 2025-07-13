@@ -142,8 +142,6 @@ export default function ChimokuRunGame() {
   const [showStartScreen, setShowStartScreen] = useState(true);
   const [showResultScreen, setShowResultScreen] = useState(false);
   const [isNewRecord, setIsNewRecord] = useState(false);
-  // スマホ用：ボタン重複クリック防止
-  const [isStartingGame, setIsStartingGame] = useState(false);
   // const [questionSequence, setQuestionSequence] = useState<ChimokuQuestion[]>([]); // 未使用のためコメントアウト
   const gameLoopRef = useRef<number | undefined>(undefined);
   const gameAreaRef = useRef<HTMLDivElement>(null);
@@ -209,50 +207,37 @@ export default function ChimokuRunGame() {
 
   // ゲーム開始
   const startGame = useCallback(() => {
-    // スマホ用：重複クリック防止
-    if (isStartingGame) {
-      if (process.env.NODE_ENV === 'development') {
-        console.log('スタートボタン重複クリック防止');
-      }
-      return;
-    }
-    
-    setIsStartingGame(true);
-    
     // ボタン音再生（最初に実行）
     gameSounds.playButtonSound();
     
     // モバイル音声初期化（ユーザーインタラクション後）
     gameSounds.initializeMobileAudio();
     
-    // スマホ用音重複防止：ボタン音再生後に長い遅延でゲーム開始
+    const walls = generateWalls();
+    const gameStartTime = performance.now(); // 高精度タイマー使用
+    
+    // ゲーム状態をリセットしてから更新
+    resetGame();
+    updateGameState(prev => ({
+      ...prev,
+      isPlaying: true,
+      walls,
+      gameStartTime,
+      startTime: gameStartTime
+    }));
+    
+    // タイマーリセット
+    gameTimeRef.current.lastUpdate = gameStartTime;
+    gameTimeRef.current.lastSoundUpdate = gameStartTime;
+    
+    setShowStartScreen(false);
+    setShowResultScreen(false);
+    
+    // 走る音を開始
     setTimeout(() => {
-      const walls = generateWalls();
-      const gameStartTime = performance.now(); // 高精度タイマー使用
-      
-      // ゲーム状態をリセットしてから更新
-      resetGame();
-      updateGameState(prev => ({
-        ...prev,
-        isPlaying: true,
-        walls,
-        gameStartTime,
-        startTime: gameStartTime
-      }));
-      
-      // タイマーリセット
-      gameTimeRef.current.lastUpdate = gameStartTime;
-      gameTimeRef.current.lastSoundUpdate = gameStartTime;
-      
-      setShowStartScreen(false);
-      setShowResultScreen(false);
-      
-      // 走る音を開始（さらに長い遅延でボタン音と完全分離）
-      setTimeout(() => {
-        gameSounds.startRunningSound();
-      }, 500); // より長い遅延でボタン音と分離
-    }, 800); // ボタン音再生後800ms待機（大幅延長）
-  }, [generateWalls, gameSounds, resetGame, updateGameState, isStartingGame]);
+      gameSounds.startRunningSound();
+    }, 100); // 少し遅延させてスムーズに開始
+  }, [generateWalls, gameSounds, resetGame, updateGameState]);
 
   // 主人公の移動（選択肢内に制限）
   const movePlayer = useCallback((direction: 'left' | 'right', amount: number = 0.08) => {
@@ -384,7 +369,6 @@ export default function ChimokuRunGame() {
     setShowResultScreen(false);
     setShowStartScreen(true);
     setIsNewRecord(false);
-    setIsStartingGame(false); // 重複クリック防止フラグをリセット
   }, [gameSounds]);
 
   // タイマー統一管理
@@ -404,8 +388,8 @@ export default function ChimokuRunGame() {
         const currentTime = performance.now();
         const elapsedTime = (currentTime - prev.gameStartTime) / 1000;
 
-        // スマホ用音重複完全防止：ゲーム開始直後の2秒間は当たり判定を無効化
-        const gameStartDelay = 2.0; // 2.0秒（スマホでの音重複を確実に防ぐ）
+        // ゲーム開始直後の0.5秒間は当たり判定を無効にして音重複を防ぐ
+        const gameStartDelay = 0.5; // 0.5秒
 
         // ターボ時の段階的加速計算
         let speedMultiplier = 1.0;
@@ -755,19 +739,14 @@ export default function ChimokuRunGame() {
               </div>
               <button
                 onClick={startGame}
-                disabled={isStartingGame}
-                className={`bg-gradient-to-r text-white px-8 py-3 border-4 border-white font-bold transition-all duration-200 text-xl pixel-font retro-button ${
-                  isStartingGame 
-                    ? 'from-gray-400 to-gray-600 cursor-not-allowed opacity-50' 
-                    : 'from-pink-500 to-yellow-500 hover:from-pink-600 hover:to-yellow-600'
-                }`}
+                className="bg-gradient-to-r from-pink-500 to-yellow-500 text-white px-8 py-3 border-4 border-white font-bold hover:from-pink-600 hover:to-yellow-600 transition-all duration-200 text-xl pixel-font retro-button"
                 style={{ 
                   textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
                   transform: 'scale(1)',
-                  animation: isStartingGame ? 'none' : 'pulse 2s infinite'
+                  animation: 'pulse 2s infinite'
                 }}
               >
-                {isStartingGame ? '🕒 STARTING...' : '🚀 START 🚀'}
+                🚀 START 🚀
               </button>
             </div>
           </div>
