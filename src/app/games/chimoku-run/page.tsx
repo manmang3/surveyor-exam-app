@@ -387,6 +387,9 @@ export default function ChimokuRunGame() {
         const currentTime = performance.now();
         const elapsedTime = (currentTime - prev.gameStartTime) / 1000;
 
+        // ゲーム開始直後の0.5秒間は当たり判定を無効にして音重複を防ぐ
+        const gameStartDelay = 0.5; // 0.5秒
+
         // ターボ時の段階的加速計算
         let speedMultiplier = 1.0;
         if (prev.isDragging) {
@@ -439,7 +442,7 @@ export default function ChimokuRunGame() {
           console.log(`チェック対象の壁: ${currentWall ? `ID=${currentWall.id}, zPos=${currentWall.zPosition.toFixed(1)}` : 'なし'}`);
         }
 
-        if (currentWall) {
+        if (currentWall && elapsedTime >= gameStartDelay) {
           if (process.env.NODE_ENV === 'development') {
             console.log(`壁がプレイヤー付近にあります: Wall ID=${currentWall.id}`);
           }
@@ -490,10 +493,11 @@ export default function ChimokuRunGame() {
         }
 
         // フォールバック: 通過した壁のチェック（上記で処理されなかった場合のみ）
-        const passedWall = newWalls.find(wall => {
+        // ゲーム開始直後の遅延期間中は処理しない
+        const passedWall = elapsedTime >= gameStartDelay ? newWalls.find(wall => {
           const wallTop = wall.zPosition;
           return wallTop > playerY + 100 && !wall.passed;
-        });
+        }) : null;
 
         if (passedWall) {
           if (process.env.NODE_ENV === 'development') {
