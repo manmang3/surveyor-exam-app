@@ -5725,7 +5725,7 @@ export const sampleQuestions: Question[] = [
     "options": [
       "アイ",
       "アウ",
-      "イエ",
+      "イウ",
       "ウオ",
       "エオ"
     ],
