@@ -169,7 +169,7 @@ export default function ChimokuRunGame() {
 
     const wall = {
       id: `wall-${index}`,
-      zPosition: -400 - (index * 1000), // 上方から開始、壁の間隔は1000px
+      zPosition: -1000 - (index * 1000), // より遠くから開始して音重複を防ぐ、壁の間隔は1000px
       leftChoice,
       rightChoice,
       correctSide,
@@ -207,35 +207,39 @@ export default function ChimokuRunGame() {
 
   // ゲーム開始
   const startGame = useCallback(() => {
-    gameSounds.playButtonSound(); // ボタン音再生
+    // ボタン音再生（最初に実行）
+    gameSounds.playButtonSound();
     
     // モバイル音声初期化（ユーザーインタラクション後）
     gameSounds.initializeMobileAudio();
     
-    const walls = generateWalls();
-    const gameStartTime = performance.now(); // 高精度タイマー使用
-    
-    // ゲーム状態をリセットしてから更新
-    resetGame();
-    updateGameState(prev => ({
-      ...prev,
-      isPlaying: true,
-      walls,
-      gameStartTime,
-      startTime: gameStartTime
-    }));
-    
-    // タイマーリセット
-    gameTimeRef.current.lastUpdate = gameStartTime;
-    gameTimeRef.current.lastSoundUpdate = gameStartTime;
-    
-    setShowStartScreen(false);
-    setShowResultScreen(false);
-    
-    // 走る音を開始
+    // ボタン音再生後に遅延してゲーム開始（音重複防止）
     setTimeout(() => {
-      gameSounds.startRunningSound();
-    }, 100); // 少し遅延させてスムーズに開始
+      const walls = generateWalls();
+      const gameStartTime = performance.now(); // 高精度タイマー使用
+      
+      // ゲーム状態をリセットしてから更新
+      resetGame();
+      updateGameState(prev => ({
+        ...prev,
+        isPlaying: true,
+        walls,
+        gameStartTime,
+        startTime: gameStartTime
+      }));
+      
+      // タイマーリセット
+      gameTimeRef.current.lastUpdate = gameStartTime;
+      gameTimeRef.current.lastSoundUpdate = gameStartTime;
+      
+      setShowStartScreen(false);
+      setShowResultScreen(false);
+      
+      // 走る音を開始（さらに遅延）
+      setTimeout(() => {
+        gameSounds.startRunningSound();
+      }, 200); // 少し遅延させてスムーズに開始
+    }, 300); // ボタン音再生後300ms待機
   }, [generateWalls, gameSounds, resetGame, updateGameState]);
 
   // 主人公の移動（選択肢内に制限）
@@ -387,8 +391,8 @@ export default function ChimokuRunGame() {
         const currentTime = performance.now();
         const elapsedTime = (currentTime - prev.gameStartTime) / 1000;
 
-        // ゲーム開始直後の0.5秒間は当たり判定を無効にして音重複を防ぐ
-        const gameStartDelay = 0.5; // 0.5秒
+        // ゲーム開始直後の1.5秒間は当たり判定を無効にして音重複を防ぐ
+        const gameStartDelay = 1.5; // 1.5秒（スマホでより確実に防ぐ）
 
         // ターボ時の段階的加速計算
         let speedMultiplier = 1.0;
