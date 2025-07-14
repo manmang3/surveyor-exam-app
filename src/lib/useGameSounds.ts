@@ -267,9 +267,9 @@ export const useGameSounds = (): GameSounds => {
     try {
       await resumeAudioContext();
       
-      // 実際のクリック音を完全無音で再生してiOS/Android音声コンテキストを初期化
-      if (audioPoolsRef.current.click) {
-        audioPoolsRef.current.click.play(0); // 完全無音で初期化
+      // クリック音は無効化されているため初期化不要
+      if (process.env.NODE_ENV === 'development') {
+        console.log('クリック音の初期化をスキップ（無効化されています）');
       }
       
       // 短い遅延後に正解音も初期化
@@ -295,8 +295,8 @@ export const useGameSounds = (): GameSounds => {
 
     initializeAudioContext();
 
-    // 音声プールの初期化
-    audioPoolsRef.current.click = new AudioPool('/src/data/クリック.mp3', 2);
+    // 音声プールの初期化（クリック音は無効化）
+    audioPoolsRef.current.click = null; // ボタン音無効化
     audioPoolsRef.current.correct = new AudioPool('/sounds/correct.mp3', 3);
     audioPoolsRef.current.gameover = new AudioPool('/sounds/gameover.mp3', 2);
     audioPoolsRef.current.victory = new AudioPool('/sounds/victory.mp3', 2);
@@ -359,33 +359,12 @@ export const useGameSounds = (): GameSounds => {
   }, []);
 
   const playButtonSound = useCallback(async () => {
-    const now = performance.now();
-    
-    // クリック音の重複防止（200ms間隔）
-    if (now - lastSoundTimesRef.current.click < 200) {
-      if (process.env.NODE_ENV === 'development') {
-        console.log('クリック音スキップ: 重複防止（200ms以内）');
-      }
-      return;
+    // ボタン音を完全に無効化（スマホでの音重複問題対策）
+    if (process.env.NODE_ENV === 'development') {
+      console.log('ボタン音無効化: スマホ音重複対策のため再生しません');
     }
-    
-    // 音声ロック取得
-    if (!acquireAudioLock('click', 300)) {
-      if (process.env.NODE_ENV === 'development') {
-        console.log('クリック音スキップ: 音声ロック取得失敗');
-      }
-      return;
-    }
-    
-    lastSoundTimesRef.current.click = now;
-    await resumeAudioContext();
-    
-    // クリック音を再生（音量0.8、短時間でクリアに再生）
-    const success = audioPoolsRef.current.click?.play(0.8);
-    if (!success && process.env.NODE_ENV === 'development') {
-      console.warn('クリック音再生失敗: プール枯渇またはユーザーインタラクション不足');
-    }
-  }, [resumeAudioContext, acquireAudioLock]);
+    return;
+  }, []);
 
   const playCorrectSound = useCallback(async () => {
     const now = performance.now();

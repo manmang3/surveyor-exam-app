@@ -207,8 +207,7 @@ export default function ChimokuRunGame() {
 
   // ゲーム開始
   const startGame = useCallback(() => {
-    // ボタン音再生（最初に実行）
-    gameSounds.playButtonSound();
+    // ボタン音は無効化（スマホでの音重複問題対策）
     
     // モバイル音声初期化（ユーザーインタラクション後）
     gameSounds.initializeMobileAudio();
@@ -361,7 +360,7 @@ export default function ChimokuRunGame() {
 
   // ゲームリスタート
   const restartGame = useCallback(() => {
-    gameSounds.playButtonSound(); // ボタン音再生
+    // ボタン音は無効化（スマホでの音重複問題対策）
     
     // モバイル音声初期化（ユーザーインタラクション後）
     gameSounds.initializeMobileAudio();
