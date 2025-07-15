@@ -212,30 +212,34 @@ export default function ChimokuRunGame() {
     // モバイル音声初期化（ユーザーインタラクション後）
     gameSounds.initializeMobileAudio();
     
-    const walls = generateWalls();
-    const gameStartTime = performance.now(); // 高精度タイマー使用
-    
-    // ゲーム状態をリセットしてから更新
-    resetGame();
-    updateGameState(prev => ({
-      ...prev,
-      isPlaying: true,
-      walls,
-      gameStartTime,
-      startTime: gameStartTime
-    }));
-    
-    // タイマーリセット
-    gameTimeRef.current.lastUpdate = gameStartTime;
-    gameTimeRef.current.lastSoundUpdate = gameStartTime;
-    
-    setShowStartScreen(false);
-    setShowResultScreen(false);
-    
-    // 走る音を開始
+    // 【重要】モバイル対策：ゲーム開始を完全に非同期化
+    // タッチイベント処理と分離してReactの同期実行を防ぐ
     setTimeout(() => {
-      gameSounds.startRunningSound();
-    }, 100); // 少し遅延させてスムーズに開始
+      const walls = generateWalls();
+      const gameStartTime = performance.now(); // 高精度タイマー使用
+      
+      // ゲーム状態をリセットしてから更新
+      resetGame();
+      updateGameState(prev => ({
+        ...prev,
+        isPlaying: true,
+        walls,
+        gameStartTime,
+        startTime: gameStartTime
+      }));
+      
+      // タイマーリセット
+      gameTimeRef.current.lastUpdate = gameStartTime;
+      gameTimeRef.current.lastSoundUpdate = gameStartTime;
+      
+      setShowStartScreen(false);
+      setShowResultScreen(false);
+      
+      // 走る音を開始
+      setTimeout(() => {
+        gameSounds.startRunningSound();
+      }, 100); // 少し遅延させてスムーズに開始
+    }, 50); // 50ms遅延でタッチイベント処理と完全分離
   }, [generateWalls, gameSounds, resetGame, updateGameState]);
 
   // 主人公の移動（選択肢内に制限）
