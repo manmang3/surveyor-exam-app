@@ -283,8 +283,8 @@ export const useGameSounds = (): GameSounds => {
 
     initializeAudioContext();
 
-    // 音声プールの初期化（クリック音は無効化）
-    audioPoolsRef.current.click = null; // ボタン音無効化
+    // 音声プールの初期化（決定ボタン音を追加）
+    audioPoolsRef.current.click = new AudioPool('/sounds/button.mp3', 2); // 決定ボタン音
     audioPoolsRef.current.correct = new AudioPool('/sounds/correct.mp3', 3);
     audioPoolsRef.current.gameover = new AudioPool('/sounds/gameover.mp3', 2);
     audioPoolsRef.current.victory = new AudioPool('/sounds/victory.mp3', 2);
@@ -347,12 +347,26 @@ export const useGameSounds = (): GameSounds => {
   }, []);
 
   const playButtonSound = useCallback(async () => {
-    // ボタン音を完全に無効化（スマホでの音重複問題対策）
-    if (process.env.NODE_ENV === 'development') {
-      console.log('ボタン音無効化: スマホ音重複対策のため再生しません');
+    // ミューテックス制御で決定ボタン音の重複を防止
+    if (!acquireAudioLock('button', 800)) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('決定ボタン音スキップ: 音声ロック取得失敗');
+      }
+      return;
     }
-    return;
-  }, []);
+    
+    await resumeAudioContext();
+    
+    // 初回使用時に無音で初期化してから実際の音量で再生
+    if (audioPoolsRef.current.click) {
+      // 一度無音で初期化
+      audioPoolsRef.current.click.play(0);
+      // 遅延後に実音で再生
+      setTimeout(() => {
+        audioPoolsRef.current.click?.play(0.7);
+      }, 50);
+    }
+  }, [resumeAudioContext, acquireAudioLock]);
 
   const playCorrectSound = useCallback(async () => {
     const now = performance.now();
