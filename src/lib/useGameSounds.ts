@@ -263,12 +263,41 @@ export const useGameSounds = (): GameSounds => {
 
   // モバイル音声初期化の強化
   const initializeMobileAudio = useCallback(async () => {
-    // スタートボタン押下時は音声再生を行わず、AudioContextのみ初期化
+    // モバイルブラウザでは音声再生を許可するため、無音で各音声を初期化
     try {
       await resumeAudioContext();
       
+      // 段階的に無音で各音声ファイルを初期化
+      if (audioPoolsRef.current.correct) {
+        audioPoolsRef.current.correct.play(0.001); // 極小音量で初期化
+      }
+      
+      setTimeout(() => {
+        if (audioPoolsRef.current.gameover) {
+          audioPoolsRef.current.gameover.play(0.001);
+        }
+      }, 50);
+      
+      setTimeout(() => {
+        if (audioPoolsRef.current.victory) {
+          audioPoolsRef.current.victory.play(0.001);
+        }
+      }, 100);
+      
+      // 走る音も初期化
+      setTimeout(() => {
+        if (runningAudioRef.current) {
+          runningAudioRef.current.start().then(() => {
+            // 即座に停止
+            runningAudioRef.current?.stop();
+          }).catch(() => {
+            // 無視
+          });
+        }
+      }, 150);
+      
       if (process.env.NODE_ENV === 'development') {
-        console.log('Mobile audio context initialized without sound playback');
+        console.log('Mobile audio files initialized with minimal volume');
       }
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
