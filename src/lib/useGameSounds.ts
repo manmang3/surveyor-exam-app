@@ -263,28 +263,12 @@ export const useGameSounds = (): GameSounds => {
 
   // モバイル音声初期化の強化
   const initializeMobileAudio = useCallback(async () => {
-    // モバイルブラウザでは音声再生を許可するため、完全無音で各音声を初期化
+    // スタートボタン押下時は音声再生を一切行わず、AudioContextのみ初期化
     try {
       await resumeAudioContext();
       
-      // 完全無音（volume 0）で音声ファイルを初期化してプールを準備
-      const initializeAudioPool = (pool: AudioPool | null) => {
-        if (pool) {
-          try {
-            pool.play(0); // 完全無音で初期化
-          } catch (error) {
-            if (process.env.NODE_ENV === 'development') {
-              console.warn('Audio pool initialization failed:', error);
-            }
-          }
-        }
-      };
-      
-      // 正解音のみ初期化（他の音声は実際の使用時に初期化）
-      initializeAudioPool(audioPoolsRef.current.correct);
-      
       if (process.env.NODE_ENV === 'development') {
-        console.log('Mobile audio context and correct sound initialized silently');
+        console.log('Mobile audio context initialized without any sound playback');
       }
     } catch (error) {
       if (process.env.NODE_ENV === 'development') {
@@ -392,10 +376,17 @@ export const useGameSounds = (): GameSounds => {
     lastSoundTimesRef.current.correct = now;
     await resumeAudioContext();
     
-    // プール枯渇時のフォールバック処理
-    const success = audioPoolsRef.current.correct?.play(0.8);
-    if (!success && process.env.NODE_ENV === 'development') {
-      console.warn('正解音再生失敗: プール枯渇またはユーザーインタラクション不足');
+    // 初回使用時に無音で初期化してから実際の音量で再生
+    if (audioPoolsRef.current.correct) {
+      // 一度無音で初期化
+      audioPoolsRef.current.correct.play(0);
+      // 遅延後に実音で再生
+      setTimeout(() => {
+        const success = audioPoolsRef.current.correct?.play(0.8);
+        if (!success && process.env.NODE_ENV === 'development') {
+          console.warn('正解音再生失敗: プール枯渇またはユーザーインタラクション不足');
+        }
+      }, 50);
     }
   }, [resumeAudioContext, acquireAudioLock]);
 
