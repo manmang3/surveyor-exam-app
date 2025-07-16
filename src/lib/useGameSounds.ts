@@ -415,13 +415,16 @@ export const useGameSounds = (): GameSounds => {
     
     await resumeAudioContext();
     
-    // 初回使用時に無音で初期化
+    if (process.env.NODE_ENV === 'development') {
+      console.log('ゲームオーバー音再生開始');
+    }
+    
+    // ゲームオーバー音を確実に再生
     if (audioPoolsRef.current.gameover) {
-      // 一度無音で初期化してから実際の音量で再生
-      audioPoolsRef.current.gameover.play(0);
-      setTimeout(() => {
-        audioPoolsRef.current.gameover?.play(0.9);
-      }, 50);
+      const success = audioPoolsRef.current.gameover.play(0.9);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('ゲームオーバー音再生結果:', success);
+      }
     }
   }, [resumeAudioContext, acquireAudioLock]);
 
@@ -436,13 +439,16 @@ export const useGameSounds = (): GameSounds => {
     
     await resumeAudioContext();
     
-    // 初回使用時に無音で初期化
+    if (process.env.NODE_ENV === 'development') {
+      console.log('勝利音再生開始');
+    }
+    
+    // 勝利音を確実に再生
     if (audioPoolsRef.current.victory) {
-      // 一度無音で初期化してから実際の音量で再生
-      audioPoolsRef.current.victory.play(0);
-      setTimeout(() => {
-        audioPoolsRef.current.victory?.play(0.9);
-      }, 50);
+      const success = audioPoolsRef.current.victory.play(0.9);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('勝利音再生結果:', success);
+      }
     }
   }, [resumeAudioContext, acquireAudioLock]);
 

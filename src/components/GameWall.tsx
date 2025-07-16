@@ -53,9 +53,7 @@ const GameWall = memo<GameWallProps>(({ wall, showDebug = false }) => {
 
       {/* 左側の選択肢 */}
       <div 
-        className={`flex-1 mx-20 mr-2 h-20 border-4 border-gray-800 flex items-center justify-center pixel-font font-bold text-white text-lg ${
-          wall.correctSide === 'left' ? 'bg-gradient-to-b from-green-400 to-green-600' : 'bg-gradient-to-b from-red-400 to-red-600'
-        }`}
+        className="flex-1 mx-20 mr-2 h-20 border-4 border-gray-800 flex items-center justify-center pixel-font font-bold text-white text-lg bg-gradient-to-b from-green-400 to-green-600"
         style={{
           textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
           boxShadow: '0 4px 8px rgba(0,0,0,0.3)'
@@ -66,9 +64,7 @@ const GameWall = memo<GameWallProps>(({ wall, showDebug = false }) => {
 
       {/* 右側の選択肢 */}
       <div 
-        className={`flex-1 mx-20 ml-2 h-20 border-4 border-gray-800 flex items-center justify-center pixel-font font-bold text-white text-lg ${
-          wall.correctSide === 'right' ? 'bg-gradient-to-b from-green-400 to-green-600' : 'bg-gradient-to-b from-red-400 to-red-600'
-        }`}
+        className="flex-1 mx-20 ml-2 h-20 border-4 border-gray-800 flex items-center justify-center pixel-font font-bold text-white text-lg bg-gradient-to-b from-red-400 to-red-600"
         style={{
           textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
           boxShadow: '0 4px 8px rgba(0,0,0,0.3)'
