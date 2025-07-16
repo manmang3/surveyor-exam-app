@@ -337,13 +337,17 @@ export default function ChimokuRunGame() {
           }
           setIsNewRecord(true);
         }
-        // ゲームクリア音を再生
+        // ゲームクリア音を再生（走る音停止後に遅延を入れて重複防止）
         gameSounds.stopRunningSound();
-        gameSounds.playVictorySound();
+        setTimeout(() => {
+          gameSounds.playVictorySound();
+        }, 150);
       } else {
-        // ゲームオーバー音を再生
+        // ゲームオーバー音を再生（走る音停止後に遅延を入れて重複防止）
         gameSounds.stopRunningSound();
-        gameSounds.playGameOverSound();
+        setTimeout(() => {
+          gameSounds.playGameOverSound();
+        }, 150);
       }
 
       if (process.env.NODE_ENV === 'development') {

@@ -377,8 +377,8 @@ export const useGameSounds = (): GameSounds => {
       return;
     }
     
-    // 音声ロック取得（正解音は優先度低く設定）
-    if (!acquireAudioLock('correct', 800)) {
+    // 音声ロック取得（正解音の優先度を上げ、ロック期間を短縮）
+    if (!acquireAudioLock('correct', 600)) {
       if (process.env.NODE_ENV === 'development') {
         console.log('正解音スキップ: 音声ロック取得失敗');
       }
@@ -396,14 +396,30 @@ export const useGameSounds = (): GameSounds => {
   }, [resumeAudioContext, acquireAudioLock]);
 
   const playGameOverSound = useCallback(async () => {
+    // ミューテックス制御でゲームオーバー音の重複を防止
+    if (!acquireAudioLock('gameover', 2000)) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('ゲームオーバー音スキップ: 音声ロック取得失敗');
+      }
+      return;
+    }
+    
     await resumeAudioContext();
     audioPoolsRef.current.gameover?.play(0.9);
-  }, [resumeAudioContext]);
+  }, [resumeAudioContext, acquireAudioLock]);
 
   const playVictorySound = useCallback(async () => {
+    // ミューテックス制御で勝利音の重複を防止
+    if (!acquireAudioLock('victory', 3000)) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('勝利音スキップ: 音声ロック取得失敗');
+      }
+      return;
+    }
+    
     await resumeAudioContext();
     audioPoolsRef.current.victory?.play(0.9);
-  }, [resumeAudioContext]);
+  }, [resumeAudioContext, acquireAudioLock]);
 
   const startRunningSound = useCallback(async () => {
     await resumeAudioContext();
