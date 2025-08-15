@@ -14,9 +14,9 @@ export default function Home() {
 
   // メインカテゴリとサブカテゴリの構造
   const mainCategories = {
-    '民法': ['代理', '物権', '債権', '相続'],
-    '不動産登記法': ['総論', '土地', '建物', '区分建物', '表題部所有者'],
-    '土地家屋調査士法': ['土地家屋調査士の義務', '土地家屋調査士会', '懲戒処分']
+    '民法': ['総則', '物権', '相続'],
+    '不動産登記法': ['総論', '表題部所有者', '土地', '建物', '区分建物'],
+    '土地家屋調査士法': ['調査士法']
   };
   
   const years = Array.from(new Set(sampleQuestions.map(q => q.year))).sort((a, b) => b - a);
@@ -89,7 +89,7 @@ export default function Home() {
             </h2>
             <div className="space-y-3">
               {Object.entries(mainCategories).map(([mainCategory, subCategories]) => {
-                const count = mainCategory === '不動産登記法'
+                const count = (mainCategory === '不動産登記法' || mainCategory === '土地家屋調査士法')
                   ? sampleQuestions.filter(q => q.category === mainCategory).length
                   : sampleQuestions.filter(q => {
                       return subCategories.includes(q.category);

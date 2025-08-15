@@ -10,9 +10,9 @@ export default function CategoryPage() {
 
   // メインカテゴリとサブカテゴリの構造
   const mainCategories = {
-    '民法': ['代理', '物権', '債権', '相続'],
-    '不動産登記法': ['総論', '土地', '建物', '区分建物', '表題部所有者'],
-    '土地家屋調査士法': ['土地家屋調査士の義務', '土地家屋調査士会', '懲戒処分']
+    '民法': ['総則', '物権', '相続'],
+    '不動産登記法': ['総論', '表題部所有者', '土地', '建物', '区分建物'],
+    '土地家屋調査士法': ['調査士法']
   };
 
   const subCategories = mainCategories[category as keyof typeof mainCategories] || [];
@@ -32,9 +32,9 @@ export default function CategoryPage() {
         </div>
 
         <div className="grid gap-4 max-w-2xl">
-          {category === '不動産登記法' ? (
-            // 不動産登記法の場合はサブカテゴリを表示
-            ['総論', '土地', '建物', '区分建物', '表題部所有者'].map(subCategory => {
+          {(category === '不動産登記法' || category === '土地家屋調査士法') ? (
+            // 不動産登記法・土地家屋調査士法の場合はサブカテゴリを表示
+            subCategories.map(subCategory => {
               const count = sampleQuestions.filter(q => q.category === category && q.subcategory === subCategory).length;
               
               return (
@@ -72,7 +72,7 @@ export default function CategoryPage() {
           
           {/* すべての問題を見るリンク */}
           <Link
-            href={category === '不動産登記法' 
+            href={(category === '不動産登記法' || category === '土地家屋調査士法')
               ? `/questions?category=${encodeURIComponent(category)}`
               : `/questions?maincategory=${encodeURIComponent(category)}`
             }
@@ -81,7 +81,7 @@ export default function CategoryPage() {
             <div className="flex justify-between items-center">
               <span className="text-lg font-medium">{category} すべての問題</span>
               <span className="text-blue-100">
-                {category === '不動産登記法'
+                {(category === '不動産登記法' || category === '土地家屋調査士法')
                   ? sampleQuestions.filter(q => q.category === category).length
                   : sampleQuestions.filter(q => {
                       return subCategories.includes(q.category);
