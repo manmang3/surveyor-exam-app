@@ -20,9 +20,9 @@ function QuestionsContent() {
 
   // メインカテゴリとサブカテゴリの構造
   const mainCategories = {
-    '民法': ['代理', '物権', '債権', '相続'],
+    '民法': ['総則', '物権', '相続'],
     '不動産登記法': ['総論', '土地', '建物', '区分建物', '表題部所有者'],
-    '土地家屋調査士法': ['土地家屋調査士の義務', '土地家屋調査士会', '懲戒処分']
+    '土地家屋調査士法': ['登録・移転・取消し', '業務に関する法規', '業務制限', '調査士法人', '欠格事由', '懲戒処分']
   };
 
   // 西暦を和暦に変換する関数
@@ -53,6 +53,163 @@ function QuestionsContent() {
   if (bookmark === 'true') {
     filteredQuestions = sampleQuestions.filter(q => bookmarkedQuestions.includes(q.id));
     title = 'チェックした問題';
+  }
+
+  // 小分類の順序マッピング（categories_*.txt ファイルの順序に基づく）
+  const detailCategoryOrder = {
+    // 民法
+    "未成年": 0,
+    "行為能力": 1,
+    "権利能力なき社団": 2,
+    "意思表示": 3,
+    "瑕疵ある意思表示": 4,
+    "代理": 5,
+    "無権代理と相続": 6,
+    "無効と取り消し": 7,
+    "条件": 8,
+    "取得時効": 9,
+    "時効の援用": 10,
+    "時効の更新": 11,
+    "不動産": 12,
+    "物件変動": 13,
+    "不動産の物権変動": 14,
+    "取得時効と登記": 15,
+    "相続と登記": 17,
+    "物件的請求権": 18,
+    "占有権": 19,
+    "占有訴権": 20,
+    "袋地所有者の囲繞地通行権": 21,
+    "囲繞地通行権": 22,
+    "相隣関係": 23,
+    "共有": 24,
+    "地上権": 25,
+    "質権": 26,
+    "付合": 27,
+    "相続": 28,
+    "相続人": 29,
+    "相続の承認・放棄": 30,
+    "遺産分割": 31,
+    "遺言": 32,
+    "代襲相続": 33,
+    // 不動産登記法
+    "不動産登記制度": 34,
+    "報告的登記と形式的登記": 35,
+    "登記制度の変遷": 36,
+    "申請義務": 37,
+    "申請人適格": 38,
+    "相続人その他の一般承継人": 39,
+    "代位による登記": 40,
+    "登記所の管轄": 41,
+    "登記所における各情報の保存期間": 42,
+    "実地調査": 43,
+    "本人確認調査": 44,
+    "登記記録": 45,
+    "一不動産一登記記録主義": 46,
+    "土地区画整理事業と登記記録": 47,
+    "地図及び建物所在図": 48,
+    "地図": 49,
+    "地図に準ずる図面": 50,
+    "地図の訂正": 51,
+    "登記情報の公開": 52,
+    "申請情報": 53,
+    "添付情報": 54,
+    "所有権証明書": 55,
+    "法定相続情報一覧図": 56,
+    "登録免許税": 57,
+    "登記識別情報": 58,
+    "登記識別情報（登記済証）": 59,
+    "登記識別情報に関する証明": 60,
+    "代理権の不消滅": 61,
+    "代理人": 62,
+    "特別の委任": 63,
+    "一の申請情報による登記の申請": 64,
+    "電子申請": 65,
+    "原本還付": 66,
+    "事前通知と本人確認情報": 67,
+    "本人確認情報": 68,
+    "登記識別情報の通知": 69,
+    "登記完了証": 70,
+    "登記完了証の通知": 71,
+    "却下": 72,
+    "却下、取下げ": 73,
+    "取下げ": 74,
+    "審査請求": 75,
+    "筆界特定の流れ": 76,
+    "筆界特定": 77,
+    "表題部所有者に関する登記": 78,
+    "土地に関する登記": 79,
+    "地番": 80,
+    "地番・家屋番号": 81,
+    "地目": 82,
+    "地積": 83,
+    "土地の境界": 84,
+    "土地の登記申請における添付図面": 85,
+    "土地所在図": 86,
+    "地積測量図": 87,
+    "地役権図面": 88,
+    "添付図面の訂正の申出": 89,
+    "土地の表題登記": 90,
+    "土地の表題部の変更または更正登記": 91,
+    "土地分筆登記": 92,
+    "土地合筆登記": 93,
+    "土地合筆登記の制限": 94,
+    "土地分合筆登記": 95,
+    "土地の滅失登記": 96,
+    "建物に関する登記": 97,
+    "建物の表示に関する登記事項": 98,
+    "所在": 99,
+    "家屋番号": 100,
+    "建物の認定": 101,
+    "種類": 102,
+    "構造": 103,
+    "構造と床面積": 104,
+    "床面積": 105,
+    "建物の個数": 106,
+    "附属建物": 107,
+    "建物の登記申請における添付図面": 108,
+    "建物の表題登記": 109,
+    "建物の表題登記の意義": 110,
+    "建物の表題部の変更または更正登記": 111,
+    "建物分割登記": 112,
+    "建物合併登記": 113,
+    "建物合併登記の制限": 114,
+    "建物の分割または合併の登記": 115,
+    "建物の合体による登記等": 116,
+    "建物の滅失登記": 117,
+    "区分建物に関する登記": 118,
+    "規約": 119,
+    "敷地権": 120,
+    "区分建物の表題登記": 121,
+    "区分建物の表題部の変更または更正登記": 122,
+    "共用部分または団地共用部分に関する登記": 123,
+    // 土地家屋調査士法
+    "登録・移転・取消し": 124,
+    "業務に関する法規": 125,
+    "業務制限": 126,
+    "調査士法人": 127,
+    "欠格事由": 128,
+    "懲戒処分": 129,
+    "調査士会": 130
+  };
+
+  // ソート方式の決定
+  if (year) {
+    // 年度別モードの場合は問題番号順（1-20問）でソート
+    filteredQuestions = filteredQuestions.sort((a, b) => a.questionNumber - b.questionNumber);
+  } else {
+    // 分野別モードの場合は小分類順と年度順でソート
+    filteredQuestions = filteredQuestions.sort((a, b) => {
+      // 1. 小分類順でソート（detailCategoryがない場合は最後）
+      const aOrder = a.detailCategory ? (detailCategoryOrder[a.detailCategory as keyof typeof detailCategoryOrder] ?? 9999) : 9999;
+      const bOrder = b.detailCategory ? (detailCategoryOrder[b.detailCategory as keyof typeof detailCategoryOrder] ?? 9999) : 9999;
+      
+      if (aOrder !== bOrder) {
+        return aOrder - bOrder;
+      }
+      
+      // 2. 同じ小分類内では年度順でソート
+      return a.year - b.year;
+    });
   }
 
   // ブックマークトグル関数
@@ -169,20 +326,29 @@ function QuestionsContent() {
               </p>
               
               <div className="flex justify-between items-center">
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-wrap gap-1">
                   {(() => {
                     // メインカテゴリを判定
                     const getMainCategory = (category: string) => {
                       if (category === '不動産登記法') return '不動産登記法';
-                      if (['代理', '物権', '債権', '相続'].includes(category)) return '民法';
-                      if (['土地家屋調査士の義務', '土地家屋調査士会', '懲戒処分'].includes(category)) return '土地家屋調査士法';
+                      if (['総則', '物権', '相続'].includes(category)) return '民法';
+                      if (category === '土地家屋調査士法') return '土地家屋調査士法';
                       return category;
                     };
 
                     const mainCategory = getMainCategory(question.category);
                     const isRealEstate = question.category === '不動産登記法';
-                    const subCategory = isRealEstate ? question.subcategory : 
-                                       mainCategory !== question.category ? question.category : null;
+                    const isSurveyorLaw = question.category === '土地家屋調査士法';
+                    
+                    // サブカテゴリの判定
+                    let subCategory = null;
+                    if (isRealEstate) {
+                      subCategory = question.subcategory;
+                    } else if (isSurveyorLaw) {
+                      subCategory = question.subcategory;
+                    } else if (mainCategory !== question.category) {
+                      subCategory = question.category;
+                    }
 
                     return (
                       <>
@@ -192,6 +358,11 @@ function QuestionsContent() {
                         {subCategory && (
                           <span className="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded">
                             {subCategory}
+                          </span>
+                        )}
+                        {question.detailCategory && (
+                          <span className="text-xs text-green-600 bg-green-50 px-2 py-1 rounded">
+                            {question.detailCategory}
                           </span>
                         )}
                       </>
