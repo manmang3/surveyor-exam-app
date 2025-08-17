@@ -4355,7 +4355,7 @@ export const sampleQuestions: Question[] = [
     "id": "h30_09",
     "year": 2018,
     "category": "不動産登記法",
-    "detailCategory": "土地に関する登記",
+    "detailCategory": "地目",
     "subcategory": "土地",
     "questionNumber": 9,
     "title": "問題9",
