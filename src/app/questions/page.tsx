@@ -243,7 +243,7 @@ function QuestionsContent() {
       }
       
       // 同じサブカテゴリ内での小分類順でソート
-      const subcategoryDetailOrder = detailCategoryOrderBySubcategory[aSubCategory as keyof typeof detailCategoryOrderBySubcategory] || {};
+      const subcategoryDetailOrder = (detailCategoryOrderBySubcategory as Record<string, Record<string, number>>)[aSubCategory] || {};
       const aOrder = aDetailCategory ? (subcategoryDetailOrder[aDetailCategory] ?? 9999) : 9999;
       const bOrder = bDetailCategory ? (subcategoryDetailOrder[bDetailCategory] ?? 9999) : 9999;
       
