@@ -705,12 +705,53 @@ export default function QuestionDetailPage() {
               <h1 className="text-2xl font-bold text-gray-900 mb-2">
                 {question.title}
               </h1>
-              <div className="flex gap-4 text-sm text-gray-600">
-                <span>{toJapaneseYear(question.year)} 第{question.questionNumber}問</span>
-                <span>{question.category}</span>
-                {question.subcategory && (
-                  <span className="text-blue-600">・{question.subcategory}</span>
-                )}
+              <div className="flex flex-wrap gap-2 text-sm text-gray-600 mb-3">
+                <span className="text-xs text-gray-600 bg-gray-50 px-2 py-1 rounded">
+                  {toJapaneseYear(question.year)} 第{question.questionNumber}問
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-1">
+                {(() => {
+                  // メインカテゴリを判定
+                  const getMainCategory = (category: string) => {
+                    if (category === '不動産登記法') return '不動産登記法';
+                    if (['総則', '物権', '相続'].includes(category)) return '民法';
+                    if (category === '土地家屋調査士法') return '土地家屋調査士法';
+                    return category;
+                  };
+
+                  const mainCategory = getMainCategory(question.category);
+                  const isRealEstate = question.category === '不動産登記法';
+                  const isSurveyorLaw = question.category === '土地家屋調査士法';
+                  
+                  // サブカテゴリの判定
+                  let subCategory = null;
+                  if (isRealEstate) {
+                    subCategory = question.subcategory;
+                  } else if (isSurveyorLaw) {
+                    subCategory = question.subcategory;
+                  } else if (mainCategory !== question.category) {
+                    subCategory = question.category;
+                  }
+
+                  return (
+                    <>
+                      <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                        {mainCategory}
+                      </span>
+                      {subCategory && (
+                        <span className="text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded">
+                          {subCategory}
+                        </span>
+                      )}
+                      {question.detailCategory && (
+                        <span className="text-xs text-green-600 bg-green-50 px-2 py-1 rounded">
+                          {question.detailCategory}
+                        </span>
+                      )}
+                    </>
+                  );
+                })()}
               </div>
             </div>
             <button
