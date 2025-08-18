@@ -975,13 +975,7 @@ export default function ExamModePage() {
             </div>
           )}
 
-          {/* 結果表示時の説明 */}
-          {showResult && currentQuestion.explanation && (
-            <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-              <h3 className="font-semibold text-blue-900 mb-2">解説</h3>
-              <p className="text-blue-800">{currentQuestion.explanation}</p>
-            </div>
-          )}
+          {/* 年度別試験モードでは解説文を非表示 */}
         </div>
       </div>
     </div>
