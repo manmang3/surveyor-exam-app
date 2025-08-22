@@ -222,24 +222,49 @@ function QuestionsContent() {
   } else {
     // 分野別モードの場合はサブカテゴリ別小分類順と年度順でソート
     filteredQuestions = filteredQuestions.sort((a, b) => {
-      // 1. サブカテゴリ別小分類順でソート
-      const aSubCategory = a.subcategory || '';
-      const bSubCategory = b.subcategory || '';
-      const aDetailCategory = a.detailCategory || '';
-      const bDetailCategory = b.detailCategory || '';
+      // 民法の場合は特別な処理（categoryがサブカテゴリとして機能）
+      const isCivilLawA = ['総則', '物権', '相続'].includes(a.category);
+      const isCivilLawB = ['総則', '物権', '相続'].includes(b.category);
+      
+      let aSubCategory, bSubCategory, aDetailCategory, bDetailCategory;
+      
+      if (isCivilLawA) {
+        aSubCategory = a.category; // 総則、物権、相続
+        aDetailCategory = a.detailCategory || '';
+      } else {
+        aSubCategory = a.subcategory || '';
+        aDetailCategory = a.detailCategory || '';
+      }
+      
+      if (isCivilLawB) {
+        bSubCategory = b.category; // 総則、物権、相続  
+        bDetailCategory = b.detailCategory || '';
+      } else {
+        bSubCategory = b.subcategory || '';
+        bDetailCategory = b.detailCategory || '';
+      }
       
       // サブカテゴリが異なる場合は、まずサブカテゴリでソート
       if (aSubCategory !== bSubCategory) {
-        // サブカテゴリの順序（不動産登記法の場合）
-        const subcategoryOrder = ['総論', '表題部所有者', '土地', '建物', '区分建物'];
-        const aSubOrder = subcategoryOrder.indexOf(aSubCategory);
-        const bSubOrder = subcategoryOrder.indexOf(bSubCategory);
+        // 不動産登記法のサブカテゴリの順序
+        const realEstateSubcategoryOrder = ['総論', '表題部所有者', '土地', '建物', '区分建物'];
+        const aSubOrder = realEstateSubcategoryOrder.indexOf(aSubCategory);
+        const bSubOrder = realEstateSubcategoryOrder.indexOf(bSubCategory);
         
         if (aSubOrder !== -1 && bSubOrder !== -1) {
           return aSubOrder - bSubOrder;
         }
         
-        // 民法・土地家屋調査士法など他のカテゴリの場合は文字列順
+        // 民法のサブカテゴリの順序  
+        const civilLawSubcategoryOrder = ['総則', '物権', '相続'];
+        const aCivilOrder = civilLawSubcategoryOrder.indexOf(aSubCategory);
+        const bCivilOrder = civilLawSubcategoryOrder.indexOf(bSubCategory);
+        
+        if (aCivilOrder !== -1 && bCivilOrder !== -1) {
+          return aCivilOrder - bCivilOrder;
+        }
+        
+        // その他のカテゴリの場合は文字列順
         return aSubCategory.localeCompare(bSubCategory, 'ja');
       }
       
@@ -252,7 +277,7 @@ function QuestionsContent() {
         return aOrder - bOrder;
       }
       
-      // 2. 同じ小分類内では年度順でソート
+      // 同じ小分類内では年度順でソート
       return a.year - b.year;
     });
   }
